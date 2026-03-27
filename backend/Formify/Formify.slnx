@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="formify.client/formify.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="Formify.Server/Formify.Server.csproj" />
+</Solution>

@@ -1,0 +1,10 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:56709",
+"RedirectUrl": "",
+"LaunchCommand": "npm run dev",
+"WorkingDirectory": "D:\\gestao de proj\\2026-Team-D\\backend\\Formify\\Formify.Server\\..\\formify.client",
+"MaxTimeoutInSeconds": "120",
+"KeepRunning": "false"
+}
+}

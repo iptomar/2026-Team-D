@@ -1,0 +1,6 @@
+@Formify.Server_HostAddress = http://localhost:5208
+
+GET {{Formify.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
