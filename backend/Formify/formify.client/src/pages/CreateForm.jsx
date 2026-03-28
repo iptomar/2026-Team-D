@@ -5,11 +5,19 @@ export default function CreateForm() {
     // 1. Estados para guardar o que o utilizador escreve
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
+
+    // (Task 3): Podes precisar de adicionar estados para os erros aqui. 
+    // Exemplo: const [erroNome, setErroNome] = useState('');
+
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     // 2. Função que corre ao submeter o formulário
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // (Task 3): A tua lógica de validação deve entrar aqui!
+        // Deves verificar se os campos cumprem as regras antes de avançar.
+        // Se houver erro, deves atualizar o estado do erro e fazer um "return" para impedir o envio.
 
         const novoFormulario = { nome, descricao };
         console.log("A preparar para enviar para o backend:", novoFormulario);
@@ -36,7 +44,6 @@ export default function CreateForm() {
             {/* Container principal do formulário */}
             <div className="space-y-4">
 
-                {/* Aqui começa a TUA parte - O Formulário que substitui o placeholder */}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-lg border border-accent-border bg-accent-bg p-6">
 
                     {/* Campo: Nome */}
@@ -49,10 +56,11 @@ export default function CreateForm() {
                             type="text"
                             value={nome}
                             onChange={(e) => setNome(e.target.value)}
-                            required
+                            required // JULIANA: Podes querer remover este required do HTML se fores fazer validação customizada no React
                             placeholder="Ex: Pedido de Aquisição de Material"
                             className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
                         />
+                        {/* JULIANA (Task 3): O teu texto de erro visual (a vermelho) pode ser renderizado aqui debaixo */}
                     </div>
 
                     {/* Campo: Descrição */}
