@@ -1,0 +1,49 @@
+[
+  {
+	  "id": "1",
+    "type": "text",
+    "icon": "text_input_icon",
+    "label": "Campo de Texto",
+    "default_props": {
+      "label": "Novo Campo de Texto",
+      "required": false,
+      "placeholder": "Digite aqui...",
+      "max_length": 255
+    }
+  },
+  {
+	  "id": "2",
+    "type": "date",
+    "icon": "calendar_icon",
+    "label": "Seleção de Data",
+    "default_props": {
+      "label": "Selecione a Data",
+      "required": true,
+      "min_date": null,
+      "max_date": null
+    }
+  },
+  {
+	  "id": "3",
+    "type": "dropdown",
+    "icon": "list_icon",
+    "label": "Menu Suspenso",
+    "default_props": {
+      "label": "Escolha uma opção",
+      "required": false,
+      "options": ["Opção 1", "Opção 2"]
+    }
+  },
+  {
+	  "id": "4",
+    "type": "number",
+    "icon": "hash_icon",
+    "label": "Campo Numérico",
+    "default_props": {
+      "label": "Insira um valor",
+      "required": false,
+      "min": 0,
+      "max": 100
+    }
+  }
+]
