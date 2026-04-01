@@ -6,8 +6,8 @@ export default function CreateForm() {
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
 
-    // (Task 3): Podes precisar de adicionar estados para os erros aqui. 
-    // Exemplo: const [erroNome, setErroNome] = useState('');
+    // estado para guardar mensagens de erro do campo nome
+    const [erroNome, setErroNome] = useState('');
 
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
@@ -15,10 +15,23 @@ export default function CreateForm() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // (Task 3): A tua lógica de validação deve entrar aqui!
-        // Deves verificar se os campos cumprem as regras antes de avançar.
-        // Se houver erro, deves atualizar o estado do erro e fazer um "return" para impedir o envio.
+        
+        // Variável que indica se o formulário é válido
+        let formValido = true;
 
+        // Reset aos erros anteriores sempre que o utilizador tenta submeter
+        setErroNome('');
+
+        // Validação: o campo nome é obrigatório
+        if (nome.trim() === '') {
+            setErroNome('O nome do formulário é obrigatório.');
+            formValido = false; // Marca como inválido
+        }
+
+        // Se houver algum erro, impede o envio
+        if (!formValido) return;
+
+        // Se tudo estiver certo, criar o formulário
         const novoFormulario = { nome, descricao };
         console.log("A preparar para enviar para o backend:", novoFormulario);
 
@@ -56,11 +69,14 @@ export default function CreateForm() {
                             type="text"
                             value={nome}
                             onChange={(e) => setNome(e.target.value)}
-                            required // JULIANA: Podes querer remover este required do HTML se fores fazer validação customizada no React
                             placeholder="Ex: Pedido de Aquisição de Material"
-                            className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                            // Se houver erro, a borda fica vermelha, caso contrário mantém o estilo normal
+                            className={`rounded-md border p-2 focus:outline-none ${erroNome ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                         />
-                        {/* JULIANA (Task 3): O teu texto de erro visual (a vermelho) pode ser renderizado aqui debaixo */}
+                        {/* Mensagem de erro visível abaixo do input */}
+                        {erroNome && (
+                            <span className="text-red-500 text-sm">{erroNome}</span>
+                        )}
                     </div>
 
                     {/* Campo: Descrição */}
