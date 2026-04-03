@@ -28,3 +28,8 @@ dist-ssr
 bin/
 obj/
 *.user
+
+# SQLite
+*.db
+*.db-shm
+*.db-wal

@@ -12,38 +12,51 @@ export default function CreateForm() {
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     // 2. Função que corre ao submeter o formulário
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        
-        // Variável que indica se o formulário é válido
         let formValido = true;
-
-        // Reset aos erros anteriores sempre que o utilizador tenta submeter
         setErroNome('');
 
-        // Validação: o campo nome é obrigatório
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
-            formValido = false; // Marca como inválido
+            formValido = false;
         }
 
-        // Se houver algum erro, impede o envio
         if (!formValido) return;
 
-        // Se tudo estiver certo, criar o formulário
-        const novoFormulario = { nome, descricao };
-        console.log("A preparar para enviar para o backend:", novoFormulario);
+        try {
+            const response = await fetch('http://localhost:5208/api/forms', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: nome,
+                    description: descricao,
+                }),
+            });
 
-        // (A chamada à API do .NET vai entrar aqui mais tarde)
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Erro do backend:', errorText);
+                alert('Erro ao criar formulário.');
+                return;
+            }
 
-        alert('Formulário criado com sucesso! (Fase de Teste)');
-        navigate('/'); // Redireciona o utilizador de volta para a lista
+            const data = await response.json();
+            console.log('Formulário criado com sucesso:', data);
+
+            alert('Formulário criado com sucesso!');
+            navigate('/');
+        } catch (error) {
+            console.error('Erro de ligação ao backend:', error);
+            alert('Não foi possível ligar ao backend.');
+        }
     };
 
     return (
         <div className="space-y-6">
-            {/* Header da página com botão de voltar (Mantido do código do Sebas) */}
             <div className="flex flex-col gap-4">
                 <Link
                     to="/"
@@ -54,12 +67,9 @@ export default function CreateForm() {
                 <h2 className="text-3xl font-bold text-text-h">Novo Formulário</h2>
             </div>
 
-            {/* Container principal do formulário */}
             <div className="space-y-4">
-
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-lg border border-accent-border bg-accent-bg p-6">
 
-                    {/* Campo: Nome */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="nome" className="font-medium text-text-h">
                             Nome do Formulário <span className="text-red-500">*</span>
@@ -70,16 +80,13 @@ export default function CreateForm() {
                             value={nome}
                             onChange={(e) => setNome(e.target.value)}
                             placeholder="Ex: Pedido de Aquisição de Material"
-                            // Se houver erro, a borda fica vermelha, caso contrário mantém o estilo normal
                             className={`rounded-md border p-2 focus:outline-none ${erroNome ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                         />
-                        {/* Mensagem de erro visível abaixo do input */}
                         {erroNome && (
                             <span className="text-red-500 text-sm">{erroNome}</span>
                         )}
                     </div>
 
-                    {/* Campo: Descrição */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="descricao" className="font-medium text-text-h">
                             Descrição
@@ -94,7 +101,6 @@ export default function CreateForm() {
                         />
                     </div>
 
-                    {/* Botão de Submeter */}
                     <div className="mt-4 flex justify-end">
                         <button
                             type="submit"
