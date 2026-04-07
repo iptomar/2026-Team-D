@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 /**
@@ -14,7 +14,30 @@ import { Link } from 'react-router-dom';
  */
 export default function AdminDashboard() {
   // TODO: Integrar com API .NET para buscar formulários
-  const [forms] = useState([]);
+    const [forms, setForms] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchForms = async () => {
+            try {
+                // Substitui pela URL real do teu endpoint .NET
+                const response = await fetch('http://localhost:5208/api/Forms');
+
+                if (!response.ok) {
+                    throw new Error('Erro ao procurar formulários');
+                }
+
+                const data = await response.json();
+                setForms(data); // Atualiza o estado com os dados do backend
+            } catch (error) {
+                console.error("Erro na integração:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchForms();
+    }, []); // O array vazio garante que isto só corre uma vez
 
   return (
     <div className="space-y-8">
@@ -38,22 +61,27 @@ export default function AdminDashboard() {
 
       {/* Seção de formulários */}
       <div className="rounded-lg">
-        {forms.length === 0 ? (
-          // Empty state
-          <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
-            <p className="text-xl font-semibold text-text-h">
-              Nenhum formulário criado ainda
-            </p>
-            <p className="mt-2 text-text">
-              Clique no botão acima para criar seu primeiro formulário
-            </p>
-          </div>
-        ) : (
-          // Grid de formulários (quando existirem)
-          <div className="grid auto-rows-max gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Componentes de formulário serão renderizados aqui */}
-          </div>
-        )}
+              {/* Condição para careregar os dados. Quando o useEffect estiver a correr ele dá uma ajuda visual*/}
+              {/* Caso o fetch nao retorne nada, mostra um div, caso contrário mostra aquilo que existe no json*/}
+              {isLoading ? (
+                  <div className="text-center py-12 text-text">A carregar formulários...</div>
+              ) : forms.length === 0 ? (
+                  <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
+                      <p className="text-xl font-semibold text-text-h">Nenhum formulário criado ainda</p>
+                      <p className="mt-2 text-text">Clique no botão acima para criar seu primeiro formulário</p>
+                  </div>
+              ) : (
+                  <div className="grid auto-rows-max gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {/* 3. Renderização dinâmica dos cards */}
+                      {forms.map((form) => (
+                          <div key={form.id} className="rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md transition-shadow">
+                              <h3 className="font-bold text-lg text-text-h">{form.title || "Sem título"}</h3>
+                              <p className="text-sm text-text mt-2">{form.description}</p>
+                              {/* Podemos mais tarde mais campos existentes dentro de cada formulário*/}
+                          </div>
+                      ))}
+                  </div>
+              )}
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 using Formify.Server.Data;
+using Formify.Server.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite("Data Source=formify.db"));
+builder.Services.AddSingleton<JsonHandler>();
 
 builder.Services.AddCors(options =>
 {

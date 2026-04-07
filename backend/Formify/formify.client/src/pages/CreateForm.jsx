@@ -9,11 +9,16 @@ export default function CreateForm() {
     // estado para guardar mensagens de erro do campo nome
     const [erroNome, setErroNome] = useState('');
 
+    //state hook para prevenir double-submits
+    const [isLoading, setIsLoading] = useState(false);
+    
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     // 2. Função que corre ao submeter o formulário
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        setIsLoading(true); // Desativa o botão
 
         let formValido = true;
         setErroNome('');
@@ -26,21 +31,24 @@ export default function CreateForm() {
         if (!formValido) return;
 
         try {
-            const response = await fetch('http://localhost:5208/api/forms', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name: nome,
-                    description: descricao,
-                }),
-            });
+            const isFinal = e.nativeEvent.submitter.id === "save-final";
+            const response = await fetch('http://localhost:5208/api/Forms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        Title: nome,
+                        Description: descricao,
+                        StatusDraft: !isFinal // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
+                    }),
+                });
 
             if (!response.ok) {
                 const errorText = await response.text();
                 console.error('Erro do backend:', errorText);
                 alert('Erro ao criar formulário.');
+                setIsLoading(false); // Reativa o botão
                 return;
             }
 
@@ -52,6 +60,7 @@ export default function CreateForm() {
         } catch (error) {
             console.error('Erro de ligação ao backend:', error);
             alert('Não foi possível ligar ao backend.');
+            setIsLoading(false); // Reativa o botão 
         }
     };
 
@@ -103,10 +112,23 @@ export default function CreateForm() {
 
                     <div className="mt-4 flex justify-end">
                         <button
+                            disabled={isLoading}
+                            id="save-final"
                             type="submit"
-                            className="rounded-md bg-blue-600 px-6 py-2 font-semibold text-white transition-all hover:bg-blue-700"
+                            className="rounded-md bg-green-600 px-6 py-2 font-semibold text-white transition-all hover:bg-green-700"
                         >
                             Guardar
+                        </button>
+                    </div>
+
+                    <div className="mt-4 flex justify-end">
+                        <button
+                            disabled={isLoading}
+                            type="submit"
+                            id="save-draft"
+                            className="rounded-md bg-blue-600 px-6 py-2 font-semibold text-white transition-all hover:bg-blue-700"
+                        >
+                            Guardar como Rascunho
                         </button>
                     </div>
 

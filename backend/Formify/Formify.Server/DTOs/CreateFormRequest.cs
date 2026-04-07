@@ -6,9 +6,11 @@ namespace Formify.Server.DTOs
     {
         [Required(ErrorMessage = "O nome é obrigatório.")]
         [MaxLength(200, ErrorMessage = "O nome não pode ter mais de 200 caracteres.")]
-        public string Name { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
 
         [MaxLength(1000, ErrorMessage = "A descrição não pode ter mais de 1000 caracteres.")]
         public string? Description { get; set; }
+
+        public bool StatusDraft { get; set; } = true;
     }
 }

@@ -4,13 +4,13 @@ namespace Formify.Server.Models
     {
         public int Id { get; set; }
 
-        public string Name { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
 
         public string? Description { get; set; }
 
-        public string Status { get; set; } = "Draft";
+        public bool StatusDrafted { get; set; }
 
-        public string SchemaJson { get; set; } = "{}";
+        public List<string> Fields { get; set; } = new List<string>();
 
         public DateTime CreatedAt { get; set; }
 

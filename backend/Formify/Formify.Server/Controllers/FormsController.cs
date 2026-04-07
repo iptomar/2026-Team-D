@@ -1,6 +1,7 @@
 using Formify.Server.Data;
 using Formify.Server.DTOs;
 using Formify.Server.Models;
+using Formify.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Formify.Server.Controllers
@@ -9,11 +10,11 @@ namespace Formify.Server.Controllers
     [Route("api/[controller]")]
     public class FormsController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly JsonHandler _jsonHandler;
 
-        public FormsController(ApplicationDbContext context)
+        public FormsController(JsonHandler jsonHandler)
         {
-            _context = context;
+            _jsonHandler = jsonHandler;
         }
 
         [HttpPost]
@@ -24,37 +25,58 @@ namespace Formify.Server.Controllers
                 return ValidationProblem(ModelState);
             }
 
-            if (string.IsNullOrWhiteSpace(request.Name))
+            if (string.IsNullOrWhiteSpace(request.Title))
             {
                 return BadRequest(new { message = "O nome do formulário é obrigatório." });
             }
 
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+
             var form = new Form
             {
-                Name = request.Name.Trim(),
-                Description = string.IsNullOrWhiteSpace(request.Description)
-                    ? null
-                    : request.Description.Trim(),
-                Status = "Draft",
-                SchemaJson = "{}",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                Id = allForms.Any() ? allForms.Max(f => f.Id) + 1 : 1,
+                Title = request.Title.Trim(),
+                Description = request.Description.Trim(),
+                StatusDrafted = request.StatusDraft,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                Fields = []
             };
 
-            _context.Forms.Add(form);
-            await _context.SaveChangesAsync();
+            allForms.Add(form);
+            await _jsonHandler.SaveFormsAsync(allForms);
 
             return CreatedAtAction(nameof(GetById), new { id = form.Id }, form);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllForms()
+        {
+            // 1. Load the entire list from the JSON file
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+
+            if (allForms == null)
+            {
+                return NotFound(new { message = $"No forms were found" });
+            }
+
+            return Ok(allForms);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var form = await _context.Forms.FindAsync(id);
+            // 1. Load the entire list from the JSON file
+            var allForms = await _jsonHandler.GetAllFormsAsync();
 
+            // 2. Use LINQ to find the first form that matches the ID
+            var form = allForms.FirstOrDefault(f => f.Id == id);
+
+            // 3. Standard null check
             if (form == null)
             {
-                return NotFound();
+                return NotFound(new { message = $"Form with ID {id} not found." });
             }
 
             return Ok(form);
