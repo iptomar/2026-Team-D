@@ -5,6 +5,8 @@ export default function CreateForm() {
     // 1. Estados para guardar o que o utilizador escreve
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
+    // Estado que guarda a lista de campos do formulário (cada campo tem label, tipo, etc.)
+    const [fields, setFields] = useState([]); // comentario ju
 
     // estado para guardar mensagens de erro do campo nome
     const [erroNome, setErroNome] = useState('');
@@ -13,22 +15,49 @@ export default function CreateForm() {
     const [isLoading, setIsLoading] = useState(false);
     
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
+    // Função que adiciona um novo campo ao formulário
+    const adicionarCampo = () => {
+        const novoCampo = {
+            id: Date.now().toString(), // ID único para identificar o campo
+            type: "text",// Tipo de campo (por agora sempre texto)
+            label: "Novo Campo",// Label inicial (editável pelo utilizador)
+            placeholder: "",    //(tem de editar esta parte)
+            required: false,
+            options: []
+        };
+        // Atualiza o estado adicionando o novo campo à lista existente
+        setFields([...fields, novoCampo]);
+    };
+    // Função que altera o label (nome visível) de um campo específico
+    const alterarLabel = (id, novoLabel) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, label: novoLabel } : campo // Atualiza apenas o campo correspondente
+        );
+        // Atualiza o estado com os novos valores
+        setFields(novosCampos);
+    };
 
     // 2. Função que corre ao submeter o formulário
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         setIsLoading(true); // Desativa o botão
+        setErroNome('');
 
         let formValido = true;
         setErroNome('');
 
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
+            setIsLoading(false); 
             formValido = false;
+            
         }
 
         if (!formValido) return;
+        console.log('Campos no estado antes de enviar:', fields);
+        console.log('Título:', nome);
+        console.log('Descrição:', descricao);
 
         try {
             const isFinal = e.nativeEvent.submitter.id === "save-final";
@@ -40,7 +69,8 @@ export default function CreateForm() {
                     body: JSON.stringify({
                         Title: nome,
                         Description: descricao,
-                        StatusDraft: !isFinal // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
+                        StatusDraft: !isFinal, // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
+                        Fields: fields // envia só os labels
                     }),
                 });
 
@@ -109,7 +139,30 @@ export default function CreateForm() {
                             className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
                         />
                     </div>
-
+                    {/* Botão que permite adicionar novos campos ao formulário */}
+                    <div className="mt-4">
+                        <button
+                            type="button"
+                            onClick={adicionarCampo}// chama a função ao clicar
+                            className="rounded-md bg-gray-200 px-4 py-2"
+                        >
+                            + Adicionar Campo
+                        </button>
+                    </div>
+                    {/* Lista de campos adicionados dinamicamente*/} 
+                    {fields.map((campo) => (
+                        <div key={campo.id} className="flex flex-col gap-2 mt-4">
+                            <label className="font-medium">Nome do campo</label>
+                            <input
+                                type="text"
+                                value={campo.label}
+                                onChange={(e) => alterarLabel(campo.id, e.target.value)}
+                                // atualiza o label quando o utilizador escreve
+                                className="rounded-md border p-2"
+                            />
+                        </div>
+                    ))}
+                    
                     <div className="mt-4 flex justify-end">
                         <button
                             disabled={isLoading}
