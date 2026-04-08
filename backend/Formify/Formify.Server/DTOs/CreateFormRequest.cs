@@ -1,3 +1,4 @@
+using Formify.Server.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Formify.Server.DTOs
@@ -12,5 +13,6 @@ namespace Formify.Server.DTOs
         public string? Description { get; set; }
 
         public bool StatusDraft { get; set; } = true;
+        public List<Field> Fields { get; set; } = new List<Field>();
     }
 }

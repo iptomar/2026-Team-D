@@ -3,7 +3,7 @@
 "ServerUrl": "https://localhost:56709",
 "RedirectUrl": "",
 "LaunchCommand": "npm run dev",
-"WorkingDirectory": "D:\\gestao de proj\\2026-Team-D\\backend\\Formify\\Formify.Server\\..\\formify.client",
+"WorkingDirectory": "C:\\Users\\Juliana Gaspar\\OneDrive\\Ambiente de Trabalho\\IPT\\3 Ano\\6_semestre\\GP\\backend\\Formify\\Formify.Server\\..\\formify.client",
 "MaxTimeoutInSeconds": "120",
 "KeepRunning": "false"
 }

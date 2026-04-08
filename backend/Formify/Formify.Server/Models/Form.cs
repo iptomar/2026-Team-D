@@ -10,7 +10,7 @@ namespace Formify.Server.Models
 
         public bool StatusDrafted { get; set; }
 
-        public List<string> Fields { get; set; } = new List<string>();
+        public List<Field> Fields { get; set; } = new List<Field>();
 
         public DateTime CreatedAt { get; set; }
 
