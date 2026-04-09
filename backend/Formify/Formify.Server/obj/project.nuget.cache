@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "FK+NboLFDWo=",
+  "dgSpecHash": "T8LBGCA3kqY=",
   "success": true,
-  "projectFilePath": "D:\\gestao de proj\\2026-Team-D\\backend\\Formify\\Formify.Server\\Formify.Server.csproj",
-  "expectedPackageFiles": [
-    "C:\\Users\\sebas\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.5\\microsoft.aspnetcore.openapi.10.0.5.nupkg.sha512",
-    "C:\\Users\\sebas\\.nuget\\packages\\microsoft.aspnetcore.spaproxy\\10.0.5\\microsoft.aspnetcore.spaproxy.10.0.5.nupkg.sha512",
-    "C:\\Users\\sebas\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
-  ],
+  "projectFilePath": "C:\\Users\\Juliana Gaspar\\OneDrive\\Ambiente de Trabalho\\IPT\\3 Ano\\6_semestre\\Gestao_Projetos\\2026-Team-D\\backend\\Formify\\Formify.Server\\Formify.Server.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }
