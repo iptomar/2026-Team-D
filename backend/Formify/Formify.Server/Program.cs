@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
+//teste
 builder.Services.AddSingleton<JsonHandler>();
 
 builder.Services.AddCors(options =>
