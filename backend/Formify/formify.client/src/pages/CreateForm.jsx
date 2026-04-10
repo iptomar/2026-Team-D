@@ -17,10 +17,10 @@ export default function CreateForm() {
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     // Função que adiciona um novo campo ao formulário
-    const adicionarCampo = (fieldType) => {
+    const adicionarCampo = () => {
         const novoCampo = {
             id: Date.now().toString(), // ID único para identificar o campo
-            type: "text" //fieldType.toString.trim,// Tipo de campo (por agora sempre texto) //É preciso fazer validação 
+            type: "text", //fieldType.toString.trim,// Tipo de campo (por agora sempre texto) //É preciso fazer validação 
             label: "", // Alterado: agora começa vazio para não ter de apagar texto
             placeholder: "",    //(tem de editar esta parte)
             required: false,
@@ -43,6 +43,13 @@ export default function CreateForm() {
     const alterarTipo = (id, novoTipo) => {
         const novosCampos = fields.map(campo =>
             campo.id === id ? { ...campo, type: novoTipo } : campo
+        );
+        setFields(novosCampos);
+    };
+
+    const alterarObrigatorio = (id) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, required: !campo.required } : campo
         );
         setFields(novosCampos);
     };
@@ -161,23 +168,20 @@ export default function CreateForm() {
 
                     {/* Lista de campos adicionados dinamicamente*/}
                     {fields.map((campo) => (
-                        <div key={campo.id} className="flex flex-col gap-4 mt-4 p-4 border border-accent-border rounded-md bg-white shadow-sm">
+                        <div key={campo.id} className="flex flex-col gap-2 mt-4">
 
-                            
                             <div className="flex flex-col gap-2">
-                                <label className="font-medium text-text-h text-sm">Nome do campo</label>
+                                <label className="font-medium">Nome do campo</label>
                                 <input
                                     type="text"
                                     value={campo.label}
                                     onChange={(e) => alterarLabel(campo.id, e.target.value)}
-                                    placeholder="Ex: Qual é a sua idade?"
-                                    className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                                    className="rounded-md border p-2"
                                 />
                             </div>
 
-                            
                             <div className="flex flex-col gap-2">
-                                <label className="font-medium text-text-h text-sm">Tipo de Dados</label>
+                                <label className="font-medium">Tipo de Dados</label>
                                 <select
                                     value={campo.type}
                                     onChange={(e) => alterarTipo(campo.id, e.target.value)}
@@ -189,6 +193,16 @@ export default function CreateForm() {
                                     <option value="dropdown">Menu Suspenso (Opções)</option>
                                 </select>
                             </div>
+
+                            <label className="inline-flex items-center gap-2 text-sm font-medium">
+                                <input
+                                    type="checkbox"
+                                    checked={campo.required}
+                                    onChange={() => alterarObrigatorio(campo.id)}
+                                    className="h-4 w-4 rounded border-accent-border"
+                                />
+                                Campo obrigatório
+                            </label>
 
                         </div>
                     ))}
