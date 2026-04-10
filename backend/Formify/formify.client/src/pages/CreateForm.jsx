@@ -21,7 +21,7 @@ export default function CreateForm() {
         const novoCampo = {
             id: Date.now().toString(), // ID único para identificar o campo
             type: "text",// Tipo de campo (por agora sempre texto)
-            label: "Novo Campo",// Label inicial (editável pelo utilizador)
+            label: "", // Alterado: agora começa vazio para não ter de apagar texto
             placeholder: "",    //(tem de editar esta parte)
             required: false,
             options: []
