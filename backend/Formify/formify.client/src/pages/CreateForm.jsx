@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function CreateForm() {
-    // 1. Estados para guardar o que o utilizador escreve
+    // Estados para guardar o que o utilizador escreve
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
     // Estado que guarda a lista de campos do formulário (cada campo tem label, tipo, etc.)
@@ -17,10 +17,10 @@ export default function CreateForm() {
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     // Função que adiciona um novo campo ao formulário
-    const adicionarCampo = () => {
+    const adicionarCampo = (fieldType) => {
         const novoCampo = {
             id: Date.now().toString(), // ID único para identificar o campo
-            type: "text",// Tipo de campo (por agora sempre texto)
+            type: "text" //fieldType.toString.trim,// Tipo de campo (por agora sempre texto) //É preciso fazer validação 
             label: "", // Alterado: agora começa vazio para não ter de apagar texto
             placeholder: "",    //(tem de editar esta parte)
             required: false,
@@ -39,7 +39,7 @@ export default function CreateForm() {
         setFields(novosCampos);
     };
 
-    // A TUA TAREFA: Função que altera o tipo (texto, data, número) de um campo específico
+    
     const alterarTipo = (id, novoTipo) => {
         const novosCampos = fields.map(campo =>
             campo.id === id ? { ...campo, type: novoTipo } : campo
@@ -163,7 +163,7 @@ export default function CreateForm() {
                     {fields.map((campo) => (
                         <div key={campo.id} className="flex flex-col gap-4 mt-4 p-4 border border-accent-border rounded-md bg-white shadow-sm">
 
-                            {/* LINHA 1: Nome da Pergunta */}
+                            
                             <div className="flex flex-col gap-2">
                                 <label className="font-medium text-text-h text-sm">Nome do campo</label>
                                 <input
@@ -175,7 +175,7 @@ export default function CreateForm() {
                                 />
                             </div>
 
-                            {/* LINHA 2: Tipo de Dados (A TUA TAREFA) */}
+                            
                             <div className="flex flex-col gap-2">
                                 <label className="font-medium text-text-h text-sm">Tipo de Dados</label>
                                 <select
