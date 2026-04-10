@@ -61,5 +61,23 @@
     ],
     "CreatedAt": "2026-04-10T15:28:59.8549571+01:00",
     "UpdatedAt": "2026-04-10T15:28:59.8549595+01:00"
+  },
+  {
+    "Id": 5,
+    "Title": "Teste de tipo de dados",
+    "Description": "Funciona porra",
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1775832326297",
+        "Type": "number",
+        "Label": "Qualquer Coisa",
+        "Required": false,
+        "Placeholder": "",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-10T15:47:17.7854666+01:00",
+    "UpdatedAt": "2026-04-10T15:47:17.785469+01:00"
   }
 ]

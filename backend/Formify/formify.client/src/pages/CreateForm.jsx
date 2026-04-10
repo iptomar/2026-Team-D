@@ -13,8 +13,9 @@ export default function CreateForm() {
 
     //state hook para prevenir double-submits
     const [isLoading, setIsLoading] = useState(false);
-    
+
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
+
     // Função que adiciona um novo campo ao formulário
     const adicionarCampo = () => {
         const novoCampo = {
@@ -28,12 +29,21 @@ export default function CreateForm() {
         // Atualiza o estado adicionando o novo campo à lista existente
         setFields([...fields, novoCampo]);
     };
+
     // Função que altera o label (nome visível) de um campo específico
     const alterarLabel = (id, novoLabel) => {
         const novosCampos = fields.map(campo =>
             campo.id === id ? { ...campo, label: novoLabel } : campo // Atualiza apenas o campo correspondente
         );
         // Atualiza o estado com os novos valores
+        setFields(novosCampos);
+    };
+
+    // A TUA TAREFA: Função que altera o tipo (texto, data, número) de um campo específico
+    const alterarTipo = (id, novoTipo) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, type: novoTipo } : campo
+        );
         setFields(novosCampos);
     };
 
@@ -49,9 +59,8 @@ export default function CreateForm() {
 
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
-            setIsLoading(false); 
+            setIsLoading(false);
             formValido = false;
-            
         }
 
         if (!formValido) return;
@@ -62,17 +71,17 @@ export default function CreateForm() {
         try {
             const isFinal = e.nativeEvent.submitter.id === "save-final";
             const response = await fetch('http://localhost:5208/api/Forms', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        Title: nome,
-                        Description: descricao,
-                        StatusDraft: !isFinal, // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
-                        Fields: fields // envia só os labels
-                    }),
-                });
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Title: nome,
+                    Description: descricao,
+                    StatusDraft: !isFinal, // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
+                    Fields: fields // envia só os labels
+                }),
+            });
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -143,45 +152,64 @@ export default function CreateForm() {
                     <div className="mt-4">
                         <button
                             type="button"
-                            onClick={adicionarCampo}// chama a função ao clicar
-                            className="rounded-md bg-gray-200 px-4 py-2"
+                            onClick={adicionarCampo}
+                            className="rounded-md bg-gray-200 px-4 py-2 font-semibold transition-all hover:bg-gray-300"
                         >
                             + Adicionar Campo
                         </button>
                     </div>
-                    {/* Lista de campos adicionados dinamicamente*/} 
+
+                    {/* Lista de campos adicionados dinamicamente*/}
                     {fields.map((campo) => (
-                        <div key={campo.id} className="flex flex-col gap-2 mt-4">
-                            <label className="font-medium">Nome do campo</label>
-                            <input
-                                type="text"
-                                value={campo.label}
-                                onChange={(e) => alterarLabel(campo.id, e.target.value)}
-                                // atualiza o label quando o utilizador escreve
-                                className="rounded-md border p-2"
-                            />
+                        <div key={campo.id} className="flex flex-col gap-4 mt-4 p-4 border border-accent-border rounded-md bg-white shadow-sm">
+
+                            {/* LINHA 1: Nome da Pergunta */}
+                            <div className="flex flex-col gap-2">
+                                <label className="font-medium text-text-h text-sm">Nome do campo</label>
+                                <input
+                                    type="text"
+                                    value={campo.label}
+                                    onChange={(e) => alterarLabel(campo.id, e.target.value)}
+                                    placeholder="Ex: Qual é a sua idade?"
+                                    className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                                />
+                            </div>
+
+                            {/* LINHA 2: Tipo de Dados (A TUA TAREFA) */}
+                            <div className="flex flex-col gap-2">
+                                <label className="font-medium text-text-h text-sm">Tipo de Dados</label>
+                                <select
+                                    value={campo.type}
+                                    onChange={(e) => alterarTipo(campo.id, e.target.value)}
+                                    className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none bg-white cursor-pointer"
+                                >
+                                    <option value="text">Texto (Resposta Curta)</option>
+                                    <option value="number">Número</option>
+                                    <option value="date">Data</option>
+                                    <option value="dropdown">Menu Suspenso (Opções)</option>
+                                </select>
+                            </div>
+
                         </div>
                     ))}
-                    
-                    <div className="mt-4 flex justify-end">
-                        <button
-                            disabled={isLoading}
-                            id="save-final"
-                            type="submit"
-                            className="rounded-md bg-green-600 px-6 py-2 font-semibold text-white transition-all hover:bg-green-700"
-                        >
-                            Guardar
-                        </button>
-                    </div>
 
-                    <div className="mt-4 flex justify-end">
+                    <div className="mt-6 flex justify-end gap-4 border-t border-accent-border pt-4">
                         <button
                             disabled={isLoading}
                             type="submit"
                             id="save-draft"
-                            className="rounded-md bg-blue-600 px-6 py-2 font-semibold text-white transition-all hover:bg-blue-700"
+                            className="rounded-md bg-blue-600 px-6 py-2 font-semibold text-white transition-all hover:bg-blue-700 disabled:opacity-50"
                         >
                             Guardar como Rascunho
+                        </button>
+
+                        <button
+                            disabled={isLoading}
+                            id="save-final"
+                            type="submit"
+                            className="rounded-md bg-green-600 px-6 py-2 font-semibold text-white transition-all hover:bg-green-700 disabled:opacity-50"
+                        >
+                            Publicar
                         </button>
                     </div>
 
