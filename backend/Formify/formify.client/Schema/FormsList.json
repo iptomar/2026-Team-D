@@ -34,5 +34,32 @@
     ],
     "CreatedAt": "2026-04-08T15:41:15.3241351+01:00",
     "UpdatedAt": "2026-04-08T15:41:15.3241399+01:00"
+  },
+  {
+    "Id": 3,
+    "Title": "teste",
+    "Description": "teste",
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-10T15:28:05.6871998+01:00",
+    "UpdatedAt": "2026-04-10T15:28:05.687203+01:00"
+  },
+  {
+    "Id": 4,
+    "Title": "Rascunho",
+    "Description": "Rascunho",
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1775831333210",
+        "Type": "text",
+        "Label": "Rascunho",
+        "Required": false,
+        "Placeholder": "",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-10T15:28:59.8549571+01:00",
+    "UpdatedAt": "2026-04-10T15:28:59.8549595+01:00"
   }
 ]

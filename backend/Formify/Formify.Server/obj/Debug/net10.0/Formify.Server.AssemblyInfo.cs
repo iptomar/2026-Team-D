@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Formify.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43f0773c8a272586d48841496508e255b9677bb5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cf99d7ad0cae704960de3cd5fa3bea96387931dd")]
 [assembly: System.Reflection.AssemblyProductAttribute("Formify.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Formify.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
