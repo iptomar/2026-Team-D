@@ -81,5 +81,22 @@ namespace Formify.Server.Controllers
 
             return Ok(form);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteForm(int id)
+        {
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+            var formToRemove = allForms.FirstOrDefault(f => f.Id == id);
+
+            if (formToRemove == null)
+            {
+                return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
+            }
+
+            allForms.Remove(formToRemove);
+            await _jsonHandler.SaveFormsAsync(allForms);
+
+            return Ok(new { message = "Formulário eliminado com sucesso." });
+        }
     }
 }

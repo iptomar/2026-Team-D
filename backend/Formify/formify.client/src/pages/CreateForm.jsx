@@ -10,6 +10,7 @@ export default function CreateForm() {
 
     // estado para guardar mensagens de erro do campo nome
     const [erroNome, setErroNome] = useState('');
+    const [erroDescricao, setErroDescricao] = useState('');
 
     //state hook para prevenir double-submits
     const [isLoading, setIsLoading] = useState(false);
@@ -17,11 +18,11 @@ export default function CreateForm() {
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     // Função que adiciona um novo campo ao formulário
-    const adicionarCampo = (fieldType) => {
+    const adicionarCampo = () => {
         const novoCampo = {
             id: Date.now().toString(), // ID único para identificar o campo
-            type: "text" //fieldType.toString.trim,// Tipo de campo (por agora sempre texto) //É preciso fazer validação 
-            label: "", // Alterado: agora começa vazio para não ter de apagar texto
+            type: "text", //fieldType.toString.trim,// Tipo de campo (por agora sempre texto) //É preciso fazer validação 
+            label: "", // Alterado: começa vazio para não ter de apagar texto
             placeholder: "",    //(tem de editar esta parte)
             required: false,
             options: []
@@ -39,6 +40,13 @@ export default function CreateForm() {
         setFields(novosCampos);
     };
 
+    const alterarPlaceholder = (id, novoPlaceholder) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, placeholder: novoPlaceholder } : campo
+        );
+        setFields(novosCampos);
+    };
+
     
     const alterarTipo = (id, novoTipo) => {
         const novosCampos = fields.map(campo =>
@@ -53,6 +61,7 @@ export default function CreateForm() {
 
         setIsLoading(true); // Desativa o botão
         setErroNome('');
+        setErroDescricao('');
 
         let formValido = true;
         setErroNome('');
@@ -84,10 +93,18 @@ export default function CreateForm() {
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Erro do backend:', errorText);
-                alert('Erro ao criar formulário.');
-                setIsLoading(false); // Reativa o botão
+                if (response.status === 400) {
+                    const errorData = await response.json();
+                    if (errorData.errors) {
+                        if (errorData.errors.Title) setErroNome(errorData.errors.Title[0]);
+                        if (errorData.errors.Description) setErroDescricao(errorData.errors.Description[0]);
+                    } else if (errorData.message) {
+                        setErroNome(errorData.message);
+                    }
+                } else {
+                    alert('Erro ao criar formulário.');
+                }
+                setIsLoading(false);
                 return;
             }
 
@@ -145,8 +162,9 @@ export default function CreateForm() {
                             onChange={(e) => setDescricao(e.target.value)}
                             placeholder="Descreva o propósito deste formulário (opcional)..."
                             rows="4"
-                            className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                            className={`rounded-md border p-2 focus:outline-none ${erroDescricao ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                         />
+                        {erroDescricao && <span className="text-red-500 text-sm">{erroDescricao}</span>}
                     </div>
                     {/* Botão que permite adicionar novos campos ao formulário */}
                     <div className="mt-4">
@@ -163,9 +181,9 @@ export default function CreateForm() {
                     {fields.map((campo) => (
                         <div key={campo.id} className="flex flex-col gap-4 mt-4 p-4 border border-accent-border rounded-md bg-white shadow-sm">
 
-                            
+                            {/* 1. Nome do Campo */}
                             <div className="flex flex-col gap-2">
-                                <label className="font-medium text-text-h text-sm">Nome do campo</label>
+                                <label className="font-medium text-sm text-text-h">Nome do campo</label>
                                 <input
                                     type="text"
                                     value={campo.label}
@@ -175,9 +193,21 @@ export default function CreateForm() {
                                 />
                             </div>
 
-                            
+                            {/* 2. Placeholder (Texto de Exemplo) */}
                             <div className="flex flex-col gap-2">
-                                <label className="font-medium text-text-h text-sm">Tipo de Dados</label>
+                                <label className="font-medium text-sm text-text-h">Texto de Exemplo (Placeholder)</label>
+                                <input
+                                    type="text"
+                                    value={campo.placeholder}
+                                    onChange={(e) => alterarPlaceholder(campo.id, e.target.value)}
+                                    placeholder="Ex: Insira o valor aqui..."
+                                    className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                                />
+                            </div>
+
+                            {/* 3. Tipo de Dados */}
+                            <div className="flex flex-col gap-2">
+                                <label className="font-medium text-sm text-text-h">Tipo de Dados</label>
                                 <select
                                     value={campo.type}
                                     onChange={(e) => alterarTipo(campo.id, e.target.value)}

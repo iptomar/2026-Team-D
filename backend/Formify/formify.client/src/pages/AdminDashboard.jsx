@@ -39,6 +39,24 @@ export default function AdminDashboard() {
         fetchForms();
     }, []); // O array vazio garante que isto só corre uma vez
 
+    const handleDelete = async (id) => {
+        const confirmacao = window.confirm("Tens a certeza que queres eliminar este formulário?");
+        if (!confirmacao) return;
+
+        try {
+            const response = await fetch(`/api/Forms/${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                // Remove o formulário da lista no ecrã imediatamente
+                setForms(forms.filter(form => form.id !== id && form.Id !== id));
+            } else {
+                alert('Erro ao eliminar formulário.');
+            }
+        } catch (error) {
+            console.error("Erro:", error);
+            alert("Não foi possível ligar ao servidor.");
+        }
+    };
+
   return (
     <div className="space-y-8">
       {/* Cabeçalho com título e botão de ação */}
@@ -78,6 +96,14 @@ export default function AdminDashboard() {
                               <h3 className="font-bold text-lg text-text-h">{form.title || "Sem título"}</h3>
                               <p className="text-sm text-text mt-2">{form.description}</p>
                               {/* Podemos mais tarde mais campos existentes dentro de cada formulário*/}
+                              {/* Adiciona este botão dentro da div do cartão do formulário */}
+                              <button
+                                  onClick={() => handleDelete(form.id || form.Id)}
+                                  className="text-red-500 hover:text-red-700 transition-colors"
+                                  title="Eliminar"
+                              >
+                                  🗑️ Eliminar
+                              </button>
                           </div>
                       ))}
                   </div>
