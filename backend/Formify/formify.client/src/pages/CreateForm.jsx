@@ -55,6 +55,13 @@ export default function CreateForm() {
         setFields(novosCampos);
     };
 
+    const alterarObrigatorio = (id) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, required: !campo.required } : campo
+        );
+        setFields(novosCampos);
+    };
+
     // 2. Função que corre ao submeter o formulário
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -179,7 +186,7 @@ export default function CreateForm() {
 
                     {/* Lista de campos adicionados dinamicamente*/}
                     {fields.map((campo) => (
-                        <div key={campo.id} className="flex flex-col gap-4 mt-4 p-4 border border-accent-border rounded-md bg-white shadow-sm">
+                        <div key={campo.id} className="flex flex-col gap-2 mt-4">
 
                             {/* 1. Nome do Campo */}
                             <div className="flex flex-col gap-2">
@@ -188,8 +195,7 @@ export default function CreateForm() {
                                     type="text"
                                     value={campo.label}
                                     onChange={(e) => alterarLabel(campo.id, e.target.value)}
-                                    placeholder="Ex: Qual é a sua idade?"
-                                    className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                                    className="rounded-md border p-2"
                                 />
                             </div>
 
@@ -219,6 +225,16 @@ export default function CreateForm() {
                                     <option value="dropdown">Menu Suspenso (Opções)</option>
                                 </select>
                             </div>
+
+                            <label className="inline-flex items-center gap-2 text-sm font-medium">
+                                <input
+                                    type="checkbox"
+                                    checked={campo.required}
+                                    onChange={() => alterarObrigatorio(campo.id)}
+                                    className="h-4 w-4 rounded border-accent-border"
+                                />
+                                Campo obrigatório
+                            </label>
 
                         </div>
                     ))}
