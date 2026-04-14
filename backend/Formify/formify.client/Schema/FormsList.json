@@ -97,5 +97,99 @@
     ],
     "CreatedAt": "2026-04-11T11:29:58.7171973+01:00",
     "UpdatedAt": "2026-04-11T11:29:58.7172006+01:00"
+  },
+  {
+    "Id": 8,
+    "Title": "Teste tarefa #71",
+    "Description": "",
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776173619309",
+        "Type": "text",
+        "Label": "Nome",
+        "Required": true,
+        "Placeholder": "Introduza o nome",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:34:55.7329909+01:00",
+    "UpdatedAt": "2026-04-14T14:34:55.7329942+01:00"
+  },
+  {
+    "Id": 9,
+    "Title": "Teste 2 tarefa #71",
+    "Description": "",
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776173801082",
+        "Type": "text",
+        "Label": "E-mail",
+        "Required": false,
+        "Placeholder": "Introduza o email",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:37:01.5967795+01:00",
+    "UpdatedAt": "2026-04-14T14:37:01.5967832+01:00"
+  },
+  {
+    "Id": 10,
+    "Title": "Teste 3 tarefa #71",
+    "Description": "",
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776173866117",
+        "Type": "date",
+        "Label": "Data",
+        "Required": false,
+        "Placeholder": "",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:38:01.3314342+01:00",
+    "UpdatedAt": "2026-04-14T14:38:01.3314383+01:00"
+  },
+  {
+    "Id": 11,
+    "Title": "Teste 4 tarefa #71",
+    "Description": "",
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776173936978",
+        "Type": "dropdown",
+        "Label": "Cargo",
+        "Required": false,
+        "Placeholder": "Indique o seu cargo",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:39:31.5545459+01:00",
+    "UpdatedAt": "2026-04-14T14:39:31.5545513+01:00"
+  },
+  {
+    "Id": 12,
+    "Title": "Teste tarefa #69",
+    "Description": "",
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776174537367",
+        "Type": "dropdown",
+        "Label": "Cargo",
+        "Required": false,
+        "Placeholder": "Insira o seu cargo",
+        "Options": [
+          "Docente",
+          "Funcion\u00E1rio",
+          "Aluno"
+        ]
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:54:11.1764946+01:00",
+    "UpdatedAt": "2026-04-14T14:54:11.1764996+01:00"
   }
 ]

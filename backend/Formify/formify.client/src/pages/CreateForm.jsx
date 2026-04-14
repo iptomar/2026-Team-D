@@ -62,6 +62,19 @@ export default function CreateForm() {
         setFields(novosCampos);
     };
 
+     // Função que altera as opções de um campo dropdown específico
+    const alterarOptions = (id, novasOptions) => {
+        const listaOptions = novasOptions
+            .split(',')
+            .map(opcao => opcao.trim())
+            .filter(opcao => opcao !== '');
+
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, options: listaOptions } : campo
+        );
+        setFields(novosCampos);
+    };
+
     // 2. Função que corre ao submeter o formulário
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -128,7 +141,7 @@ export default function CreateForm() {
     };
 
     return (
-        <div className="space-y-6">
+       <div className="space-y-6">
             <div className="flex flex-col gap-4">
                 <Link
                     to="/"
@@ -225,6 +238,23 @@ export default function CreateForm() {
                                     <option value="dropdown">Menu Suspenso (Opções)</option>
                                 </select>
                             </div>
+
+                            {/* 4. Opções do Menu Suspenso */}
+                            {campo.type === "dropdown" && (
+                                <div className="flex flex-col gap-2">
+                                    <label className="font-medium text-sm text-text-h">Opções do menu</label>
+                                    <input
+                                        type="text"
+                                        value={campo.options.join(', ')}
+                                        onChange={(e) => alterarOptions(campo.id, e.target.value)}
+                                        placeholder="Ex: Opção 1, Opção 2, Opção 3, ..."
+                                        className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                                    />
+                                    <span className="text-xs text-gray-500">
+                                        Separe as opções por vírgulas.
+                                    </span>
+                                </div>
+                            )}
 
                             <label className="inline-flex items-center gap-2 text-sm font-medium">
                                 <input
