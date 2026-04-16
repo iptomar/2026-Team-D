@@ -37,6 +37,7 @@ namespace Formify.Server.Controllers
                 Id = allForms.Any() ? allForms.Max(f => f.Id) + 1 : 1,
                 Title = request.Title.Trim(),
                 Description = request.Description?.Trim(),
+                Audience = request.Audience,
                 StatusDrafted = request.StatusDraft,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,

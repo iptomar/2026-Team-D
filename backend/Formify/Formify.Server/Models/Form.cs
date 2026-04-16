@@ -8,6 +8,8 @@ namespace Formify.Server.Models
 
         public string? Description { get; set; }
 
+        public List<string> Audience { get; set; } = new();
+
         public bool StatusDrafted { get; set; }
 
         public List<Field> Fields { get; set; } = new List<Field>();

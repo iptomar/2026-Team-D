@@ -7,10 +7,13 @@ export default function CreateForm() {
     const [descricao, setDescricao] = useState('');
     // Estado que guarda a lista de campos do formulário (cada campo tem label, tipo, etc.)
     const [fields, setFields] = useState([]); // comentario ju
+    const [audience, setAudience] = useState([]);
 
     // estado para guardar mensagens de erro do campo nome
     const [erroNome, setErroNome] = useState('');
     const [erroDescricao, setErroDescricao] = useState('');
+    // Limpa qualquer erro anterior do público-alvo
+    const [erroAudience, setErroAudience] = useState('');
 
     //state hook para prevenir double-submits
     const [isLoading, setIsLoading] = useState(false);
@@ -29,6 +32,10 @@ export default function CreateForm() {
         };
         // Atualiza o estado adicionando o novo campo à lista existente
         setFields([...fields, novoCampo]);
+    };
+    const eliminarCampo = (id) => {
+        const novosCampos = fields.filter(campo => campo.id !== id);
+        setFields(novosCampos);
     };
 
     // Função que altera o label (nome visível) de um campo específico
@@ -62,6 +69,14 @@ export default function CreateForm() {
         setFields(novosCampos);
     };
 
+    const toggleAudience = (value) => {
+        setAudience(prev =>
+            prev.includes(value)
+                ? prev.filter(v => v !== value)
+                : [...prev, value]
+        );
+    };
+
      // Função que altera as opções de um campo dropdown específico
     const alterarOptions = (id, novasOptions) => {
         const listaOptions = novasOptions
@@ -82,6 +97,7 @@ export default function CreateForm() {
         setIsLoading(true); // Desativa o botão
         setErroNome('');
         setErroDescricao('');
+        setErroAudience('');
 
         let formValido = true;
         setErroNome('');
@@ -91,11 +107,16 @@ export default function CreateForm() {
             setIsLoading(false);
             formValido = false;
         }
+        // Validação do público-alvo
+        if (audience.length === 0) {
+            setErroAudience("Tem de selecionar pelo menos um público-alvo.");
+            setIsLoading(false);// Marca o formulário como inválido
+            formValido = false;
+            return;
+        }
 
         if (!formValido) return;
-        console.log('Campos no estado antes de enviar:', fields);
-        console.log('Título:', nome);
-        console.log('Descrição:', descricao);
+        
 
         try {
             const isFinal = e.nativeEvent.submitter.id === "save-final";
@@ -108,7 +129,8 @@ export default function CreateForm() {
                     Title: nome,
                     Description: descricao,
                     StatusDraft: !isFinal, // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
-                    Fields: fields // envia só os labels
+                    Fields: fields, // envia só os labels
+                    Audience: audience
                 }),
             });
 
@@ -186,6 +208,46 @@ export default function CreateForm() {
                         />
                         {erroDescricao && <span className="text-red-500 text-sm">{erroDescricao}</span>}
                     </div>
+                    <div className="flex flex-col gap-3">
+                        <label className="font-medium text-text-h">
+                            Público-alvo
+                        </label>
+
+                        <div className="flex flex-col gap-2 rounded-md border border-accent-border bg-white p-3">
+
+                            {/* Professores */}
+                            <label className="flex items-center gap-2 cursor-pointer text-sm">
+                                <input
+                                    type="checkbox"
+                                    checked={audience.includes("teacher")}
+                                    onChange={() => toggleAudience("teacher")}
+                                    className="h-4 w-4 accent-blue-600"
+                                />
+                                <span>Professores</span>
+                            </label>
+
+                            {/* Funcionários */}
+                            <label className="flex items-center gap-2 cursor-pointer text-sm">
+                                <input
+                                    type="checkbox"
+                                    checked={audience.includes("staff")}
+                                    onChange={() => toggleAudience("staff")}
+                                    className="h-4 w-4 accent-blue-600"
+                                />
+                                <span>Funcionários</span>
+                            </label>
+
+                            
+                            {erroAudience && (
+                            <span className="text-red-500 text-sm">
+                                {erroAudience}
+                            </span>
+                        )}
+                        </div>
+                        
+                    </div>
+                    
+                    
                     {/* Botão que permite adicionar novos campos ao formulário */}
                     <div className="mt-4">
                         <button
@@ -207,6 +269,7 @@ export default function CreateForm() {
                                 <input
                                     type="text"
                                     value={campo.label}
+                                    placeholder="Ex: Endereço ..."
                                     onChange={(e) => alterarLabel(campo.id, e.target.value)}
                                     className="rounded-md border p-2"
                                 />
@@ -265,8 +328,18 @@ export default function CreateForm() {
                                 />
                                 Campo obrigatório
                             </label>
+                            <div className="flex justify-end mt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => eliminarCampo(campo.id)}
+                                    className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-600 transition-all hover:bg-red-100 hover:border-red-300"
+                                >
+                                    🗑️ Eliminar campo
+                                </button>
+                            </div>
 
                         </div>
+
                     ))}
 
                     <div className="mt-6 flex justify-end gap-4 border-t border-accent-border pt-4">

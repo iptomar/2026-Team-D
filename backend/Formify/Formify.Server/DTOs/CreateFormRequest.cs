@@ -12,6 +12,8 @@ namespace Formify.Server.DTOs
         [MaxLength(1000, ErrorMessage = "A descrição não pode ter mais de 1000 caracteres.")]
         public string? Description { get; set; }
 
+        public List<string> Audience { get; set; } = new();
+
         public bool StatusDraft { get; set; } = true;
         public List<Field> Fields { get; set; } = new List<Field>();
     }

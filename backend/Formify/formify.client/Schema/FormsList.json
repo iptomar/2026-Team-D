@@ -3,6 +3,7 @@
     "Id": 1,
     "Title": "Teste com altera\u00E7\u00E3o do backend",
     "Description": "",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -21,6 +22,7 @@
     "Id": 2,
     "Title": "Pedro",
     "Description": "alguma coisa",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -39,6 +41,7 @@
     "Id": 3,
     "Title": "teste",
     "Description": "teste",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [],
     "CreatedAt": "2026-04-10T15:28:05.6871998+01:00",
@@ -48,6 +51,7 @@
     "Id": 4,
     "Title": "Rascunho",
     "Description": "Rascunho",
+    "Audience": [],
     "StatusDrafted": true,
     "Fields": [
       {
@@ -66,6 +70,7 @@
     "Id": 6,
     "Title": "Teste 2",
     "Description": "Isto s\u00E3o muitos testes para o meu gosto",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -84,6 +89,7 @@
     "Id": 7,
     "Title": "ffkghfk",
     "Description": "kfgkg",
+    "Audience": [],
     "StatusDrafted": true,
     "Fields": [
       {
@@ -102,6 +108,7 @@
     "Id": 8,
     "Title": "Teste tarefa #71",
     "Description": "",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -120,6 +127,7 @@
     "Id": 9,
     "Title": "Teste 2 tarefa #71",
     "Description": "",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -138,6 +146,7 @@
     "Id": 10,
     "Title": "Teste 3 tarefa #71",
     "Description": "",
+    "Audience": [],
     "StatusDrafted": true,
     "Fields": [
       {
@@ -156,6 +165,7 @@
     "Id": 11,
     "Title": "Teste 4 tarefa #71",
     "Description": "",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -174,6 +184,7 @@
     "Id": 12,
     "Title": "Teste tarefa #69",
     "Description": "",
+    "Audience": [],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -191,5 +202,87 @@
     ],
     "CreatedAt": "2026-04-14T14:54:11.1764946+01:00",
     "UpdatedAt": "2026-04-14T14:54:11.1764996+01:00"
+  },
+  {
+    "Id": 13,
+    "Title": "teste",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776363291381",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "Options": []
+      },
+      {
+        "Id": "1776363304430",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-16T19:17:17.4679527+01:00",
+    "UpdatedAt": "2026-04-16T19:17:17.4679574+01:00"
+  },
+  {
+    "Id": 14,
+    "Title": "Teste com P\u00FAblico Alvo",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-16T20:10:34.8758257+01:00",
+    "UpdatedAt": "2026-04-16T20:10:34.8758273+01:00"
+  },
+  {
+    "Id": 15,
+    "Title": "Testar associa\u00E7\u00E3o do p\u00FAblico-alvo",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776367596723",
+        "Type": "number",
+        "Label": "Endere\u00E7o",
+        "Required": true,
+        "Placeholder": "",
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-16T20:27:28.2627762+01:00",
+    "UpdatedAt": "2026-04-16T20:27:28.2627777+01:00"
+  },
+  {
+    "Id": 16,
+    "Title": "teste",
+    "Description": "",
+    "Audience": [
+      "staff",
+      "teacher"
+    ],
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-16T20:32:57.261738+01:00",
+    "UpdatedAt": "2026-04-16T20:32:57.26174+01:00"
+  },
+  {
+    "Id": 17,
+    "Title": "teste",
+    "Description": "",
+    "Audience": [
+      "teacher",
+      "staff"
+    ],
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-16T20:36:13.3476495+01:00",
+    "UpdatedAt": "2026-04-16T20:36:13.3476762+01:00"
   }
 ]
