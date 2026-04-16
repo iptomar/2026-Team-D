@@ -33,6 +33,10 @@ export default function CreateForm() {
         // Atualiza o estado adicionando o novo campo à lista existente
         setFields([...fields, novoCampo]);
     };
+    const eliminarCampo = (id) => {
+        const novosCampos = fields.filter(campo => campo.id !== id);
+        setFields(novosCampos);
+    };
 
     // Função que altera o label (nome visível) de um campo específico
     const alterarLabel = (id, novoLabel) => {
@@ -233,16 +237,7 @@ export default function CreateForm() {
                                 <span>Funcionários</span>
                             </label>
 
-                            {/* Ambos */}
-                            <label className="flex items-center gap-2 cursor-pointer text-sm">
-                                <input
-                                    type="checkbox"
-                                    checked={audience.includes("both")}
-                                    onChange={() => toggleAudience("both")}
-                                    className="h-4 w-4 accent-blue-600"
-                                />
-                                <span>Ambos</span>
-                            </label>
+                            
                             {erroAudience && (
                             <span className="text-red-500 text-sm">
                                 {erroAudience}
@@ -274,6 +269,7 @@ export default function CreateForm() {
                                 <input
                                     type="text"
                                     value={campo.label}
+                                    placeholder="Ex: Endereço ..."
                                     onChange={(e) => alterarLabel(campo.id, e.target.value)}
                                     className="rounded-md border p-2"
                                 />
@@ -332,8 +328,18 @@ export default function CreateForm() {
                                 />
                                 Campo obrigatório
                             </label>
+                            <div className="flex justify-end mt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => eliminarCampo(campo.id)}
+                                    className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-600 transition-all hover:bg-red-100 hover:border-red-300"
+                                >
+                                    🗑️ Eliminar campo
+                                </button>
+                            </div>
 
                         </div>
+
                     ))}
 
                     <div className="mt-6 flex justify-end gap-4 border-t border-accent-border pt-4">
