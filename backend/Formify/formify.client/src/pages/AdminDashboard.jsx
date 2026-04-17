@@ -51,15 +51,36 @@ export default function AdminDashboard() {
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
 
+    const getAudience = (form) => {
+        const rawAudience = form.audience || form.Audience || [];
+        if (Array.isArray(rawAudience)) {
+            return rawAudience.map(normalizeText);
+        }
+
+        return [normalizeText(rawAudience)];
+    };
+
+    const matchesCargo = (form) => {
+        if (selectedCargo === 'todos') return true;
+
+        const audience = getAudience(form);
+        const hasTeacher = audience.includes('teacher');
+        const hasStaff = audience.includes('staff');
+        const hasBoth = hasTeacher && hasStaff;
+
+        if (selectedCargo === 'professores') {
+            return hasTeacher || hasBoth;
+        }
+
+        if (selectedCargo === 'funcionarios') {
+            return hasStaff || hasBoth;
+        }
+
+        return hasBoth;
+    };
+
     const filteredForms = forms
-        .filter((form) => {
-            if (selectedCargo === 'todos') return true;
-
-            const cargo = (form.cargo || form.Cargo || '').toString().toLowerCase();
-            if (!cargo) return true;
-
-            return cargo === selectedCargo;
-        })
+        .filter(matchesCargo)
         .filter((form) => {
             const term = normalizeText(searchTerm.trim());
             if (!term) return true;
@@ -160,7 +181,6 @@ export default function AdminDashboard() {
                   className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
               >
                   <option value="todos">Todos</option>
-                  <option value="ambos">Ambos</option>
                   <option value="professores">Professores</option>
                   <option value="funcionarios">Funcionários</option>
               </select>
@@ -239,3 +259,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+
