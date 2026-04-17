@@ -609,42 +609,5 @@
     ],
     "CreatedAt": "2026-04-17T17:15:41.09849+01:00",
     "UpdatedAt": "2026-04-17T17:15:41.0984992+01:00"
-  },
-  {
-    "Id": 26,
-    "Title": "so para professores",
-    "Description": "",
-    "Audience": [
-      "teacher"
-    ],
-    "StatusDrafted": true,
-    "Fields": [],
-    "CreatedAt": "2026-04-17T18:22:28.5060036+01:00",
-    "UpdatedAt": "2026-04-17T18:22:28.5060087+01:00"
-  },
-  {
-    "Id": 27,
-    "Title": "so duncionarios",
-    "Description": "",
-    "Audience": [
-      "staff"
-    ],
-    "StatusDrafted": true,
-    "Fields": [],
-    "CreatedAt": "2026-04-17T18:23:24.9108993+01:00",
-    "UpdatedAt": "2026-04-17T18:23:24.9109056+01:00"
-  },
-  {
-    "Id": 28,
-    "Title": "todos",
-    "Description": "",
-    "Audience": [
-      "teacher",
-      "staff"
-    ],
-    "StatusDrafted": true,
-    "Fields": [],
-    "CreatedAt": "2026-04-17T18:24:41.9330701+01:00",
-    "UpdatedAt": "2026-04-17T18:24:41.9330735+01:00"
   }
 ]
