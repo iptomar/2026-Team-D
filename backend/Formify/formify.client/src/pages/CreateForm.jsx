@@ -248,16 +248,6 @@ export default function CreateForm() {
 
     return (
        <div className="space-y-6">
-            <div className="flex flex-col gap-4">
-                <Link
-                    to="/"
-                    className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80"
-                >
-                    ← Voltar
-                </Link>
-                <h2 className="text-3xl font-bold text-text-h">Novo Formulário</h2>
-            </div>
-
             <div className="space-y-4">
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-lg border border-accent-border bg-accent-bg p-6">
 

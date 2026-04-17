@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom';
  * 
  * Página principal para administradores gerenciarem formulários.
  * Funcionalidades:
- * - Lista de formulários criados (atualmente vazia - placeholder)
- * - Botão para criar novo formulário
+ * - Lista de formulários criados
  * - Empty state com instruções quando não há formulários
  * 
  * Futura integração com API será implementada aqui.
@@ -33,6 +32,7 @@ export default function AdminDashboard() {
                 }
 
                 const data = await response.json();
+                console.log(data.toString());
                 setForms(data); // Atualiza o estado com os dados do backend
             } catch (error) {
                 console.error("Erro na integração:", error);
@@ -139,6 +139,8 @@ export default function AdminDashboard() {
         }
     };
 
+    console.log(forms);
+
   return (
     <div className="min-h-[calc(100vh-140px)] space-y-8 flex flex-col">
       {/* Cabeçalho com título e botão de ação */}
@@ -149,14 +151,6 @@ export default function AdminDashboard() {
             Gestão dos formulários institucionais
           </p>
         </div>
-
-        {/* Botão para criar novo formulário */}
-        <Link
-          to="/create-form"
-          className="inline-flex whitespace-nowrap rounded-lg bg-accent px-6 py-3 font-semibold text-white transition-all hover:opacity-90 hover:shadow-custom active:scale-95 sm:self-center"
-        >
-         Criar Formulário
-        </Link>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">

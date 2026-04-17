@@ -33,3 +33,11 @@ obj/
 *.db
 *.db-shm
 *.db-wal
+/backend/Formify/Formify.Server/obj/Debug/net10.0/Formify.Server.assets.cache
+/backend/Formify/Formify.Server/obj/Formify.Server.csproj.nuget.dgspec.json
+/backend/Formify/Formify.Server/obj/Formify.Server.csproj.nuget.g.props
+/backend/Formify/Formify.Server/obj/Formify.Server.csproj.nuget.g.targets
+/backend/Formify/Formify.Server/obj/project.assets.json
+/backend/Formify/Formify.Server/obj/project.nuget.cache
+/.gitignore
+/.gitignore
