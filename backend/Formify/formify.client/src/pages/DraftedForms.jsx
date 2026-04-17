@@ -4,12 +4,8 @@ import { Link } from 'react-router-dom';
 /**
  * AdminDashboard Component
  * 
- * Página principal para administradores gerenciarem formulários.
  * Funcionalidades:
- * - Lista de formulários criados
- * - Empty state com instruções quando não há formulários
- * 
- * Futura integração com API será implementada aqui.
+ * - Lista de formulários criados mas em rascunho
  */
 export default function AdminDashboard() {
   // TODO: Integrar com API .NET para buscar formulários
@@ -27,7 +23,6 @@ export default function AdminDashboard() {
                 }
 
                 const data = await response.json();
-                console.log(data.toString());
                 setForms(data); // Atualiza o estado com os dados do backend
             } catch (error) {
                 console.error("Erro na integração:", error);
@@ -57,8 +52,6 @@ export default function AdminDashboard() {
         }
     };
 
-    console.log(forms);
-
   return (
     <div className="space-y-8">
       {/* Cabeçalho com título e botão de ação */}
@@ -85,8 +78,7 @@ export default function AdminDashboard() {
               ) : (
                   <div className="grid auto-rows-max gap-6 sm:grid-cols-2 lg:grid-cols-3">
                       {/* 3. Renderização dinâmica dos cards */}
-                        {forms.filter((form) => form.statusDrafted === false).map((form) => (
-
+                       {forms.filter((form) => form.statusDrafted === true).map((form) => (
                           <div key={form.Id} className="rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md transition-shadow">
                               <h3 className="font-bold text-lg text-text-h">{form.title || "Sem título"}</h3>
                               <p className="text-sm text-text mt-2">{form.description}</p>
@@ -98,7 +90,7 @@ export default function AdminDashboard() {
                                   title="Eliminar"
                               >
                                   🗑️ Eliminar
-                                </button>
+                              </button>
                           </div>
                       ))}
                   </div>
