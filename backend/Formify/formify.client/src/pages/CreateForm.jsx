@@ -30,7 +30,9 @@ export default function CreateForm() {
             required: false,
             x: null,
             y: null,
-            options: []
+            options: [],
+            tableFixedRows: false, 
+            tableRowCount: 1       
         };
         // Atualiza o estado adicionando o novo campo à lista existente
         setFields([...fields, novoCampo]);
@@ -62,6 +64,32 @@ export default function CreateForm() {
             campo.id === id ? { ...campo, type: novoTipo } : campo
         );
         setFields(novosCampos);
+    };
+
+    // Adiciona uma nova coluna (caixa de texto vazia) à lista de opções
+    const adicionarColuna = (id) => {
+        setFields(fields.map(c =>
+            c.id === id ? { ...c, options: [...c.options, ""] } : c
+        ));
+    };
+
+    // Atualiza o texto de uma coluna específica
+    const alterarColuna = (id, index, valor) => {
+        setFields(fields.map(c => {
+            if (c.id === id) {
+                const novasColunas = [...c.options];
+                novasColunas[index] = valor;
+                return { ...c, options: novasColunas };
+            }
+            return c;
+        }));
+    };
+
+    // Atualiza as configurações da tabela (o toggle das linhas e o número de linhas)
+    const alterarConfigTabela = (id, propriedade, valor) => {
+        setFields(fields.map(c =>
+            c.id === id ? { ...c, [propriedade]: valor } : c
+        ));
     };
 
     const alterarObrigatorio = (id) => {
@@ -301,8 +329,67 @@ export default function CreateForm() {
                                     <option value="number">Número</option>
                                     <option value="date">Data</option>
                                     <option value="dropdown">Menu Suspenso (Opções)</option>
+                                    <option value="table">Tabela (Grelha)</option>
                                 </select>
                             </div>
+
+                            {/* CONFIGURAÇÃO DA TABELA (Só aparece se o tipo for 'table') */}
+                            {campo.type === 'table' && (
+                                <div className="flex flex-col gap-4 mt-2 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                                    <p className="font-semibold text-sm text-text-h">Configuração da Tabela</p>
+
+                                    {/* Caixas de texto das Colunas */}
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-medium">Colunas da Tabela</label>
+                                        {campo.options.map((coluna, idx) => (
+                                            <input
+                                                key={idx}
+                                                type="text"
+                                                value={coluna}
+                                                onChange={(e) => alterarColuna(campo.id, idx, e.target.value)}
+                                                placeholder={`Nome da Coluna ${idx + 1}`}
+                                                className="rounded-md border border-accent-border p-2 text-sm focus:border-blue-500 focus:outline-none"
+                                            />
+                                        ))}
+                                    </div>
+
+                                    {/* Botão de Adicionar Coluna + Toggle de Linhas */}
+                                    <div className="flex flex-wrap items-center gap-6 mt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => adicionarColuna(campo.id)}
+                                            className="bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm px-4 py-2 rounded-md font-semibold transition"
+                                        >
+                                            + Adicionar Coluna
+                                        </button>
+
+                                        <label className="flex items-center gap-2 text-sm cursor-pointer font-medium">
+                                            <input
+                                                type="checkbox"
+                                                checked={campo.tableFixedRows}
+                                                onChange={(e) => alterarConfigTabela(campo.id, 'tableFixedRows', e.target.checked)}
+                                                className="w-4 h-4 cursor-pointer"
+                                            />
+                                            Número fixo de linhas?
+                                        </label>
+
+                                        {/* Caixa de Número de Linhas (Só aparece se o toggle estiver ativo) */}
+                                        {campo.tableFixedRows && (
+                                            <div className="flex items-center gap-2">
+                                                <label className="text-sm font-medium">Nº de linhas:</label>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    value={campo.tableRowCount}
+                                                    onChange={(e) => alterarConfigTabela(campo.id, 'tableRowCount', parseInt(e.target.value) || 1)}
+                                                    className="rounded-md border border-accent-border p-1 w-16 text-center focus:border-blue-500 focus:outline-none"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
+
 
                             {/* 4. Opções do Menu Suspenso */}
                             {campo.type === "dropdown" && (

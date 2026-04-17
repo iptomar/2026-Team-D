@@ -11,5 +11,8 @@
         public double? X { get; set; }
         public double? Y { get; set; }
         public List<string>? Options { get; set; }
+
+        public bool TableFixedRows { get; set; }
+        public int? TableRowCount { get; set; }
     }
 }

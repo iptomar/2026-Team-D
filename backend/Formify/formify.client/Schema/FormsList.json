@@ -14,7 +14,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-07T22:28:43.3582975+01:00",
@@ -35,7 +37,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-08T15:41:15.3241351+01:00",
@@ -66,7 +70,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-10T15:28:59.8549571+01:00",
@@ -87,7 +93,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-10T15:55:17.1819454+01:00",
@@ -108,7 +116,9 @@
         "Placeholder": "jgfjk",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-11T11:29:58.7171973+01:00",
@@ -129,7 +139,9 @@
         "Placeholder": "Introduza o nome",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-14T14:34:55.7329909+01:00",
@@ -150,7 +162,9 @@
         "Placeholder": "Introduza o email",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-14T14:37:01.5967795+01:00",
@@ -171,7 +185,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-14T14:38:01.3314342+01:00",
@@ -192,7 +208,9 @@
         "Placeholder": "Indique o seu cargo",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-14T14:39:31.5545459+01:00",
@@ -217,7 +235,9 @@
           "Docente",
           "Funcion\u00E1rio",
           "Aluno"
-        ]
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-14T14:54:11.1764946+01:00",
@@ -238,7 +258,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       },
       {
         "Id": "1776363304430",
@@ -248,7 +270,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-16T19:17:17.4679527+01:00",
@@ -279,7 +303,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-16T20:27:28.2627762+01:00",
@@ -328,7 +354,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       },
       {
         "Id": "1776436060720",
@@ -338,7 +366,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       },
       {
         "Id": "1776436063065",
@@ -348,7 +378,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-17T15:27:54.8898992+01:00",
@@ -371,7 +403,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       },
       {
         "Id": "1776436297912",
@@ -381,7 +415,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       },
       {
         "Id": "1776436298384",
@@ -391,7 +427,9 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": []
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       },
       {
         "Id": "1776436298913",
@@ -403,10 +441,96 @@
         "Y": null,
         "Options": [
           "hkjhj"
-        ]
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
     "CreatedAt": "2026-04-17T15:32:10.9598071+01:00",
     "UpdatedAt": "2026-04-17T15:32:10.9598097+01:00"
+  },
+  {
+    "Id": 20,
+    "Title": "teste tabela1",
+    "Description": "",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776437628068",
+        "Type": "table",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "col1",
+          "col2",
+          "col3",
+          "col4"
+        ],
+        "TableFixedRows": true,
+        "TableRowCount": 20
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:54:45.8862899+01:00",
+    "UpdatedAt": "2026-04-17T15:54:45.8862952+01:00"
+  },
+  {
+    "Id": 21,
+    "Title": "teste tabela 2",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776437694710",
+        "Type": "table",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "col1",
+          "col12",
+          "col123"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:55:10.1372442+01:00",
+    "UpdatedAt": "2026-04-17T15:55:10.1372462+01:00"
+  },
+  {
+    "Id": 22,
+    "Title": "teste tabela 3",
+    "Description": "",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776437720381",
+        "Type": "table",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:55:24.2203399+01:00",
+    "UpdatedAt": "2026-04-17T15:55:24.220343+01:00"
   }
 ]
