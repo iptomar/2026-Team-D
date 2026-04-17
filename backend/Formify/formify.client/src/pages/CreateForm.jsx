@@ -28,6 +28,8 @@ export default function CreateForm() {
             label: "", // Alterado: começa vazio para não ter de apagar texto
             placeholder: "",    //(tem de editar esta parte)
             required: false,
+            x: null,
+            y: null,
             options: []
         };
         // Atualiza o estado adicionando o novo campo à lista existente

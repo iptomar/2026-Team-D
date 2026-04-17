@@ -12,6 +12,8 @@
         "Label": "label ",
         "Required": false,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -31,6 +33,8 @@
         "Label": "Nome do aluno",
         "Required": false,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -60,6 +64,8 @@
         "Label": "Rascunho",
         "Required": false,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -79,6 +85,8 @@
         "Label": "Campo",
         "Required": false,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -98,6 +106,8 @@
         "Label": "gfkfg",
         "Required": false,
         "Placeholder": "jgfjk",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -117,6 +127,8 @@
         "Label": "Nome",
         "Required": true,
         "Placeholder": "Introduza o nome",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -136,6 +148,8 @@
         "Label": "E-mail",
         "Required": false,
         "Placeholder": "Introduza o email",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -155,6 +169,8 @@
         "Label": "Data",
         "Required": false,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -174,6 +190,8 @@
         "Label": "Cargo",
         "Required": false,
         "Placeholder": "Indique o seu cargo",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -193,6 +211,8 @@
         "Label": "Cargo",
         "Required": false,
         "Placeholder": "Insira o seu cargo",
+        "X": null,
+        "Y": null,
         "Options": [
           "Docente",
           "Funcion\u00E1rio",
@@ -216,6 +236,8 @@
         "Label": "",
         "Required": false,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       },
       {
@@ -224,6 +246,8 @@
         "Label": "",
         "Required": false,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -253,6 +277,8 @@
         "Label": "Endere\u00E7o",
         "Required": true,
         "Placeholder": "",
+        "X": null,
+        "Y": null,
         "Options": []
       }
     ],
@@ -284,5 +310,103 @@
     "Fields": [],
     "CreatedAt": "2026-04-16T20:36:13.3476495+01:00",
     "UpdatedAt": "2026-04-16T20:36:13.3476762+01:00"
+  },
+  {
+    "Id": 18,
+    "Title": "klghklgh",
+    "Description": "gjhg",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776436058919",
+        "Type": "text",
+        "Label": "",
+        "Required": true,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": []
+      },
+      {
+        "Id": "1776436060720",
+        "Type": "text",
+        "Label": "jhgjhgjhg",
+        "Required": true,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": []
+      },
+      {
+        "Id": "1776436063065",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": []
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:27:54.8898992+01:00",
+    "UpdatedAt": "2026-04-17T15:27:54.8899026+01:00"
+  },
+  {
+    "Id": 19,
+    "Title": "teste123456",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776436297428",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": []
+      },
+      {
+        "Id": "1776436297912",
+        "Type": "number",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": []
+      },
+      {
+        "Id": "1776436298384",
+        "Type": "date",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": []
+      },
+      {
+        "Id": "1776436298913",
+        "Type": "dropdown",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "hkjhj"
+        ]
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:32:10.9598071+01:00",
+    "UpdatedAt": "2026-04-17T15:32:10.9598097+01:00"
   }
 ]
