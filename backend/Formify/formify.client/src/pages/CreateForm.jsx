@@ -95,6 +95,21 @@ export default function CreateForm() {
         }));
     };
 
+
+    // Remove uma coluna específica (garantindo que sobra sempre pelo menos 1)
+    const removerColuna = (id, index) => {
+        setFields(fields.map(c => {
+            if (c.id === id) {
+                // Só remove se houver mais do que uma coluna
+                if (c.options.length > 1) {
+                    const novasColunas = c.options.filter((_, i) => i !== index);
+                    return { ...c, options: novasColunas };
+                }
+            }
+            return c;
+        }));
+    };
+
     // Atualiza as configurações da tabela (o toggle das linhas e o número de linhas)
     const alterarConfigTabela = (id, propriedade, valor) => {
         setFields(fields.map(c =>
@@ -383,14 +398,24 @@ export default function CreateForm() {
                                     <div className="flex flex-col gap-2">
                                         <label className="text-sm font-medium">Colunas da Tabela</label>
                                         {campo.options.map((coluna, idx) => (
-                                            <input
-                                                key={idx}
-                                                type="text"
-                                                value={coluna}
-                                                onChange={(e) => alterarColuna(campo.id, idx, e.target.value)}
-                                                placeholder={`Nome da Coluna ${idx + 1}`}
-                                                className={`rounded-md border p-2 text-sm focus:outline-none ${fieldErrors[campo.id]?.options && (!coluna || coluna.trim() === '') ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
-                                            />
+                                            <div key={idx} className="flex items-center gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={coluna}
+                                                    onChange={(e) => alterarColuna(campo.id, idx, e.target.value)}
+                                                    placeholder={`Nome da Coluna ${idx + 1}`}
+                                                    className={`flex-1 rounded-md border p-2 text-sm focus:outline-none ${fieldErrors[campo.id]?.options && (!coluna || coluna.trim() === '') ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removerColuna(campo.id, idx)}
+                                                    disabled={campo.options.length <= 1}
+                                                    className="flex-shrink-0 text-red-500 hover:text-red-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                                                    title="Remover coluna"
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </div>
                                         ))}
                                         {fieldErrors[campo.id]?.options && <span className="text-red-500 text-sm">Todas as colunas têm de ter um nome.</span>}
                                     </div>
