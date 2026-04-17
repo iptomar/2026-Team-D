@@ -18,6 +18,9 @@ export default function CreateForm() {
     //state hook para prevenir double-submits
     const [isLoading, setIsLoading] = useState(false);
 
+    // Guarda erros específicos de cada campo
+    const [fieldErrors, setFieldErrors] = useState({}); 
+
     const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     // Função que adiciona um novo campo ao formulário
@@ -60,10 +63,17 @@ export default function CreateForm() {
 
     
     const alterarTipo = (id, novoTipo) => {
-        const novosCampos = fields.map(campo =>
-            campo.id === id ? { ...campo, type: novoTipo } : campo
-        );
-        setFields(novosCampos);
+        setFields(fields.map(campo => {
+            if (campo.id === id) {
+                // Se mudar para tabela e não houver colunas, cria a primeira
+                const novasOpcoes = (novoTipo === 'table' && campo.options.length === 0)
+                    ? [""]
+                    : campo.options;
+
+                return { ...campo, type: novoTipo, options: novasOpcoes };
+            }
+            return campo;
+        }));
     };
 
     // Adiciona uma nova coluna (caixa de texto vazia) à lista de opções
@@ -131,21 +141,50 @@ export default function CreateForm() {
 
         let formValido = true;
         setErroNome('');
+        setErroAudience('');
+        setFieldErrors({});
 
+        // 1. Validações base
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
-            setIsLoading(false);
             formValido = false;
-        }
-        // Validação do público-alvo
-        if (audience.length === 0) {
-            setErroAudience("Tem de selecionar pelo menos um público-alvo.");
-            setIsLoading(false);// Marca o formulário como inválido
-            formValido = false;
-            return;
         }
 
-        if (!formValido) return;
+        if (audience.length === 0) {
+            setErroAudience("Tem de selecionar pelo menos um público-alvo.");
+            formValido = false;
+        }
+
+        // 2. Validações dos campos dinâmicos (Erro individual por cada input)
+        let novosErros = {};
+        let camposValidos = true;
+
+        fields.forEach(f => {
+            let errosDoCampo = {
+                label: !f.label || f.label.trim() === '',
+                placeholder: !f.placeholder || f.placeholder.trim() === '',
+                options: false
+            };
+
+            if (f.type === 'dropdown' && (f.options.length === 0 || f.options.some(opt => opt.trim() === ''))) {
+                errosDoCampo.options = true;
+            }
+            if (f.type === 'table' && (f.options.length === 0 || f.options.some(col => col.trim() === ''))) {
+                errosDoCampo.options = true;
+            }
+
+            if (errosDoCampo.label || errosDoCampo.placeholder || errosDoCampo.options) {
+                novosErros[f.id] = errosDoCampo;
+                camposValidos = false;
+            }
+        });
+
+        // 3. Se algo falhar, PÁRA aqui e não vai para o try/catch
+        if (!formValido || !camposValidos) {
+            if (!camposValidos) setFieldErrors(novosErros);
+            setIsLoading(false);
+            return;
+        }
         
 
         try {
@@ -289,9 +328,9 @@ export default function CreateForm() {
                         </button>
                     </div>
 
-                    {/* Lista de campos adicionados dinamicamente*/}
+                    {/* Lista de campos adicionados dinamicamente */}
                     {fields.map((campo) => (
-                        <div key={campo.id} className="flex flex-col gap-2 mt-4">
+                        <div key={campo.id} className={`flex flex-col gap-4 mt-4 p-4 rounded-md border shadow-sm transition-all ${fieldErrors[campo.id] ? 'border-red-300 bg-red-50/30' : 'border-accent-border bg-white'}`}>
 
                             {/* 1. Nome do Campo */}
                             <div className="flex flex-col gap-2">
@@ -301,8 +340,9 @@ export default function CreateForm() {
                                     value={campo.label}
                                     placeholder="Ex: Endereço ..."
                                     onChange={(e) => alterarLabel(campo.id, e.target.value)}
-                                    className="rounded-md border p-2"
+                                    className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.label ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                                 />
+                                {fieldErrors[campo.id]?.label && <span className="text-red-500 text-sm">O nome do campo é obrigatório.</span>}
                             </div>
 
                             {/* 2. Placeholder (Texto de Exemplo) */}
@@ -313,8 +353,9 @@ export default function CreateForm() {
                                     value={campo.placeholder}
                                     onChange={(e) => alterarPlaceholder(campo.id, e.target.value)}
                                     placeholder="Ex: Insira o valor aqui..."
-                                    className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                                    className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.placeholder ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                                 />
+                                {fieldErrors[campo.id]?.placeholder && <span className="text-red-500 text-sm">O texto de exemplo é obrigatório.</span>}
                             </div>
 
                             {/* 3. Tipo de Dados */}
@@ -348,9 +389,10 @@ export default function CreateForm() {
                                                 value={coluna}
                                                 onChange={(e) => alterarColuna(campo.id, idx, e.target.value)}
                                                 placeholder={`Nome da Coluna ${idx + 1}`}
-                                                className="rounded-md border border-accent-border p-2 text-sm focus:border-blue-500 focus:outline-none"
+                                                className={`rounded-md border p-2 text-sm focus:outline-none ${fieldErrors[campo.id]?.options && (!coluna || coluna.trim() === '') ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                                             />
                                         ))}
+                                        {fieldErrors[campo.id]?.options && <span className="text-red-500 text-sm">Todas as colunas têm de ter um nome.</span>}
                                     </div>
 
                                     {/* Botão de Adicionar Coluna + Toggle de Linhas */}
@@ -400,15 +442,17 @@ export default function CreateForm() {
                                         value={campo.options.join(', ')}
                                         onChange={(e) => alterarOptions(campo.id, e.target.value)}
                                         placeholder="Ex: Opção 1, Opção 2, Opção 3, ..."
-                                        className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                                        className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.options ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                                     />
-                                    <span className="text-xs text-gray-500">
-                                        Separe as opções por vírgulas.
-                                    </span>
+                                    {fieldErrors[campo.id]?.options ? (
+                                        <span className="text-red-500 text-sm">As opções não podem estar vazias.</span>
+                                    ) : (
+                                        <span className="text-xs text-gray-500">Separe as opções por vírgulas.</span>
+                                    )}
                                 </div>
                             )}
 
-                            <label className="inline-flex items-center gap-2 text-sm font-medium">
+                            <label className="inline-flex items-center gap-2 text-sm font-medium mt-2">
                                 <input
                                     type="checkbox"
                                     checked={campo.required}
@@ -417,6 +461,7 @@ export default function CreateForm() {
                                 />
                                 Campo obrigatório
                             </label>
+
                             <div className="flex justify-end mt-2">
                                 <button
                                     type="button"
@@ -428,7 +473,6 @@ export default function CreateForm() {
                             </div>
 
                         </div>
-
                     ))}
 
                     <div className="mt-6 flex justify-end gap-4 border-t border-accent-border pt-4">
