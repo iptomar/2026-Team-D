@@ -20,6 +20,21 @@ export default function Sidebar() {
          Formulários
         </Link>
 
+       <Link
+        to="/DraftedForms"
+        className="block rounded-lg px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-accent-bg hover:text-accent"
+       >
+         Formulários em Rascunho
+       </Link>
+
+       <Link
+        to="/CreateForm"
+        className="block rounded-lg px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-accent-bg hover:text-accent"
+       >
+        Criar Formulário
+       </Link>
+
+
       </nav>
     </aside>
   );
