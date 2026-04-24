@@ -1,0 +1,650 @@
+[
+  {
+    "Id": 1,
+    "Title": "Teste com altera\u00E7\u00E3o do backend",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1775597312208",
+        "Type": "text",
+        "Label": "label ",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-07T22:28:43.3582975+01:00",
+    "UpdatedAt": "2026-04-07T22:28:43.3583018+01:00"
+  },
+  {
+    "Id": 2,
+    "Title": "Pedro",
+    "Description": "alguma coisa",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1775659253677",
+        "Type": "text",
+        "Label": "Nome do aluno",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-08T15:41:15.3241351+01:00",
+    "UpdatedAt": "2026-04-08T15:41:15.3241399+01:00"
+  },
+  {
+    "Id": 3,
+    "Title": "teste",
+    "Description": "teste",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-10T15:28:05.6871998+01:00",
+    "UpdatedAt": "2026-04-10T15:28:05.687203+01:00"
+  },
+  {
+    "Id": 4,
+    "Title": "Rascunho",
+    "Description": "Rascunho",
+    "Audience": [],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1775831333210",
+        "Type": "text",
+        "Label": "Rascunho",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-10T15:28:59.8549571+01:00",
+    "UpdatedAt": "2026-04-10T15:28:59.8549595+01:00"
+  },
+  {
+    "Id": 6,
+    "Title": "Teste 2",
+    "Description": "Isto s\u00E3o muitos testes para o meu gosto",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1775832885502",
+        "Type": "dropdown",
+        "Label": "Campo",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-10T15:55:17.1819454+01:00",
+    "UpdatedAt": "2026-04-10T15:55:17.1819479+01:00"
+  },
+  {
+    "Id": 7,
+    "Title": "ffkghfk",
+    "Description": "kfgkg",
+    "Audience": [],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1775903389821",
+        "Type": "dropdown",
+        "Label": "gfkfg",
+        "Required": false,
+        "Placeholder": "jgfjk",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-11T11:29:58.7171973+01:00",
+    "UpdatedAt": "2026-04-11T11:29:58.7172006+01:00"
+  },
+  {
+    "Id": 8,
+    "Title": "Teste tarefa #71",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776173619309",
+        "Type": "text",
+        "Label": "Nome",
+        "Required": true,
+        "Placeholder": "Introduza o nome",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:34:55.7329909+01:00",
+    "UpdatedAt": "2026-04-14T14:34:55.7329942+01:00"
+  },
+  {
+    "Id": 9,
+    "Title": "Teste 2 tarefa #71",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776173801082",
+        "Type": "text",
+        "Label": "E-mail",
+        "Required": false,
+        "Placeholder": "Introduza o email",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:37:01.5967795+01:00",
+    "UpdatedAt": "2026-04-14T14:37:01.5967832+01:00"
+  },
+  {
+    "Id": 10,
+    "Title": "Teste 3 tarefa #71",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776173866117",
+        "Type": "date",
+        "Label": "Data",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:38:01.3314342+01:00",
+    "UpdatedAt": "2026-04-14T14:38:01.3314383+01:00"
+  },
+  {
+    "Id": 11,
+    "Title": "Teste 4 tarefa #71",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776173936978",
+        "Type": "dropdown",
+        "Label": "Cargo",
+        "Required": false,
+        "Placeholder": "Indique o seu cargo",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:39:31.5545459+01:00",
+    "UpdatedAt": "2026-04-14T14:39:31.5545513+01:00"
+  },
+  {
+    "Id": 12,
+    "Title": "Teste tarefa #69",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776174537367",
+        "Type": "dropdown",
+        "Label": "Cargo",
+        "Required": false,
+        "Placeholder": "Insira o seu cargo",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "Docente",
+          "Funcion\u00E1rio",
+          "Aluno"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-14T14:54:11.1764946+01:00",
+    "UpdatedAt": "2026-04-14T14:54:11.1764996+01:00"
+  },
+  {
+    "Id": 13,
+    "Title": "teste",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776363291381",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1776363304430",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-16T19:17:17.4679527+01:00",
+    "UpdatedAt": "2026-04-16T19:17:17.4679574+01:00"
+  },
+  {
+    "Id": 14,
+    "Title": "Teste com P\u00FAblico Alvo",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-16T20:10:34.8758257+01:00",
+    "UpdatedAt": "2026-04-16T20:10:34.8758273+01:00"
+  },
+  {
+    "Id": 15,
+    "Title": "Testar associa\u00E7\u00E3o do p\u00FAblico-alvo",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776367596723",
+        "Type": "number",
+        "Label": "Endere\u00E7o",
+        "Required": true,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-16T20:27:28.2627762+01:00",
+    "UpdatedAt": "2026-04-16T20:27:28.2627777+01:00"
+  },
+  {
+    "Id": 16,
+    "Title": "teste",
+    "Description": "",
+    "Audience": [
+      "staff",
+      "teacher"
+    ],
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-16T20:32:57.261738+01:00",
+    "UpdatedAt": "2026-04-16T20:32:57.26174+01:00"
+  },
+  {
+    "Id": 17,
+    "Title": "teste",
+    "Description": "",
+    "Audience": [
+      "teacher",
+      "staff"
+    ],
+    "StatusDrafted": false,
+    "Fields": [],
+    "CreatedAt": "2026-04-16T20:36:13.3476495+01:00",
+    "UpdatedAt": "2026-04-16T20:36:13.3476762+01:00"
+  },
+  {
+    "Id": 18,
+    "Title": "klghklgh",
+    "Description": "gjhg",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776436058919",
+        "Type": "text",
+        "Label": "",
+        "Required": true,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1776436060720",
+        "Type": "text",
+        "Label": "jhgjhgjhg",
+        "Required": true,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1776436063065",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:27:54.8898992+01:00",
+    "UpdatedAt": "2026-04-17T15:27:54.8899026+01:00"
+  },
+  {
+    "Id": 19,
+    "Title": "teste123456",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776436297428",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1776436297912",
+        "Type": "number",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1776436298384",
+        "Type": "date",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1776436298913",
+        "Type": "dropdown",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "hkjhj"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:32:10.9598071+01:00",
+    "UpdatedAt": "2026-04-17T15:32:10.9598097+01:00"
+  },
+  {
+    "Id": 20,
+    "Title": "teste tabela1",
+    "Description": "",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776437628068",
+        "Type": "table",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "col1",
+          "col2",
+          "col3",
+          "col4"
+        ],
+        "TableFixedRows": true,
+        "TableRowCount": 20
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:54:45.8862899+01:00",
+    "UpdatedAt": "2026-04-17T15:54:45.8862952+01:00"
+  },
+  {
+    "Id": 21,
+    "Title": "teste tabela 2",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776437694710",
+        "Type": "table",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "col1",
+          "col12",
+          "col123"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:55:10.1372442+01:00",
+    "UpdatedAt": "2026-04-17T15:55:10.1372462+01:00"
+  },
+  {
+    "Id": 22,
+    "Title": "teste tabela 3",
+    "Description": "",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776437720381",
+        "Type": "table",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-17T15:55:24.2203399+01:00",
+    "UpdatedAt": "2026-04-17T15:55:24.220343+01:00"
+  },
+  {
+    "Id": 23,
+    "Title": "utyuyit",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776440200428",
+        "Type": "dropdown",
+        "Label": "jkhjkh",
+        "Required": false,
+        "Placeholder": "jhjhjh",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-17T16:36:54.4688903+01:00",
+    "UpdatedAt": "2026-04-17T16:36:54.4688931+01:00"
+  },
+  {
+    "Id": 24,
+    "Title": "jhjhjhj",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1776440712428",
+        "Type": "text",
+        "Label": "",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-17T16:45:17.0907498+01:00",
+    "UpdatedAt": "2026-04-17T16:45:17.0907526+01:00"
+  },
+  {
+    "Id": 25,
+    "Title": "lmkdlkwmd",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1776442398899",
+        "Type": "table",
+        "Label": "kjkj",
+        "Required": false,
+        "Placeholder": "qsq",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "alkdjlkd"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-17T17:15:41.09849+01:00",
+    "UpdatedAt": "2026-04-17T17:15:41.0984992+01:00"
+  },
+  {
+    "Id": 26,
+    "Title": "so para professores",
+    "Description": "",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": true,
+    "Fields": [],
+    "CreatedAt": "2026-04-17T18:22:28.5060036+01:00",
+    "UpdatedAt": "2026-04-17T18:22:28.5060087+01:00"
+  },
+  {
+    "Id": 27,
+    "Title": "so duncionarios",
+    "Description": "",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": true,
+    "Fields": [],
+    "CreatedAt": "2026-04-17T18:23:24.9108993+01:00",
+    "UpdatedAt": "2026-04-17T18:23:24.9109056+01:00"
+  },
+  {
+    "Id": 28,
+    "Title": "todos",
+    "Description": "",
+    "Audience": [
+      "teacher",
+      "staff"
+    ],
+    "StatusDrafted": true,
+    "Fields": [],
+    "CreatedAt": "2026-04-17T18:24:41.9330701+01:00",
+    "UpdatedAt": "2026-04-17T18:24:41.9330735+01:00"
+  }
+]
