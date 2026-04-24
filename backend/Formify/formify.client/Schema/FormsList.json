@@ -1,9 +1,12 @@
 [
   {
     "Id": 1,
-    "Title": "Inquérito de Satisfação Escolar",
-    "Description": "Avaliação geral das infraestruturas e ensino.",
-    "Audience": [ "teacher", "staff" ],
+    "Title": "Inqu\u00E9rito de Satisfa\u00E7\u00E3o Escolar",
+    "Description": "Avalia\u00E7\u00E3o geral das infraestruturas e ensino.",
+    "Audience": [
+      "teacher",
+      "staff"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -23,10 +26,14 @@
         "Type": "dropdown",
         "Label": "Departamento",
         "Required": true,
-        "Placeholder": "Selecione uma opção",
+        "Placeholder": "Selecione uma op\u00E7\u00E3o",
         "X": null,
         "Y": null,
-        "Options": [ "Informática", "Gestão", "Artes" ],
+        "Options": [
+          "Inform\u00E1tica",
+          "Gest\u00E3o",
+          "Artes"
+        ],
         "TableFixedRows": false,
         "TableRowCount": 1
       }
@@ -38,7 +45,9 @@
     "Id": 2,
     "Title": "Registo de Horas Extra",
     "Description": "Rascunho para controlo interno.",
-    "Audience": [ "staff" ],
+    "Audience": [
+      "staff"
+    ],
     "StatusDrafted": true,
     "Fields": [
       {
@@ -49,12 +58,66 @@
         "Placeholder": "",
         "X": null,
         "Y": null,
-        "Options": [ "Data", "Horas", "Tarefa" ],
+        "Options": [
+          "Data",
+          "Horas",
+          "Tarefa"
+        ],
         "TableFixedRows": true,
         "TableRowCount": 5
       }
     ],
     "CreatedAt": "2026-04-24T23:10:00Z",
     "UpdatedAt": "2026-04-24T23:10:00Z"
+  },
+  {
+    "Id": 3,
+    "Title": "fbdfcdb",
+    "Description": "bdfcbdcbfd",
+    "Audience": [
+      "staff"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1777069244057",
+        "Type": "date",
+        "Label": "bdfbfd",
+        "Required": true,
+        "Placeholder": "dfbdfb",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-24T23:20:52.4238391+01:00",
+    "UpdatedAt": "2026-04-24T23:20:52.4238447+01:00"
+  },
+  {
+    "Id": 4,
+    "Title": "fewfwef",
+    "Description": "fewfwefwe",
+    "Audience": [
+      "teacher"
+    ],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1777069294891",
+        "Type": "number",
+        "Label": "fewfwf",
+        "Required": true,
+        "Placeholder": "efwfew",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      }
+    ],
+    "CreatedAt": "2026-04-24T23:21:42.1158468+01:00",
+    "UpdatedAt": "2026-04-24T23:21:42.1158496+01:00"
   }
 ]

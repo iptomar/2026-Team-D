@@ -78,21 +78,20 @@ export default function AdminDashboard() {
               ) : (
                   <div className="grid auto-rows-max gap-6 sm:grid-cols-2 lg:grid-cols-3">
                       {/* 3. Renderização dinâmica dos cards */}
-                       {forms.filter((form) => form.statusDrafted === true).map((form) => (
-                          <div key={form.Id} className="rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md transition-shadow">
-                              <h3 className="font-bold text-lg text-text-h">{form.title || "Sem título"}</h3>
-                              <p className="text-sm text-text mt-2">{form.description}</p>
-                              {/* Podemos mais tarde mais campos existentes dentro de cada formulário*/}
-                              {/* Adiciona este botão dentro da div do cartão do formulário */}
-                              <button
-                                  onClick={() => handleDelete(form.id || form.Id)}
-                                  className="text-red-500 hover:text-red-700 transition-colors"
-                                  title="Eliminar"
-                              >
-                                  🗑️ Eliminar
-                              </button>
-                          </div>
-                      ))}
+                              {forms.filter((form) => (form.statusDrafted || form.StatusDrafted) === true).map((form) => (
+                                  <div key={form.Id || form.id || Math.random()} className="rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md transition-shadow">
+                                      <h3 className="font-bold text-lg text-text-h">{form.Title || form.title || "Sem título"}</h3>
+                                      <p className="text-sm text-text mt-2">{form.Description || form.description}</p>
+
+                                      <button
+                                          onClick={() => handleDelete(form.Id || form.id)}
+                                          className="text-red-500 hover:text-red-700 transition-colors"
+                                          title="Eliminar"
+                                      >
+                                          🗑️ Eliminar
+                                      </button>
+                                  </div>
+                              ))}
                   </div>
               )}
       </div>
