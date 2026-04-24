@@ -7,7 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
-
+//teste
 app.UseDefaultFiles();
 app.MapStaticAssets();
 
