@@ -119,5 +119,141 @@
     ],
     "CreatedAt": "2026-04-24T23:21:42.1158468+01:00",
     "UpdatedAt": "2026-04-24T23:21:42.1158496+01:00"
+  },
+  {
+    "Id": 5,
+    "Title": "Teste com drag and drop",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "1777462748072",
+        "Type": "text",
+        "Label": "Nome dos Alunos",
+        "Required": true,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-29T12:39:35.5056626+01:00",
+    "UpdatedAt": "2026-04-29T12:39:35.5056647+01:00"
+  },
+  {
+    "Id": 6,
+    "Title": "Teste2",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1777462822377",
+        "Type": "dropdown",
+        "Label": "Popula\u00E7\u00E3o alvo",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "Op\u00E7\u00E3o 1",
+          "Op\u00E7\u00E3o 2"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-29T12:40:45.4177068+01:00",
+    "UpdatedAt": "2026-04-29T12:40:45.4177082+01:00"
+  },
+  {
+    "Id": 7,
+    "Title": "tESTE COM APRIMORAMENTO",
+    "Description": "",
+    "Audience": [],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "1777463618762",
+        "Type": "section",
+        "Label": "Sec\u00E7\u00E3o das perguntas",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1777463672352",
+        "Type": "text",
+        "Label": "Nome de Alunos",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1777463691888",
+        "Type": "text",
+        "Label": "Nome de Professores",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1777463721931",
+        "Type": "dropdown",
+        "Label": "Dropdown",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [
+          "Op\u00E7\u00E3o 1",
+          "Op\u00E7\u00E3o 2",
+          "Op\u00E7\u00E3o 3"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1777463729323",
+        "Type": "table",
+        "Label": "Tabela",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1777463780724",
+        "Type": "section",
+        "Label": "T\u00EDtulo de sec\u00E7\u00E3o",
+        "Required": false,
+        "Placeholder": "",
+        "X": null,
+        "Y": null,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-29T12:56:36.3803485+01:00",
+    "UpdatedAt": "2026-04-29T12:56:36.3803501+01:00"
   }
 ]
