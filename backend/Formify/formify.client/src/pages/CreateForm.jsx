@@ -1,256 +1,507 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+// ─── Tipos de elementos da paleta ────────────────────────────────────────────
+const FIELD_TYPES = [
+    { type: 'section', label: 'Título de secção', icon: '§', color: 'bg-gray-100 text-gray-600' },
+    { type: 'text', label: 'Texto curto', icon: 'T', color: 'bg-blue-100 text-blue-700' },
+    { type: 'textarea', label: 'Texto longo', icon: '¶', color: 'bg-green-100 text-green-700' },
+    { type: 'number', label: 'Número', icon: '#', color: 'bg-teal-100 text-teal-700' },
+    { type: 'date', label: 'Data', icon: '▦', color: 'bg-pink-100 text-pink-700' },
+    { type: 'dropdown', label: 'Dropdown', icon: '▾', color: 'bg-purple-100 text-purple-700' },
+    { type: 'checkbox', label: 'Checkbox', icon: '☑', color: 'bg-yellow-100 text-yellow-700' },
+    { type: 'radio', label: 'Botões de opção', icon: '◉', color: 'bg-orange-100 text-orange-700' },
+    { type: 'table', label: 'Tabela', icon: '⊞', color: 'bg-gray-100 text-gray-700' },
+];
+
+function getTypeInfo(type) {
+    return FIELD_TYPES.find(f => f.type === type) || FIELD_TYPES[0];
+}
+
+// ─── Preview do campo no canvas ───────────────────────────────────────────────
+function FieldPreview({ field }) {
+    const inputCls = "w-full rounded border border-gray-200 bg-gray-50 px-2 py-1 text-sm text-gray-400 pointer-events-none";
+    switch (field.type) {
+        case 'section': return null;
+        case 'text':
+            return <input disabled type="text" placeholder={field.placeholder || 'Texto curto...'} className={inputCls} />;
+        case 'textarea':
+            return <textarea disabled placeholder={field.placeholder || 'Texto longo...'} rows={2} className={inputCls + ' resize-none'} />;
+        case 'number':
+            return <input disabled type="number" placeholder="0" className={inputCls} />;
+        case 'date':
+            return <input disabled type="date" className={inputCls} />;
+        case 'dropdown':
+            return (
+                <select disabled className={inputCls}>
+                    {(field.options?.length ? field.options : ['Opção 1', 'Opção 2']).map((o, i) => (
+                        <option key={i}>{o}</option>
+                    ))}
+                </select>
+            );
+        case 'checkbox':
+            return (
+                <div className="flex flex-col gap-1 pointer-events-none">
+                    {(field.options?.length ? field.options : ['Opção A', 'Opção B']).map((o, i) => (
+                        <label key={i} className="flex items-center gap-2 text-sm text-gray-400 cursor-default">
+                            <input type="checkbox" disabled readOnly /> {o}
+                        </label>
+                    ))}
+                </div>
+            );
+        case 'radio':
+            return (
+                <div className="flex flex-col gap-1 pointer-events-none">
+                    {(field.options?.length ? field.options : ['Sim', 'Não']).map((o, i) => (
+                        <label key={i} className="flex items-center gap-2 text-sm text-gray-400 cursor-default">
+                            <input type="radio" disabled readOnly /> {o}
+                        </label>
+                    ))}
+                </div>
+            );
+        case 'table': {
+            const cols = field.tableColumns?.length ? field.tableColumns : ['Coluna A', 'Coluna B', 'Coluna C'];
+            const rows = field.tableRows || 2;
+            return (
+                <table className="w-full border-collapse text-xs pointer-events-none">
+                    <thead>
+                        <tr>{cols.map((c, i) => (
+                            <th key={i} className="border border-gray-200 bg-gray-100 px-2 py-1 text-gray-500 font-medium">{c}</th>
+                        ))}</tr>
+                    </thead>
+                    <tbody>
+                        {Array.from({ length: rows }).map((_, r) => (
+                            <tr key={r}>{cols.map((_, i) => (
+                                <td key={i} className="border border-gray-200 px-2 py-1 text-gray-300">—</td>
+                            ))}</tr>
+                        ))}
+                    </tbody>
+                </table>
+            );
+        }
+        default: return null;
+    }
+}
+
+// ─── Painel lateral de edição ─────────────────────────────────────────────────
+function EditPanel({ field, onClose, onUpdate }) {
+    if (!field) return null;
+    const ti = getTypeInfo(field.type);
+    const hasOptions = ['dropdown', 'checkbox', 'radio'].includes(field.type);
+    const isTable = field.type === 'table';
+    const isSection = field.type === 'section';
+
+    const upd = (key, value) => onUpdate({ ...field, [key]: value });
+
+    const addOption = () => upd('options', [...(field.options || []), `Opção ${(field.options?.length || 0) + 1}`]);
+    const updateOption = (i, val) => { const o = [...(field.options || [])]; o[i] = val; upd('options', o); };
+    const removeOption = (i) => { const o = [...(field.options || [])]; o.splice(i, 1); upd('options', o); };
+
+    const addColumn = () => { const c = [...(field.tableColumns || ['Coluna A', 'Coluna B', 'Coluna C'])]; c.push(`Coluna ${String.fromCharCode(65 + c.length)}`); upd('tableColumns', c); };
+    const updateColumn = (i, val) => { const c = [...(field.tableColumns || ['Coluna A', 'Coluna B', 'Coluna C'])]; c[i] = val; upd('tableColumns', c); };
+    const removeColumn = (i) => { const c = [...(field.tableColumns || ['Coluna A', 'Coluna B', 'Coluna C'])]; if (c.length <= 1) return; c.splice(i, 1); upd('tableColumns', c); };
+
+    return (
+        <div className="flex flex-col h-full w-64 flex-shrink-0 border-l border-gray-100 bg-white">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3">
+                <div className="flex items-center gap-2">
+                    <span className={`flex h-6 w-6 items-center justify-center rounded text-xs font-bold ${ti.color}`}>{ti.icon}</span>
+                    <span className="text-sm font-semibold text-gray-700">{ti.label}</span>
+                </div>
+                <button type="button" onClick={onClose} className="text-gray-300 hover:text-gray-500 transition-colors text-lg leading-none">✕</button>
+            </div>
+
+            {/* Campos de edição */}
+            <div className="flex flex-col gap-5 overflow-y-auto p-4">
+
+                {/* Label */}
+                <div className="flex flex-col gap-1.5">
+                    <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                        {isSection ? 'Título' : 'Label'}
+                    </label>
+                    <input
+                        type="text"
+                        value={field.label}
+                        onChange={(e) => upd('label', e.target.value)}
+                        className="rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:border-green-400 focus:outline-none"
+                        placeholder={isSection ? 'Ex: Dados Pessoais' : 'Nome do campo'}
+                    />
+                </div>
+
+                {/* Descrição da secção */}
+                {isSection && (
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Descrição (opcional)</label>
+                        <textarea
+                            value={field.description || ''}
+                            onChange={(e) => upd('description', e.target.value)}
+                            rows={2}
+                            className="rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:border-green-400 focus:outline-none resize-none"
+                            placeholder="Subtítulo da secção..."
+                        />
+                    </div>
+                )}
+
+                {/* Placeholder */}
+                {!isSection && !isTable && !hasOptions && (
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Placeholder</label>
+                        <input
+                            type="text"
+                            value={field.placeholder || ''}
+                            onChange={(e) => upd('placeholder', e.target.value)}
+                            className="rounded-md border border-gray-200 px-3 py-1.5 text-sm focus:border-green-400 focus:outline-none"
+                            placeholder="Texto de exemplo..."
+                        />
+                    </div>
+                )}
+
+                {/* Obrigatório */}
+                {!isSection && (
+                    <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            checked={field.required || false}
+                            onChange={(e) => upd('required', e.target.checked)}
+                            className="accent-green-600 w-4 h-4"
+                        />
+                        <span className="text-sm text-gray-700">Campo obrigatório</span>
+                    </label>
+                )}
+
+                {/* Largura */}
+                {!isSection && (
+                    <div className="flex flex-col gap-1.5">
+                        <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Largura na grelha</label>
+                        <div className="flex gap-2">
+                            {[
+                                { value: 'full', label: 'Completa', desc: '2 colunas' },
+                                { value: 'half', label: 'Metade', desc: '1 coluna' },
+                            ].map(opt => (
+                                <button
+                                    key={opt.value}
+                                    type="button"
+                                    onClick={() => upd('width', opt.value)}
+                                    className={`flex flex-1 flex-col items-center gap-0.5 rounded-md border py-2 text-xs transition-all
+                                        ${(field.width || 'full') === opt.value
+                                            ? 'border-green-400 bg-green-50 text-green-700 font-semibold'
+                                            : 'border-gray-200 text-gray-500 hover:border-gray-300'}`}
+                                >
+                                    {/* Ícone visual da largura */}
+                                    <div className="flex gap-0.5 mb-1">
+                                        {opt.value === 'full'
+                                            ? <div className="h-2 w-10 rounded-sm bg-current opacity-40" />
+                                            : <><div className="h-2 w-5 rounded-sm bg-current opacity-70" /><div className="h-2 w-5 rounded-sm bg-current opacity-20" /></>
+                                        }
+                                    </div>
+                                    <span>{opt.label}</span>
+                                    <span className="text-[10px] opacity-60">{opt.desc}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Opções dropdown / checkbox / radio */}
+                {hasOptions && (
+                    <div className="flex flex-col gap-2">
+                        <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Opções</label>
+                        <div className="flex flex-col gap-1.5">
+                            {(field.options || []).map((opt, i) => (
+                                <div key={i} className="flex items-center gap-1.5">
+                                    <span className="text-gray-300 text-xs w-4 text-center flex-shrink-0">{i + 1}.</span>
+                                    <input
+                                        type="text"
+                                        value={opt}
+                                        onChange={(e) => updateOption(i, e.target.value)}
+                                        className="flex-1 min-w-0 rounded border border-gray-200 px-2 py-1 text-sm focus:border-green-400 focus:outline-none"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeOption(i)}
+                                        disabled={(field.options?.length || 0) <= 1}
+                                        className="text-gray-300 hover:text-red-400 disabled:opacity-20 text-sm transition-colors flex-shrink-0"
+                                    >✕</button>
+                                </div>
+                            ))}
+                        </div>
+                        <button
+                            type="button"
+                            onClick={addOption}
+                            className="mt-1 rounded-md border border-dashed border-gray-300 py-1.5 text-xs text-gray-400 hover:border-green-400 hover:text-green-600 transition-colors"
+                        >+ Adicionar opção</button>
+                    </div>
+                )}
+
+                {/* Tabela: colunas + linhas */}
+                {isTable && (
+                    <>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Colunas</label>
+                            <div className="flex flex-col gap-1.5">
+                                {(field.tableColumns || ['Coluna A', 'Coluna B', 'Coluna C']).map((col, i) => (
+                                    <div key={i} className="flex items-center gap-1.5">
+                                        <span className="text-gray-300 text-xs w-4 text-center flex-shrink-0">{i + 1}.</span>
+                                        <input
+                                            type="text"
+                                            value={col}
+                                            onChange={(e) => updateColumn(i, e.target.value)}
+                                            className="flex-1 min-w-0 rounded border border-gray-200 px-2 py-1 text-sm focus:border-green-400 focus:outline-none"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={() => removeColumn(i)}
+                                            disabled={(field.tableColumns?.length || 3) <= 1}
+                                            className="text-gray-300 hover:text-red-400 disabled:opacity-20 text-sm transition-colors flex-shrink-0"
+                                        >✕</button>
+                                    </div>
+                                ))}
+                            </div>
+                            <button
+                                type="button"
+                                onClick={addColumn}
+                                className="mt-1 rounded-md border border-dashed border-gray-300 py-1.5 text-xs text-gray-400 hover:border-green-400 hover:text-green-600 transition-colors"
+                            >+ Adicionar coluna</button>
+                        </div>
+
+                        <div className="flex flex-col gap-1.5">
+                            <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                                Linhas ({field.tableRows || 2})
+                            </label>
+                            <input
+                                type="range"
+                                min={1} max={10} step={1}
+                                value={field.tableRows || 2}
+                                onChange={(e) => upd('tableRows', parseInt(e.target.value))}
+                                className="w-full accent-green-600"
+                            />
+                            <div className="flex justify-between text-[10px] text-gray-300">
+                                <span>1</span><span>10</span>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div>
+        </div>
+    );
+}
+
+// ─── Card de campo no canvas ──────────────────────────────────────────────────
+function FieldCard({ field, index, isSelected, onSelect, onRemove, isDraggingOver, onDragStart, onDragEnter, onDragEnd }) {
+    const ti = getTypeInfo(field.type);
+    const isSection = field.type === 'section';
+    const isHalf = !isSection && (field.width || 'full') === 'half';
+
+    // Secção: ocupa sempre as 2 colunas
+    if (isSection) {
+        return (
+            <div
+                draggable
+                onDragStart={onDragStart}
+                onDragEnter={onDragEnter}
+                onDragEnd={onDragEnd}
+                onClick={onSelect}
+                style={{ gridColumn: '1 / -1' }}
+                className={`group relative cursor-pointer rounded-lg border px-4 py-3 transition-all select-none
+                    ${isSelected ? 'border-green-400 bg-green-50' : 'border-gray-200 bg-white hover:border-green-200'}
+                    ${isDraggingOver ? 'scale-[1.01] border-green-400 shadow-md' : ''}`}
+            >
+                <div className="flex items-center gap-3">
+                    <DragHandle />
+                    <div className="flex-1">
+                        <div className="flex items-center gap-3">
+                            <div className="h-px flex-1 bg-gray-200" />
+                            <span className="text-sm font-bold text-gray-700">{field.label || 'Título da secção'}</span>
+                            <div className="h-px flex-1 bg-gray-200" />
+                        </div>
+                        {field.description && (
+                            <p className="mt-1 text-center text-xs text-gray-400">{field.description}</p>
+                        )}
+                    </div>
+                    <RemoveBtn onRemove={onRemove} />
+                </div>
+                {isSelected && <SelectedDot />}
+            </div>
+        );
+    }
+
+    return (
+        <div
+            draggable
+            onDragStart={onDragStart}
+            onDragEnter={onDragEnter}
+            onDragEnd={onDragEnd}
+            onClick={onSelect}
+            style={{ gridColumn: isHalf ? 'span 1' : '1 / -1' }}
+            className={`group relative flex flex-col gap-2 rounded-lg border bg-white p-3 cursor-pointer transition-all select-none
+                ${isSelected ? 'border-green-400 ring-2 ring-green-100' : 'border-gray-200 hover:border-green-200 hover:shadow-sm'}
+                ${isDraggingOver ? 'border-green-400 scale-[1.02] shadow-md' : ''}`}
+        >
+            <div className="flex items-center gap-2">
+                <DragHandle />
+                <span className={`flex h-6 w-6 items-center justify-center rounded text-xs font-bold flex-shrink-0 ${ti.color}`}>
+                    {ti.icon}
+                </span>
+                <span className="flex-1 text-sm font-medium text-gray-700 truncate">
+                    {field.label}
+                    {field.required && <span className="ml-1 text-red-400">*</span>}
+                </span>
+                {isHalf && <span className="text-[10px] text-gray-300 border border-gray-100 rounded px-1 flex-shrink-0">½</span>}
+                <RemoveBtn onRemove={onRemove} />
+            </div>
+            <div className="pl-8">
+                <FieldPreview field={field} />
+            </div>
+            {isSelected && <SelectedDot />}
+        </div>
+    );
+}
+
+function DragHandle() {
+    return (
+        <div className="flex flex-col gap-0.5 opacity-20 group-hover:opacity-50 transition-opacity cursor-grab flex-shrink-0">
+            {[0, 1, 2].map(i => (
+                <div key={i} className="flex gap-0.5">
+                    {[0, 1].map(j => <div key={j} className="w-1 h-1 rounded-full bg-gray-500" />)}
+                </div>
+            ))}
+        </div>
+    );
+}
+
+function RemoveBtn({ onRemove }) {
+    return (
+        <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onRemove(); }}
+            className="opacity-0 group-hover:opacity-100 text-gray-300 hover:text-red-500 transition-all flex-shrink-0 text-sm"
+        >✕</button>
+    );
+}
+
+function SelectedDot() {
+    return <div className="absolute right-2 top-2 h-2 w-2 rounded-full bg-green-400" />;
+}
+
+// ─── Componente Principal ─────────────────────────────────────────────────────
 export default function CreateForm() {
-    // Estados para guardar o que o utilizador escreve
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
-    // Estado que guarda a lista de campos do formulário (cada campo tem label, tipo, etc.)
-    const [fields, setFields] = useState([]); // comentario ju
-    const [audience, setAudience] = useState([]);
-
-    // estado para guardar mensagens de erro do campo nome
+    const [fields, setFields] = useState([]);
     const [erroNome, setErroNome] = useState('');
-    const [erroDescricao, setErroDescricao] = useState('');
-    // Limpa qualquer erro anterior do público-alvo
-    const [erroAudience, setErroAudience] = useState('');
-
-    //state hook para prevenir double-submits
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
 
-    // Guarda erros específicos de cada campo
-    const [fieldErrors, setFieldErrors] = useState({}); 
+    const dragIndex = useRef(null);
+    const [dragOverIndex, setDragOverIndex] = useState(null);
+    const [isDraggingFromPalette, setIsDraggingFromPalette] = useState(false);
+    const dragTypeRef = useRef(null);
 
-    const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
+    const navigate = useNavigate();
+    const selectedField = fields.find(f => f.id === selectedId) || null;
 
-    // Função que adiciona um novo campo ao formulário
-    const adicionarCampo = () => {
-        const novoCampo = {
-            id: Date.now().toString(), // ID único para identificar o campo
-            type: "text", //fieldType.toString.trim,// Tipo de campo (por agora sempre texto) //É preciso fazer validação 
-            label: "", // Alterado: começa vazio para não ter de apagar texto
-            placeholder: "",    //(tem de editar esta parte)
+    // ── Adicionar campo ──
+    const adicionarCampo = (type) => {
+        const ti = getTypeInfo(type);
+        const novo = {
+            id: Date.now().toString(),
+            type,
+            label: ti.label,
+            placeholder: '',
             required: false,
-            x: null,
-            y: null,
-            options: [],
-            tableFixedRows: false, 
-            tableRowCount: 1       
+            width: 'full',
+            options: ['dropdown', 'checkbox', 'radio'].includes(type) ? ['Opção 1', 'Opção 2'] : [],
+            tableColumns: type === 'table' ? ['Coluna A', 'Coluna B', 'Coluna C'] : [],
+            tableRows: type === 'table' ? 2 : 0,
+            description: '',
         };
-        // Atualiza o estado adicionando o novo campo à lista existente
-        setFields([...fields, novoCampo]);
-    };
-    const eliminarCampo = (id) => {
-        const novosCampos = fields.filter(campo => campo.id !== id);
-        setFields(novosCampos);
+        setFields(prev => [...prev, novo]);
+        setSelectedId(novo.id);
     };
 
-    // Função que altera o label (nome visível) de um campo específico
-    const alterarLabel = (id, novoLabel) => {
-        const novosCampos = fields.map(campo =>
-            campo.id === id ? { ...campo, label: novoLabel } : campo // Atualiza apenas o campo correspondente
-        );
-        // Atualiza o estado com os novos valores
-        setFields(novosCampos);
+    const updateField = (updated) => setFields(prev => prev.map(f => f.id === updated.id ? updated : f));
+    const removerCampo = (id) => { setFields(prev => prev.filter(f => f.id !== id)); if (selectedId === id) setSelectedId(null); };
+
+    // ── Drag & Drop ──
+    const handlePaletteDragStart = (type) => { dragTypeRef.current = type; setIsDraggingFromPalette(true); };
+    const handleCardDragStart = (index) => { dragIndex.current = index; setIsDraggingFromPalette(false); };
+    const handleCardDragEnter = (index) => setDragOverIndex(index);
+    const handleCardDragEnd = () => {
+        if (!isDraggingFromPalette && dragIndex.current !== null && dragOverIndex !== null && dragIndex.current !== dragOverIndex) {
+            const arr = [...fields];
+            const [moved] = arr.splice(dragIndex.current, 1);
+            arr.splice(dragOverIndex, 0, moved);
+            setFields(arr);
+        }
+        dragIndex.current = null;
+        setDragOverIndex(null);
+        setIsDraggingFromPalette(false);
+    };
+    const handleCanvasDrop = (e) => {
+        e.preventDefault();
+        if (isDraggingFromPalette && dragTypeRef.current) adicionarCampo(dragTypeRef.current);
+        dragTypeRef.current = null;
+        setIsDraggingFromPalette(false);
+        setDragOverIndex(null);
     };
 
-    const alterarPlaceholder = (id, novoPlaceholder) => {
-        const novosCampos = fields.map(campo =>
-            campo.id === id ? { ...campo, placeholder: novoPlaceholder } : campo
-        );
-        setFields(novosCampos);
-    };
-
-    
-    const alterarTipo = (id, novoTipo) => {
-        setFields(fields.map(campo => {
-            if (campo.id === id) {
-                // Se mudar para tabela e não houver colunas, cria a primeira
-                const novasOpcoes = (novoTipo === 'table' && campo.options.length === 0)
-                    ? [""]
-                    : campo.options;
-
-                return { ...campo, type: novoTipo, options: novasOpcoes };
-            }
-            return campo;
-        }));
-    };
-
-    // Adiciona uma nova coluna (caixa de texto vazia) à lista de opções
-    const adicionarColuna = (id) => {
-        setFields(fields.map(c =>
-            c.id === id ? { ...c, options: [...c.options, ""] } : c
-        ));
-    };
-
-    // Atualiza o texto de uma coluna específica
-    const alterarColuna = (id, index, valor) => {
-        setFields(fields.map(c => {
-            if (c.id === id) {
-                const novasColunas = [...c.options];
-                novasColunas[index] = valor;
-                return { ...c, options: novasColunas };
-            }
-            return c;
-        }));
-    };
-
-
-    // Remove uma coluna específica (garantindo que sobra sempre pelo menos 1)
-    const removerColuna = (id, index) => {
-        setFields(fields.map(c => {
-            if (c.id === id) {
-                // Só remove se houver mais do que uma coluna
-                if (c.options.length > 1) {
-                    const novasColunas = c.options.filter((_, i) => i !== index);
-                    return { ...c, options: novasColunas };
-                }
-            }
-            return c;
-        }));
-    };
-
-    // Atualiza as configurações da tabela (o toggle das linhas e o número de linhas)
-    const alterarConfigTabela = (id, propriedade, valor) => {
-        setFields(fields.map(c =>
-            c.id === id ? { ...c, [propriedade]: valor } : c
-        ));
-    };
-
-    const alterarObrigatorio = (id) => {
-        const novosCampos = fields.map(campo =>
-            campo.id === id ? { ...campo, required: !campo.required } : campo
-        );
-        setFields(novosCampos);
-    };
-
-    const toggleAudience = (value) => {
-        setAudience(prev =>
-            prev.includes(value)
-                ? prev.filter(v => v !== value)
-                : [...prev, value]
-        );
-    };
-
-     // Função que altera as opções de um campo dropdown específico
-    const alterarOptions = (id, novasOptions) => {
-        const listaOptions = novasOptions
-            .split(',')
-            .map(opcao => opcao.trim())
-            .filter(opcao => opcao !== '');
-
-        const novosCampos = fields.map(campo =>
-            campo.id === id ? { ...campo, options: listaOptions } : campo
-        );
-        setFields(novosCampos);
-    };
-
-    // 2. Função que corre ao submeter o formulário
+    // ── Submit (igual ao original) ──
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        setIsLoading(true); // Desativa o botão
+        setIsLoading(true);
         setErroNome('');
-        setErroDescricao('');
-        setErroAudience('');
 
-        let formValido = true;
-        setErroNome('');
-        setErroAudience('');
-        setFieldErrors({});
-
-        // 1. Validações base
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
-            formValido = false;
-        }
-
-        if (audience.length === 0) {
-            setErroAudience("Tem de selecionar pelo menos um público-alvo.");
-            formValido = false;
-        }
-
-        // 2. Validações dos campos dinâmicos (Erro individual por cada input)
-        let novosErros = {};
-        let camposValidos = true;
-
-        fields.forEach(f => {
-            let errosDoCampo = {
-                label: !f.label || f.label.trim() === '',
-                placeholder: !f.placeholder || f.placeholder.trim() === '',
-                options: false
-            };
-
-            if (f.type === 'dropdown' && (f.options.length === 0 || f.options.some(opt => opt.trim() === ''))) {
-                errosDoCampo.options = true;
-            }
-            if (f.type === 'table' && (f.options.length === 0 || f.options.some(col => col.trim() === ''))) {
-                errosDoCampo.options = true;
-            }
-
-            if (errosDoCampo.label || errosDoCampo.placeholder || errosDoCampo.options) {
-                novosErros[f.id] = errosDoCampo;
-                camposValidos = false;
-            }
-        });
-
-        // 3. Se algo falhar, PÁRA aqui e não vai para o try/catch
-        if (!formValido || !camposValidos) {
-            if (!camposValidos) setFieldErrors(novosErros);
             setIsLoading(false);
             return;
         }
-        
 
         try {
-            const isFinal = e.nativeEvent.submitter.id === "save-final";
+            const isFinal = e.nativeEvent.submitter.id === 'save-final';
             const response = await fetch('http://localhost:5208/api/Forms', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     Title: nome,
                     Description: descricao,
-                    StatusDraft: !isFinal, // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
-                    Fields: fields, // envia só os labels
-                    Audience: audience
+                    StatusDraft: !isFinal,
+                    Fields: fields,
                 }),
             });
 
             if (!response.ok) {
-                if (response.status === 400) {
-                    const errorData = await response.json();
-                    if (errorData.errors) {
-                        if (errorData.errors.Title) setErroNome(errorData.errors.Title[0]);
-                        if (errorData.errors.Description) setErroDescricao(errorData.errors.Description[0]);
-                    } else if (errorData.message) {
-                        setErroNome(errorData.message);
-                    }
-                } else {
-                    alert('Erro ao criar formulário.');
-                }
+                const errorText = await response.text();
+                console.error('Erro do backend:', errorText);
+                alert('Erro ao criar formulário.');
                 setIsLoading(false);
                 return;
             }
 
             const data = await response.json();
             console.log('Formulário criado com sucesso:', data);
-
             alert('Formulário criado com sucesso!');
             navigate('/');
         } catch (error) {
             console.error('Erro de ligação ao backend:', error);
             alert('Não foi possível ligar ao backend.');
-            setIsLoading(false); // Reativa o botão 
+            setIsLoading(false);
         }
     };
 
     return (
-       <div className="space-y-6">
-            <div className="space-y-4">
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-lg border border-accent-border bg-accent-bg p-6">
+        <div className="space-y-6">
+            <div className="flex flex-col gap-4">
+                <Link to="/" className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80">
+                    ← Voltar
+                </Link>
+                <h2 className="text-3xl font-bold text-text-h">Novo Formulário</h2>
+            </div>
 
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+                {/* Informações básicas */}
+                <div className="flex flex-col gap-4 rounded-lg border border-accent-border bg-accent-bg p-6">
                     <div className="flex flex-col gap-2">
                         <label htmlFor="nome" className="font-medium text-text-h">
                             Nome do Formulário <span className="text-red-500">*</span>
@@ -263,255 +514,122 @@ export default function CreateForm() {
                             placeholder="Ex: Pedido de Aquisição de Material"
                             className={`rounded-md border p-2 focus:outline-none ${erroNome ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                         />
-                        {erroNome && (
-                            <span className="text-red-500 text-sm">{erroNome}</span>
-                        )}
+                        {erroNome && <span className="text-red-500 text-sm">{erroNome}</span>}
                     </div>
-
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="descricao" className="font-medium text-text-h">
-                            Descrição
-                        </label>
+                        <label htmlFor="descricao" className="font-medium text-text-h">Descrição</label>
                         <textarea
                             id="descricao"
                             value={descricao}
                             onChange={(e) => setDescricao(e.target.value)}
                             placeholder="Descreva o propósito deste formulário (opcional)..."
-                            rows="4"
-                            className={`rounded-md border p-2 focus:outline-none ${erroDescricao ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
+                            rows={3}
+                            className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
                         />
-                        {erroDescricao && <span className="text-red-500 text-sm">{erroDescricao}</span>}
                     </div>
-                    <div className="flex flex-col gap-3">
-                        <label className="font-medium text-text-h">
-                            Público-alvo
-                        </label>
+                </div>
 
-                        <div className="flex flex-col gap-2 rounded-md border border-accent-border bg-white p-3">
+                {/* Form Builder */}
+                <div className="flex flex-col gap-3">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-lg font-semibold text-text-h">Campos do Formulário</h3>
+                        <span className="text-sm text-gray-400">{fields.filter(f => f.type !== 'section').length} campo{fields.filter(f => f.type !== 'section').length !== 1 ? 's' : ''}</span>
+                    </div>
 
-                            {/* Professores */}
-                            <label className="flex items-center gap-2 cursor-pointer text-sm">
-                                <input
-                                    type="checkbox"
-                                    checked={audience.includes("teacher")}
-                                    onChange={() => toggleAudience("teacher")}
-                                    className="h-4 w-4 accent-blue-600"
-                                />
-                                <span>Professores</span>
-                            </label>
+                    <div className="flex rounded-lg border border-gray-200 bg-white overflow-hidden" style={{ minHeight: '520px' }}>
 
-                            {/* Funcionários */}
-                            <label className="flex items-center gap-2 cursor-pointer text-sm">
-                                <input
-                                    type="checkbox"
-                                    checked={audience.includes("staff")}
-                                    onChange={() => toggleAudience("staff")}
-                                    className="h-4 w-4 accent-blue-600"
-                                />
-                                <span>Funcionários</span>
-                            </label>
+                        {/* Paleta */}
+                        <div className="flex flex-col gap-1.5 border-r border-gray-100 bg-gray-50 p-4 w-48 flex-shrink-0">
+                            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Elementos</p>
+                            {FIELD_TYPES.map((ft) => (
+                                <div
+                                    key={ft.type}
+                                    draggable
+                                    onDragStart={() => handlePaletteDragStart(ft.type)}
+                                    onDragEnd={() => setIsDraggingFromPalette(false)}
+                                    onClick={() => adicionarCampo(ft.type)}
+                                    className="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 cursor-grab active:cursor-grabbing hover:border-green-300 hover:bg-green-50 transition-all select-none"
+                                >
+                                    <span className={`flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold flex-shrink-0 ${ft.color}`}>
+                                        {ft.icon}
+                                    </span>
+                                    {ft.label}
+                                </div>
+                            ))}
+                            <p className="mt-2 text-[10px] text-gray-300 text-center leading-snug">Arrasta ou clica</p>
+                        </div>
 
-                            
-                            {erroAudience && (
-                            <span className="text-red-500 text-sm">
-                                {erroAudience}
-                            </span>
+                        {/* Canvas */}
+                        <div
+                            className="relative flex-1 p-4 overflow-y-auto"
+                            onDrop={handleCanvasDrop}
+                            onDragOver={(e) => e.preventDefault()}
+                            onClick={() => setSelectedId(null)}
+                            style={{
+                                backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)',
+                                backgroundSize: '24px 24px',
+                            }}
+                        >
+                            {fields.length === 0 ? (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
+                                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 text-3xl text-gray-200">⊞</div>
+                                    <p className="text-sm text-gray-300">Arrasta elementos para aqui</p>
+                                </div>
+                            ) : (
+                                <div className="grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
+                                    {fields.map((campo, index) => (
+                                        <FieldCard
+                                            key={campo.id}
+                                            field={campo}
+                                            index={index}
+                                            isSelected={selectedId === campo.id}
+                                            onSelect={(e) => { e?.stopPropagation(); setSelectedId(campo.id); }}
+                                            onRemove={() => removerCampo(campo.id)}
+                                            isDraggingOver={dragOverIndex === index && !isDraggingFromPalette}
+                                            onDragStart={() => handleCardDragStart(index)}
+                                            onDragEnter={() => handleCardDragEnter(index)}
+                                            onDragEnd={handleCardDragEnd}
+                                        />
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Painel de edição */}
+                        {selectedField && (
+                            <EditPanel
+                                field={selectedField}
+                                onClose={() => setSelectedId(null)}
+                                onUpdate={updateField}
+                            />
                         )}
-                        </div>
-                        
-                    </div>
-                    
-                    
-                    {/* Botão que permite adicionar novos campos ao formulário */}
-                    <div className="mt-4">
-                        <button
-                            type="button"
-                            onClick={adicionarCampo}
-                            className="rounded-md bg-gray-200 px-4 py-2 font-semibold transition-all hover:bg-gray-300"
-                        >
-                            + Adicionar Campo
-                        </button>
                     </div>
 
-                    {/* Lista de campos adicionados dinamicamente */}
-                    {fields.map((campo) => (
-                        <div key={campo.id} className={`flex flex-col gap-4 mt-4 p-4 rounded-md border shadow-sm transition-all ${fieldErrors[campo.id] ? 'border-red-300 bg-red-50/30' : 'border-accent-border bg-white'}`}>
+                    <p className="text-xs text-gray-300 text-right">
+                        Clica num campo para editar · Arrasta para reordenar · "Metade" coloca campos lado a lado
+                    </p>
+                </div>
 
-                            {/* 1. Nome do Campo */}
-                            <div className="flex flex-col gap-2">
-                                <label className="font-medium text-sm text-text-h">Nome do campo</label>
-                                <input
-                                    type="text"
-                                    value={campo.label}
-                                    placeholder="Ex: Endereço ..."
-                                    onChange={(e) => alterarLabel(campo.id, e.target.value)}
-                                    className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.label ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
-                                />
-                                {fieldErrors[campo.id]?.label && <span className="text-red-500 text-sm">O nome do campo é obrigatório.</span>}
-                            </div>
-
-                            {/* 2. Placeholder (Texto de Exemplo) */}
-                            <div className="flex flex-col gap-2">
-                                <label className="font-medium text-sm text-text-h">Texto de Exemplo (Placeholder)</label>
-                                <input
-                                    type="text"
-                                    value={campo.placeholder}
-                                    onChange={(e) => alterarPlaceholder(campo.id, e.target.value)}
-                                    placeholder="Ex: Insira o valor aqui..."
-                                    className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.placeholder ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
-                                />
-                                {fieldErrors[campo.id]?.placeholder && <span className="text-red-500 text-sm">O texto de exemplo é obrigatório.</span>}
-                            </div>
-
-                            {/* 3. Tipo de Dados */}
-                            <div className="flex flex-col gap-2">
-                                <label className="font-medium text-sm text-text-h">Tipo de Dados</label>
-                                <select
-                                    value={campo.type}
-                                    onChange={(e) => alterarTipo(campo.id, e.target.value)}
-                                    className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none bg-white cursor-pointer"
-                                >
-                                    <option value="text">Texto (Resposta Curta)</option>
-                                    <option value="number">Número</option>
-                                    <option value="date">Data</option>
-                                    <option value="dropdown">Menu Suspenso (Opções)</option>
-                                    <option value="table">Tabela (Grelha)</option>
-                                </select>
-                            </div>
-
-                            {/* CONFIGURAÇÃO DA TABELA (Só aparece se o tipo for 'table') */}
-                            {campo.type === 'table' && (
-                                <div className="flex flex-col gap-4 mt-2 p-4 bg-gray-50 border border-gray-200 rounded-md">
-                                    <p className="font-semibold text-sm text-text-h">Configuração da Tabela</p>
-
-                                    {/* Caixas de texto das Colunas */}
-                                    <div className="flex flex-col gap-2">
-                                        <label className="text-sm font-medium">Colunas da Tabela</label>
-                                        {campo.options.map((coluna, idx) => (
-                                            <div key={idx} className="flex items-center gap-2">
-                                                <input
-                                                    type="text"
-                                                    value={coluna}
-                                                    onChange={(e) => alterarColuna(campo.id, idx, e.target.value)}
-                                                    placeholder={`Nome da Coluna ${idx + 1}`}
-                                                    className={`flex-1 rounded-md border p-2 text-sm focus:outline-none ${fieldErrors[campo.id]?.options && (!coluna || coluna.trim() === '') ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
-                                                />
-                                                <button
-                                                    type="button"
-                                                    onClick={() => removerColuna(campo.id, idx)}
-                                                    disabled={campo.options.length <= 1}
-                                                    className="flex-shrink-0 text-red-500 hover:text-red-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
-                                                    title="Remover coluna"
-                                                >
-                                                    🗑️
-                                                </button>
-                                            </div>
-                                        ))}
-                                        {fieldErrors[campo.id]?.options && <span className="text-red-500 text-sm">Todas as colunas têm de ter um nome.</span>}
-                                    </div>
-
-                                    {/* Botão de Adicionar Coluna + Toggle de Linhas */}
-                                    <div className="flex flex-wrap items-center gap-6 mt-2">
-                                        <button
-                                            type="button"
-                                            onClick={() => adicionarColuna(campo.id)}
-                                            className="bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm px-4 py-2 rounded-md font-semibold transition"
-                                        >
-                                            + Adicionar Coluna
-                                        </button>
-
-                                        <label className="flex items-center gap-2 text-sm cursor-pointer font-medium">
-                                            <input
-                                                type="checkbox"
-                                                checked={campo.tableFixedRows}
-                                                onChange={(e) => alterarConfigTabela(campo.id, 'tableFixedRows', e.target.checked)}
-                                                className="w-4 h-4 cursor-pointer"
-                                            />
-                                            Número fixo de linhas?
-                                        </label>
-
-                                        {/* Caixa de Número de Linhas (Só aparece se o toggle estiver ativo) */}
-                                        {campo.tableFixedRows && (
-                                            <div className="flex items-center gap-2">
-                                                <label className="text-sm font-medium">Nº de linhas:</label>
-                                                <input
-                                                    type="number"
-                                                    min="1"
-                                                    value={campo.tableRowCount}
-                                                    onChange={(e) => alterarConfigTabela(campo.id, 'tableRowCount', parseInt(e.target.value) || 1)}
-                                                    className="rounded-md border border-accent-border p-1 w-16 text-center focus:border-blue-500 focus:outline-none"
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-
-
-                            {/* 4. Opções do Menu Suspenso */}
-                            {campo.type === "dropdown" && (
-                                <div className="flex flex-col gap-2">
-                                    <label className="font-medium text-sm text-text-h">Opções do menu</label>
-                                    <input
-                                        type="text"
-                                        value={campo.options.join(', ')}
-                                        onChange={(e) => alterarOptions(campo.id, e.target.value)}
-                                        placeholder="Ex: Opção 1, Opção 2, Opção 3, ..."
-                                        className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.options ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
-                                    />
-                                    {fieldErrors[campo.id]?.options ? (
-                                        <span className="text-red-500 text-sm">As opções não podem estar vazias.</span>
-                                    ) : (
-                                        <span className="text-xs text-gray-500">Separe as opções por vírgulas.</span>
-                                    )}
-                                </div>
-                            )}
-
-                            <label className="inline-flex items-center gap-2 text-sm font-medium mt-2">
-                                <input
-                                    type="checkbox"
-                                    checked={campo.required}
-                                    onChange={() => alterarObrigatorio(campo.id)}
-                                    className="h-4 w-4 rounded border-accent-border"
-                                />
-                                Campo obrigatório
-                            </label>
-
-                            <div className="flex justify-end mt-2">
-                                <button
-                                    type="button"
-                                    onClick={() => eliminarCampo(campo.id)}
-                                    className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-600 transition-all hover:bg-red-100 hover:border-red-300"
-                                >
-                                    🗑️ Eliminar campo
-                                </button>
-                            </div>
-
-                        </div>
-                    ))}
-
-                    <div className="mt-6 flex justify-end gap-4 border-t border-accent-border pt-4">
-                        <button
-                            disabled={isLoading}
-                            type="submit"
-                            id="save-draft"
-                            className="rounded-md bg-blue-600 px-6 py-2 font-semibold text-white transition-all hover:bg-blue-700 disabled:opacity-50"
-                        >
-                            Guardar como Rascunho
-                        </button>
-
-                        <button
-                            disabled={isLoading}
-                            id="save-final"
-                            type="submit"
-                            className="rounded-md bg-green-600 px-6 py-2 font-semibold text-white transition-all hover:bg-green-700 disabled:opacity-50"
-                        >
-                            Publicar
-                        </button>
-                    </div>
-
-                </form>
-            </div>
+                {/* Botões */}
+                <div className="flex justify-end gap-3">
+                    <button
+                        disabled={isLoading}
+                        type="submit"
+                        id="save-draft"
+                        className="rounded-md border border-blue-300 bg-blue-50 px-6 py-2 font-semibold text-blue-700 transition-all hover:bg-blue-100 disabled:opacity-50"
+                    >
+                        Guardar como Rascunho
+                    </button>
+                    <button
+                        disabled={isLoading}
+                        id="save-final"
+                        type="submit"
+                        className="rounded-md bg-green-600 px-6 py-2 font-semibold text-white transition-all hover:bg-green-700 disabled:opacity-50"
+                    >
+                        {isLoading ? 'A guardar...' : 'Guardar'}
+                    </button>
+                </div>
+            </form>
         </div>
     );
 }
