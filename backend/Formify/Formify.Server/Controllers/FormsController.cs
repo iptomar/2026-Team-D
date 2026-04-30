@@ -19,16 +19,32 @@ namespace Formify.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateFormRequest request)
         {
+            // Validação automática das anotações existentes no DTO.
             if (!ModelState.IsValid)
             {
                 return ValidationProblem(ModelState);
             }
 
+            // Garante que o formulário tem nome.
             if (string.IsNullOrWhiteSpace(request.Title))
             {
                 return BadRequest(new { message = "O nome do formulário é obrigatório." });
             }
 
+            // Garante que foi selecionado pelo menos um público-alvo.
+            if (request.Audience == null || !request.Audience.Any())
+            {
+                return BadRequest(new { message = "É obrigatório selecionar pelo menos um público-alvo." });
+            }
+
+            // Garante que o formulário tem pelo menos um campo real.
+            // O tipo "section" serve apenas como separador visual e não conta como campo de resposta.
+            if (request.Fields == null || !request.Fields.Any(f => f.Type != "section"))
+            {
+                return BadRequest(new { message = "O formulário deve conter pelo menos um campo." });
+            }
+
+            // Carrega os formulários existentes para gerar o próximo ID e acrescentar o novo formulário.
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
             var form = new Form
@@ -49,16 +65,15 @@ namespace Formify.Server.Controllers
             return CreatedAtAction(nameof(GetById), new { id = form.Id }, form);
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetAllForms()
         {
-            // 1. Load the entire list from the JSON file
+            // Carrega a lista completa de formulários guardados no ficheiro JSON.
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
             if (allForms == null)
             {
-                return NotFound(new { message = $"No forms were found" });
+                return NotFound(new { message = "No forms were found" });
             }
 
             return Ok(allForms);
@@ -67,13 +82,13 @@ namespace Formify.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            // 1. Load the entire list from the JSON file
+            // Carrega a lista completa de formulários guardados no ficheiro JSON.
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
-            // 2. Use LINQ to find the first form that matches the ID
+            // Procura o formulário correspondente ao ID recebido.
             var form = allForms.FirstOrDefault(f => f.Id == id);
 
-            // 3. Standard null check
+            // Se não existir, devolve 404.
             if (form == null)
             {
                 return NotFound(new { message = $"Form with ID {id} not found." });
@@ -85,7 +100,10 @@ namespace Formify.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteForm(int id)
         {
+            // Carrega os formulários existentes.
             var allForms = await _jsonHandler.GetAllFormsAsync();
+
+            // Procura o formulário a remover.
             var formToRemove = allForms.FirstOrDefault(f => f.Id == id);
 
             if (formToRemove == null)
