@@ -27,6 +27,44 @@ function getTypeInfo(type) {
     return FIELD_TYPES.find(f => f.type === type) || FIELD_TYPES[0];
 }
 
+// ─── Modal de confirmação ─────────────────────────────────────────────────────
+// Mostra uma caixa de diálogo pedindo confirmação antes de publicar
+function ConfirmPublishModal({ isOpen, onConfirm, onCancel, isLoading }) {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Publicar Formulário?
+                </h3>
+                <p className="text-sm text-gray-600 mb-6">
+                    Depois de publicar, o formulário ficará disponível para os públicos-alvo selecionados.
+                </p>
+
+                <div className="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        disabled={isLoading}
+                        className="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50"
+                    >
+                        Não, cancelar
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onConfirm}
+                        disabled={isLoading}
+                        className="rounded-md bg-green-600 px-4 py-2 font-medium text-white transition-all hover:bg-green-700 disabled:opacity-50"
+                    >
+                        {isLoading ? 'A Publicar...' : 'Sim, publicar'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // ─── Preview do campo no canvas ───────────────────────────────────────────────
 // Mostra uma pré-visualização visual do campo, sem permitir edição direta.
 function FieldPreview({ field }) {
@@ -511,11 +549,11 @@ export default function CreateForm() {
     // Estados de interface
     const [isLoading, setIsLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
+    const [showConfirmPublish, setShowConfirmPublish] = useState(false);
 
     // Estados auxiliares para drag and drop
     const dragIndex = useRef(null);
     const [dragOverIndex, setDragOverIndex] = useState(null);
-    const [isDraggingFromPalette, setIsDraggingFromPalette] = useState(false);
     const dragTypeRef = useRef(null);
 
     const navigate = useNavigate();
@@ -607,7 +645,6 @@ export default function CreateForm() {
     const handlePaletteDragStart = (e, type) => {
         dragTypeRef.current = type;
         dragIndex.current = null;
-        setIsDraggingFromPalette(true);
 
         e.dataTransfer.effectAllowed = 'copy';
         e.dataTransfer.setData('field-type', type);
@@ -619,7 +656,6 @@ export default function CreateForm() {
         dragIndex.current = index;
         dragTypeRef.current = null;
         setDragOverIndex(index);
-        setIsDraggingFromPalette(false);
 
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('field-index', index.toString());
@@ -666,7 +702,6 @@ export default function CreateForm() {
         dragIndex.current = null;
         dragTypeRef.current = null;
         setDragOverIndex(null);
-        setIsDraggingFromPalette(false);
     };
 
     // ── Fim do drag ──
@@ -674,7 +709,6 @@ export default function CreateForm() {
         dragIndex.current = null;
         dragTypeRef.current = null;
         setDragOverIndex(null);
-        setIsDraggingFromPalette(false);
     };
 
     // ── Largar no espaço vazio do canvas ──
@@ -691,52 +725,127 @@ export default function CreateForm() {
         dragIndex.current = null;
         dragTypeRef.current = null;
         setDragOverIndex(null);
-        setIsDraggingFromPalette(false);
     };
+
+    // Função para verificar se ainda existem valores default no formulário
+    const validarFormularioCompleto = (fieldsToValidate) => {
+        const erros = [];
+
+        fieldsToValidate.forEach((field, index) => {
+            // Obter os dados padrão para este tipo de campo
+            const typeInfo = FIELD_TYPES.find(f => f.type === field.type);
+            const defaultLabel = typeInfo ? typeInfo.label : '';
+
+            // Forma amigável de referir o campo no erro
+            const nomeAmigavel = field.label && field.label !== defaultLabel
+                ? `"${field.label}"`
+                : `Nº ${index + 1} (${defaultLabel})`;
+
+            // 1. Validar Label (APLICA-SE A TODOS, INCLUINDO SECÇÕES)
+            if (!field.label || field.label.trim() === '' || field.label === defaultLabel) {
+                erros.push(`O elemento ${nomeAmigavel} ainda tem o título por preencher ou tem o nome default.`);
+            }
+
+            // As secções ('section') param a validação por aqui.
+            // Não têm placeholders, opções nem colunas de tabela.
+            if (field.type === 'section') return;
+
+            // 2. Validar Placeholder (para os campos que suportam placeholder de texto)
+            if (['text', 'textarea', 'number'].includes(field.type)) {
+                if (!field.placeholder || field.placeholder.trim() === '') {
+                    erros.push(`O campo ${nomeAmigavel} não tem um texto de ajuda (placeholder) definido.`);
+                }
+            }
+
+            // 3. Validar Opções (Dropdown, Checkbox, Radio)
+            if (['dropdown', 'checkbox', 'radio'].includes(field.type)) {
+                // Regex para detetar "Opção 1", "Opção 2", "Opção 99", etc.
+                const hasDefaultOptions = field.options.some(opt =>
+                    !opt || opt.trim() === '' || /^Opção \d+$/.test(opt.trim())
+                );
+
+                if (hasDefaultOptions) {
+                    erros.push(`O campo ${nomeAmigavel} contém opções vazias ou com o nome padrão ("Opção X").`);
+                }
+            }
+
+            // 4. Validar Colunas da Tabela
+            if (field.type === 'table') {
+                // Regex para detetar "Coluna A", "Coluna B", "Coluna Z", etc.
+                const hasDefaultCols = field.tableColumns.some(col =>
+                    !col || col.trim() === '' || /^Coluna [A-Z]$/.test(col.trim())
+                );
+
+                if (hasDefaultCols) {
+                    erros.push(`A tabela ${nomeAmigavel} contém colunas vazias ou com o nome padrão ("Coluna X").`);
+                }
+            }
+        });
+
+        return erros;
+    };
+
 
     // ── Submissão do formulário ──
     // Valida os dados no frontend antes de enviar para o backend.
+    // ─── Submissão do formulário ──
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setIsLoading(true);
         setErroNome('');
         setErroAudience('');
-        setErroFields('');
+        setErroFields([]);
 
-        // Campos reais são todos os elementos que não são apenas títulos de secção.
         const realFields = fields.filter(field => field.type !== 'section');
-
-        // Adiciona a posição lógica de cada campo antes de enviar para o backend.
-        // A ordem visual definida por drag and drop é representada pelo índice no array.
         const fieldsWithOrder = fields.map((field, index) => ({
             ...field,
             order: index,
         }));
 
+        // 1. Validações SEMPRE obrigatórias (Rascunho ou Publicado)
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
-            setIsLoading(false);
             return;
         }
 
         if (audience.length === 0) {
             setErroAudience('Seleciona pelo menos um público-alvo para o formulário.');
-            setIsLoading(false);
             return;
         }
 
-        if (realFields.length === 0) {
-            setErroFields('Adiciona pelo menos um campo ao formulário antes de guardar.');
-            setIsLoading(false);
+        // IDENTIFICAR QUAL BOTÃO FOI CLICADO
+        const isFinal = e.nativeEvent.submitter.id === 'save-final';
+
+        // 2. ⭐ VALIDAÇÕES APENAS PARA QUANDO FOR PUBLICADO ⭐
+        if (isFinal) {
+            // Regra A: Tem de ter pelo menos um campo real (não conta se for só uma secção)
+            if (realFields.length === 0) {
+                setErroFields(['Adiciona pelo menos um campo ao formulário antes de publicar.']);
+                return;
+            }
+
+            // Regra B: Os campos não podem ter os valores default
+            const errosDePreenchimento = validarFormularioCompleto(fields);
+
+            if (errosDePreenchimento.length > 0) {
+                setErroFields(errosDePreenchimento);
+                return;
+            }
+
+            // Se passou todas as validações, mostra o modal de confirmação
+            setShowConfirmPublish(true);
             return;
         }
+
+        // Se não for final (é rascunho), submete diretamente
+        await submeterFormulario(fieldsWithOrder, false);
+    };
+
+    // ── Função para submeter o formulário ao backend ──
+    const submeterFormulario = async (fieldsWithOrder, isFinal) => {
+        setIsLoading(true);
 
         try {
-            // Identifica se o utilizador carregou em "Guardar" ou "Guardar como Rascunho".
-            const isFinal = e.nativeEvent.submitter.id === 'save-final';
-
-            // Decide se é Criação (POST) ou Edição (PUT) com base na existência do ID
             const url = id
                 ? `http://localhost:5208/api/Forms/${id}`
                 : 'http://localhost:5208/api/Forms';
@@ -747,7 +856,7 @@ export default function CreateForm() {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    Id: id, // Pode ser necessário passar o ID no body para o PUT
+                    Id: id,
                     Title: nome,
                     Description: descricao,
                     Audience: audience,
@@ -765,15 +874,31 @@ export default function CreateForm() {
             }
 
             const data = await response.json();
-            console.log('Formulário criado com sucesso:', data);
+            console.log('Formulário submetido com sucesso:', data);
 
-            alert('Formulário criado com sucesso!');
+            alert(isFinal ? 'Formulário publicado com sucesso!' : 'Rascunho guardado com sucesso!');
             navigate('/');
         } catch (error) {
             console.error('Erro de ligação ao backend:', error);
             alert('Não foi possível ligar ao backend.');
             setIsLoading(false);
         }
+    };
+
+    // ── Handler para confirmar publicação ──
+    const handleConfirmPublish = async () => {
+        const fieldsWithOrder = fields.map((field, index) => ({
+            ...field,
+            order: index,
+        }));
+
+        await submeterFormulario(fieldsWithOrder, true);
+        setShowConfirmPublish(false);
+    };
+
+    // ── Handler para cancelar publicação ──
+    const handleCancelPublish = () => {
+        setShowConfirmPublish(false);
     };
 
     return (
@@ -864,10 +989,17 @@ export default function CreateForm() {
                         </span>
                     </div>
 
-                    {/* Erro de validação quando não existem campos reais */}
-                    {erroFields && (
-                        <div className="rounded-md border border-red-200 bg-red-50 px-4 py-2 text-sm text-red-600">
-                            {erroFields}
+                    {/* Erro de validação dos campos */}
+                    {erroFields && erroFields.length > 0 && (
+                        <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                            <p className="font-bold mb-2">Não é possível publicar. O formulário não está completo:</p>
+                            <ul className="list-disc pl-5 space-y-1">
+                                {typeof erroFields === 'string' ? (
+                                    <li>{erroFields}</li> /* Para os teus erros antigos de string */
+                                ) : (
+                                    erroFields.map((erro, i) => <li key={i}>{erro}</li>)
+                                )}
+                            </ul>
                         </div>
                     )}
 
@@ -883,7 +1015,6 @@ export default function CreateForm() {
                                     key={ft.type}
                                     draggable
                                     onDragStart={(e) => handlePaletteDragStart(e, ft.type)}
-                                    onDragEnd={() => setIsDraggingFromPalette(false)}
                                     onClick={() => adicionarCampo(ft.type)}
                                     className="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 cursor-grab active:cursor-grabbing hover:border-green-300 hover:bg-green-50 transition-all select-none"
                                 >
@@ -972,10 +1103,18 @@ export default function CreateForm() {
                         type="submit"
                         className="rounded-md bg-green-600 px-6 py-2 font-semibold text-white transition-all hover:bg-green-700 disabled:opacity-50"
                     >
-                        {isLoading ? 'A guardar...' : 'Guardar'}
+                        {isLoading ? 'A Publicar...' : 'Publicar'}
                     </button>
                 </div>
             </form>
+
+            {/* Modal de confirmação de publicação */}
+            <ConfirmPublishModal
+                isOpen={showConfirmPublish}
+                onConfirm={handleConfirmPublish}
+                onCancel={handleCancelPublish}
+                isLoading={isLoading}
+            />
         </div>
     );
-}   
+}
