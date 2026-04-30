@@ -1,259 +1,717 @@
 [
   {
     "Id": 1,
-    "Title": "Inqu\u00E9rito de Satisfa\u00E7\u00E3o Escolar",
-    "Description": "Avalia\u00E7\u00E3o geral das infraestruturas e ensino.",
-    "Audience": [
-      "teacher",
-      "staff"
-    ],
+    "Title": "Pedido de Alteração de Sala",
+    "Description": "Formulário para solicitar alteração de sala para aulas, reuniões ou atividades institucionais.",
+    "Audience": ["Professor", "Funcionario"],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "f1",
-        "Type": "text",
-        "Label": "Nome Completo",
-        "Required": true,
-        "Placeholder": "Insira o seu nome",
-        "X": null,
-        "Y": null,
+        "Id": "f1-section-1",
+        "Type": "section",
+        "Label": "Identificação",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
         "Options": [],
         "TableFixedRows": false,
-        "TableRowCount": 1
+        "TableRowCount": null
       },
       {
-        "Id": "f2",
-        "Type": "dropdown",
-        "Label": "Departamento",
+        "Id": "f1-nome",
+        "Type": "text",
+        "Label": "Nome completo",
         "Required": true,
-        "Placeholder": "Selecione uma op\u00E7\u00E3o",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "Inform\u00E1tica",
-          "Gest\u00E3o",
-          "Artes"
-        ],
+        "Placeholder": "Insira o seu nome",
+        "Order": 1,
+        "Options": [],
         "TableFixedRows": false,
-        "TableRowCount": 1
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-data",
+        "Type": "date",
+        "Label": "Data pretendida",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-sala-atual",
+        "Type": "text",
+        "Label": "Sala atual",
+        "Required": true,
+        "Placeholder": "Ex: O103",
+        "Order": 3,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-sala-pretendida",
+        "Type": "text",
+        "Label": "Sala pretendida",
+        "Required": false,
+        "Placeholder": "Ex: O204",
+        "Order": 4,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-justificacao",
+        "Type": "textarea",
+        "Label": "Justificação",
+        "Required": true,
+        "Placeholder": "Explique o motivo do pedido",
+        "Order": 5,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-24T23:00:00Z",
-    "UpdatedAt": "2026-04-24T23:00:00Z"
+    "CreatedAt": "2026-04-30T09:00:00+01:00",
+    "UpdatedAt": "2026-04-30T09:00:00+01:00"
   },
   {
     "Id": 2,
-    "Title": "Registo de Horas Extra",
-    "Description": "Rascunho para controlo interno.",
-    "Audience": [
-      "staff"
-    ],
-    "StatusDrafted": true,
+    "Title": "Requisição de Material Informático",
+    "Description": "Pedido de equipamentos, periféricos ou software para uso institucional.",
+    "Audience": ["Funcionario"],
+    "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "f3",
-        "Type": "table",
-        "Label": "Tabela de Horas",
+        "Id": "f2-section-1",
+        "Type": "section",
+        "Label": "Dados do Pedido",
         "Required": false,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "Data",
-          "Horas",
-          "Tarefa"
-        ],
-        "TableFixedRows": true,
-        "TableRowCount": 5
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-nome",
+        "Type": "text",
+        "Label": "Nome do funcionário",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 1,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-departamento",
+        "Type": "dropdown",
+        "Label": "Departamento",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": ["Informática", "Serviços Académicos", "Recursos Humanos", "Biblioteca", "Outro"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-material",
+        "Type": "checkbox",
+        "Label": "Material solicitado",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 3,
+        "Options": ["Computador", "Monitor", "Teclado", "Rato", "Software"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-prioridade",
+        "Type": "radio",
+        "Label": "Prioridade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 4,
+        "Options": ["Baixa", "Normal", "Alta", "Urgente"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-justificacao",
+        "Type": "textarea",
+        "Label": "Justificação",
+        "Required": true,
+        "Placeholder": "Descreva a necessidade do material",
+        "Order": 5,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-24T23:10:00Z",
-    "UpdatedAt": "2026-04-24T23:10:00Z"
+    "CreatedAt": "2026-04-30T09:10:00+01:00",
+    "UpdatedAt": "2026-04-30T09:10:00+01:00"
   },
   {
     "Id": 3,
-    "Title": "fbdfcdb",
-    "Description": "bdfcbdcbfd",
-    "Audience": [
-      "staff"
-    ],
-    "StatusDrafted": true,
+    "Title": "Proposta de Atividade Pedagógica",
+    "Description": "Submissão de propostas de workshops, visitas de estudo, seminários ou aulas abertas.",
+    "Audience": ["Professor"],
+    "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1777069244057",
-        "Type": "date",
-        "Label": "bdfbfd",
-        "Required": true,
-        "Placeholder": "dfbdfb",
-        "X": null,
-        "Y": null,
+        "Id": "f3-section-1",
+        "Type": "section",
+        "Label": "Dados do Docente",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
         "Options": [],
         "TableFixedRows": false,
-        "TableRowCount": 1
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-docente",
+        "Type": "text",
+        "Label": "Nome do docente",
+        "Required": true,
+        "Placeholder": "Insira o nome do docente responsável",
+        "Order": 1,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-uc",
+        "Type": "text",
+        "Label": "Unidade curricular",
+        "Required": true,
+        "Placeholder": "Ex: Gestão de Projetos",
+        "Order": 2,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-tipo",
+        "Type": "dropdown",
+        "Label": "Tipo de atividade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 3,
+        "Options": ["Workshop", "Seminário", "Visita de estudo", "Aula aberta", "Outro"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-data",
+        "Type": "date",
+        "Label": "Data prevista",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 4,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-participantes",
+        "Type": "number",
+        "Label": "Número estimado de participantes",
+        "Required": true,
+        "Placeholder": "Ex: 25",
+        "Order": 5,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-24T23:20:52.4238391+01:00",
-    "UpdatedAt": "2026-04-24T23:20:52.4238447+01:00"
+    "CreatedAt": "2026-04-30T09:20:00+01:00",
+    "UpdatedAt": "2026-04-30T09:20:00+01:00"
   },
   {
     "Id": 4,
-    "Title": "fewfwef",
-    "Description": "fewfwefwe",
-    "Audience": [
-      "teacher"
-    ],
-    "StatusDrafted": true,
+    "Title": "Comunicação de Ausência",
+    "Description": "Formulário para comunicação de ausência prevista ou imprevista.",
+    "Audience": ["Professor", "Funcionario"],
+    "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1777069294891",
-        "Type": "number",
-        "Label": "fewfwf",
+        "Id": "f4-nome",
+        "Type": "text",
+        "Label": "Nome completo",
         "Required": true,
-        "Placeholder": "efwfew",
-        "X": null,
-        "Y": null,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
         "Options": [],
         "TableFixedRows": false,
-        "TableRowCount": 1
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-tipo-ausencia",
+        "Type": "dropdown",
+        "Label": "Tipo de ausência",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Options": ["Doença", "Formação", "Serviço externo", "Assunto pessoal", "Outro"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-data-inicio",
+        "Type": "date",
+        "Label": "Data de início",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-data-fim",
+        "Type": "date",
+        "Label": "Data de fim",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 3,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-observacoes",
+        "Type": "textarea",
+        "Label": "Observações",
+        "Required": false,
+        "Placeholder": "Informação adicional",
+        "Order": 4,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-24T23:21:42.1158468+01:00",
-    "UpdatedAt": "2026-04-24T23:21:42.1158496+01:00"
+    "CreatedAt": "2026-04-30T09:30:00+01:00",
+    "UpdatedAt": "2026-04-30T09:30:00+01:00"
   },
   {
     "Id": 5,
-    "Title": "Teste com drag and drop",
-    "Description": "",
-    "Audience": [],
-    "StatusDrafted": true,
+    "Title": "Pedido de Manutenção",
+    "Description": "Pedido de intervenção técnica em salas, equipamentos ou espaços comuns.",
+    "Audience": ["Funcionario"],
+    "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1777462748072",
+        "Id": "f5-local",
         "Type": "text",
-        "Label": "Nome dos Alunos",
+        "Label": "Local da ocorrência",
+        "Required": true,
+        "Placeholder": "Ex: Sala O103",
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f5-categoria",
+        "Type": "dropdown",
+        "Label": "Categoria",
         "Required": true,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Order": 1,
+        "Options": ["Eletricidade", "Mobiliário", "Climatização", "Informática", "Limpeza", "Outro"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f5-urgente",
+        "Type": "radio",
+        "Label": "É urgente?",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": ["Sim", "Não"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f5-descricao",
+        "Type": "textarea",
+        "Label": "Descrição do problema",
+        "Required": true,
+        "Placeholder": "Descreva o problema encontrado",
+        "Order": 3,
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-29T12:39:35.5056626+01:00",
-    "UpdatedAt": "2026-04-29T12:39:35.5056647+01:00"
+    "CreatedAt": "2026-04-30T09:40:00+01:00",
+    "UpdatedAt": "2026-04-30T09:40:00+01:00"
   },
   {
     "Id": 6,
-    "Title": "Teste2",
-    "Description": "",
-    "Audience": [],
+    "Title": "Inscrição em Formação Interna",
+    "Description": "Formulário para inscrição em ações de formação internas.",
+    "Audience": ["Professor", "Funcionario"],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1777462822377",
+        "Id": "f6-nome",
+        "Type": "text",
+        "Label": "Nome completo",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f6-email",
+        "Type": "text",
+        "Label": "Email institucional",
+        "Required": true,
+        "Placeholder": "exemplo@ipt.pt",
+        "Order": 1,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f6-formacao",
         "Type": "dropdown",
-        "Label": "Popula\u00E7\u00E3o alvo",
-        "Required": false,
+        "Label": "Formação pretendida",
+        "Required": true,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "Op\u00E7\u00E3o 1",
-          "Op\u00E7\u00E3o 2"
-        ],
+        "Order": 2,
+        "Options": ["Excel intermédio", "Power BI", "Cibersegurança", "Inteligência Artificial", "Gestão de Projetos"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f6-disponibilidade",
+        "Type": "checkbox",
+        "Label": "Disponibilidade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 3,
+        "Options": ["Manhã", "Tarde", "Pós-laboral"],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-29T12:40:45.4177068+01:00",
-    "UpdatedAt": "2026-04-29T12:40:45.4177082+01:00"
+    "CreatedAt": "2026-04-30T09:50:00+01:00",
+    "UpdatedAt": "2026-04-30T09:50:00+01:00"
   },
   {
     "Id": 7,
-    "Title": "tESTE COM APRIMORAMENTO",
-    "Description": "",
-    "Audience": [],
+    "Title": "Avaliação de Evento",
+    "Description": "Questionário simples para recolha de feedback após eventos institucionais.",
+    "Audience": ["Professor", "Funcionario"],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1777463618762",
-        "Type": "section",
-        "Label": "Sec\u00E7\u00E3o das perguntas",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      },
-      {
-        "Id": "1777463672352",
+        "Id": "f7-evento",
         "Type": "text",
-        "Label": "Nome de Alunos",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Label": "Nome do evento",
+        "Required": true,
+        "Placeholder": "Insira o nome do evento",
+        "Order": 0,
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
-        "Id": "1777463691888",
-        "Type": "text",
-        "Label": "Nome de Professores",
-        "Required": false,
+        "Id": "f7-satisfacao",
+        "Type": "radio",
+        "Label": "Grau de satisfação",
+        "Required": true,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
+        "Order": 1,
+        "Options": ["Muito satisfeito", "Satisfeito", "Neutro", "Insatisfeito"],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
-        "Id": "1777463721931",
-        "Type": "dropdown",
-        "Label": "Dropdown",
-        "Required": false,
+        "Id": "f7-recomendaria",
+        "Type": "radio",
+        "Label": "Recomendaria este evento?",
+        "Required": true,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "Op\u00E7\u00E3o 1",
-          "Op\u00E7\u00E3o 2",
-          "Op\u00E7\u00E3o 3"
-        ],
+        "Order": 2,
+        "Options": ["Sim", "Não"],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
-        "Id": "1777463729323",
-        "Type": "table",
-        "Label": "Tabela",
+        "Id": "f7-comentarios",
+        "Type": "textarea",
+        "Label": "Comentários ou sugestões",
         "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      },
-      {
-        "Id": "1777463780724",
-        "Type": "section",
-        "Label": "T\u00EDtulo de sec\u00E7\u00E3o",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Placeholder": "Escreva a sua opinião",
+        "Order": 3,
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-29T12:56:36.3803485+01:00",
-    "UpdatedAt": "2026-04-29T12:56:36.3803501+01:00"
+    "CreatedAt": "2026-04-30T10:00:00+01:00",
+    "UpdatedAt": "2026-04-30T10:00:00+01:00"
+  },
+  {
+    "Id": 8,
+    "Title": "Pedido de Apoio aos Serviços Académicos",
+    "Description": "Pedido de esclarecimento ou apoio relacionado com processos académicos.",
+    "Audience": ["Professor"],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "f8-nome",
+        "Type": "text",
+        "Label": "Nome do docente",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f8-assunto",
+        "Type": "dropdown",
+        "Label": "Assunto",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Options": ["Pautas", "Inscrições", "Horários", "Sumários", "Estudantes", "Outro"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f8-urgencia",
+        "Type": "radio",
+        "Label": "Nível de urgência",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": ["Normal", "Urgente"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f8-descricao",
+        "Type": "textarea",
+        "Label": "Descrição do pedido",
+        "Required": true,
+        "Placeholder": "Descreva o pedido com detalhe",
+        "Order": 3,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-30T10:10:00+01:00",
+    "UpdatedAt": "2026-04-30T10:10:00+01:00"
+  },
+  {
+    "Id": 9,
+    "Title": "Registo de Ocorrência",
+    "Description": "Registo interno de ocorrências em espaços, equipamentos ou serviços.",
+    "Audience": ["Funcionario"],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "f9-data",
+        "Type": "date",
+        "Label": "Data da ocorrência",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f9-local",
+        "Type": "text",
+        "Label": "Local",
+        "Required": true,
+        "Placeholder": "Ex: Biblioteca",
+        "Order": 1,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f9-tipo",
+        "Type": "dropdown",
+        "Label": "Tipo de ocorrência",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": ["Segurança", "Equipamento", "Infraestrutura", "Atendimento", "Outro"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f9-descricao",
+        "Type": "textarea",
+        "Label": "Descrição",
+        "Required": true,
+        "Placeholder": "Descreva a ocorrência",
+        "Order": 3,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-30T10:20:00+01:00",
+    "UpdatedAt": "2026-04-30T10:20:00+01:00"
+  },
+  {
+    "Id": 10,
+    "Title": "Pedido de Reserva de Equipamento",
+    "Description": "Formulário para reservar equipamentos institucionais por um período definido.",
+    "Audience": ["Professor", "Funcionario"],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "f10-nome",
+        "Type": "text",
+        "Label": "Nome do requerente",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f10-equipamento",
+        "Type": "dropdown",
+        "Label": "Equipamento",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Options": ["Projetor", "Computador portátil", "Câmara", "Microfone", "Colunas"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f10-data",
+        "Type": "date",
+        "Label": "Data de utilização",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f10-finalidade",
+        "Type": "textarea",
+        "Label": "Finalidade da reserva",
+        "Required": true,
+        "Placeholder": "Indique o motivo da reserva",
+        "Order": 3,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-30T10:30:00+01:00",
+    "UpdatedAt": "2026-04-30T10:30:00+01:00"
+  },
+  {
+    "Id": 11,
+    "Title": "Plano de Substituição de Aula",
+    "Description": "Rascunho para registo de substituições de aulas entre docentes.",
+    "Audience": ["Professor"],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "f11-docente",
+        "Type": "text",
+        "Label": "Docente responsável",
+        "Required": true,
+        "Placeholder": "Nome do docente",
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f11-uc",
+        "Type": "text",
+        "Label": "Unidade curricular",
+        "Required": true,
+        "Placeholder": "Nome da unidade curricular",
+        "Order": 1,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f11-data",
+        "Type": "date",
+        "Label": "Data da aula",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-30T10:40:00+01:00",
+    "UpdatedAt": "2026-04-30T10:40:00+01:00"
+  },
+  {
+    "Id": 12,
+    "Title": "Controlo Interno de Inventário",
+    "Description": "Rascunho para inventariação simples de materiais e equipamentos.",
+    "Audience": ["Funcionario"],
+    "StatusDrafted": true,
+    "Fields": [
+      {
+        "Id": "f12-item",
+        "Type": "text",
+        "Label": "Nome do item",
+        "Required": true,
+        "Placeholder": "Ex: Monitor Dell",
+        "Order": 0,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f12-quantidade",
+        "Type": "number",
+        "Label": "Quantidade",
+        "Required": true,
+        "Placeholder": "Ex: 5",
+        "Order": 1,
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f12-estado",
+        "Type": "dropdown",
+        "Label": "Estado",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Options": ["Novo", "Bom", "Usado", "Danificado", "Abatido"],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-30T10:50:00+01:00",
+    "UpdatedAt": "2026-04-30T10:50:00+01:00"
   }
 ]
