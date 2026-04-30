@@ -377,7 +377,7 @@ function EditPanel({ field, onClose, onUpdate }) {
 
 // ─── Card de campo no canvas ──────────────────────────────────────────────────
 // Representa visualmente cada campo adicionado ao formulário.
-function FieldCard({ field, isSelected, onSelect, onRemove, isDraggingOver, onDragStart, onDragEnter, onDragEnd }) {
+function FieldCard({ field, isSelected, onSelect, onRemove, isDraggingOver, onDragStart, onDragEnter, onDragOver, onDragEnd }) {
     const ti = getTypeInfo(field.type);
     const isSection = field.type === 'section';
     const isHalf = !isSection && (field.width || 'full') === 'half';
@@ -389,6 +389,7 @@ function FieldCard({ field, isSelected, onSelect, onRemove, isDraggingOver, onDr
                 draggable
                 onDragStart={onDragStart}
                 onDragEnter={onDragEnter}
+                onDragOver={onDragOver}
                 onDragEnd={onDragEnd}
                 onClick={onSelect}
                 style={{ gridColumn: '1 / -1' }}
@@ -420,6 +421,7 @@ function FieldCard({ field, isSelected, onSelect, onRemove, isDraggingOver, onDr
             draggable
             onDragStart={onDragStart}
             onDragEnter={onDragEnter}
+            onDragOver={onDragOver}
             onDragEnd={onDragEnd}
             onClick={onSelect}
             style={{ gridColumn: isHalf ? 'span 1' : '1 / -1' }}
@@ -553,35 +555,39 @@ export default function CreateForm() {
         }
     };
 
-    // ── Drag and drop da paleta para o canvas ──
-    const handlePaletteDragStart = (type) => {
-        dragTypeRef.current = type;
-        setIsDraggingFromPalette(true);
-    };
-
     // ── Drag and drop para reordenar campos no canvas ──
+    // A reordenação acontece durante o dragEnter, tornando a troca de posição
+    // mais fluida e mais fácil de controlar pelo utilizador.
     const handleCardDragStart = (index) => {
         dragIndex.current = index;
+        setDragOverIndex(index);
         setIsDraggingFromPalette(false);
     };
 
     const handleCardDragEnter = (index) => {
+        if (isDraggingFromPalette) return;
+        if (dragIndex.current === null) return;
+        if (dragIndex.current === index) return;
+
+        setFields(prevFields => {
+            const updatedFields = [...prevFields];
+
+            const [movedField] = updatedFields.splice(dragIndex.current, 1);
+            updatedFields.splice(index, 0, movedField);
+
+            dragIndex.current = index;
+
+            return updatedFields;
+        });
+
         setDragOverIndex(index);
     };
 
-    const handleCardDragEnd = () => {
-        if (
-            !isDraggingFromPalette &&
-            dragIndex.current !== null &&
-            dragOverIndex !== null &&
-            dragIndex.current !== dragOverIndex
-        ) {
-            const arr = [...fields];
-            const [moved] = arr.splice(dragIndex.current, 1);
-            arr.splice(dragOverIndex, 0, moved);
-            setFields(arr);
-        }
+    const handleCardDragOver = (e) => {
+        e.preventDefault();
+    };
 
+    const handleCardDragEnd = () => {
         dragIndex.current = null;
         setDragOverIndex(null);
         setIsDraggingFromPalette(false);
@@ -599,7 +605,7 @@ export default function CreateForm() {
         setDragOverIndex(null);
     };
 
-    // ── Submissão do formulário ──
+   // ── Submissão do formulário ──
     // Valida os dados no frontend antes de enviar para o backend.
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -611,6 +617,13 @@ export default function CreateForm() {
 
         // Campos reais são todos os elementos que não são apenas títulos de secção.
         const realFields = fields.filter(field => field.type !== 'section');
+
+        // Adiciona a posição lógica de cada campo antes de enviar para o backend.
+        // A ordem visual definida por drag and drop é representada pelo índice no array.
+        const fieldsWithOrder = fields.map((field, index) => ({
+            ...field,
+            order: index,
+        }));
 
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
@@ -642,7 +655,7 @@ export default function CreateForm() {
                     Description: descricao,
                     Audience: audience,
                     StatusDraft: !isFinal,
-                    Fields: fields,
+                    Fields: fieldsWithOrder,
                 }),
             });
 
@@ -811,19 +824,20 @@ export default function CreateForm() {
                                 <div className="grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
                                     {fields.map((campo, index) => (
                                         <FieldCard
-                                            key={campo.id}
-                                            field={campo}
-                                            isSelected={selectedId === campo.id}
-                                            onSelect={(e) => {
-                                                e?.stopPropagation();
-                                                setSelectedId(campo.id);
-                                            }}
-                                            onRemove={() => removerCampo(campo.id)}
-                                            isDraggingOver={dragOverIndex === index && !isDraggingFromPalette}
-                                            onDragStart={() => handleCardDragStart(index)}
-                                            onDragEnter={() => handleCardDragEnter(index)}
-                                            onDragEnd={handleCardDragEnd}
-                                        />
+    key={campo.id}
+    field={campo}
+    isSelected={selectedId === campo.id}
+    onSelect={(e) => {
+        e?.stopPropagation();
+        setSelectedId(campo.id);
+    }}
+    onRemove={() => removerCampo(campo.id)}
+    isDraggingOver={dragOverIndex === index && !isDraggingFromPalette}
+    onDragStart={() => handleCardDragStart(index)}
+    onDragEnter={() => handleCardDragEnter(index)}
+    onDragOver={handleCardDragOver}
+    onDragEnd={handleCardDragEnd}
+/>
                                     ))}
                                 </div>
                             )}

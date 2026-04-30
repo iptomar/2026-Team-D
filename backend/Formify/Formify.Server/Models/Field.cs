@@ -8,8 +8,10 @@
         public bool Required { get; set; } = false;
         public string? Placeholder { get; set; }
 
-        public double? X { get; set; }
-        public double? Y { get; set; }
+        // Posição lógica do campo dentro do formulário.
+        // Representa a ordem definida por drag and drop.
+        public int? Order { get; set; }
+
         public List<string>? Options { get; set; }
 
         public bool TableFixedRows { get; set; }
