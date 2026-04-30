@@ -753,7 +753,7 @@
       {
         "Id": "f11-uc",
         "Type": "text",
-        "Label": "Unidade curricular",
+        "Label": "Unidade curricular ",
         "Required": true,
         "Placeholder": "Nome da unidade curricular",
         "Order": 1,
@@ -774,7 +774,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T10:40:00+01:00",
-    "UpdatedAt": "2026-04-30T10:40:00+01:00"
+    "UpdatedAt": "2026-04-30T12:58:50.8472013+01:00"
   },
   {
     "Id": 12,
