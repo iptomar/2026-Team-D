@@ -1,5 +1,5 @@
-import { useState, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 // ─── Tipos de elementos disponíveis na paleta do editor ──────────────────────
 // Cada elemento representa um tipo de campo que pode ser arrastado/clicado
@@ -492,6 +492,9 @@ function SelectedDot() {
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 export default function CreateForm() {
+    // Se for edição, isto terá o ID. Se for criação, será undefined.
+    const { id } = useParams(); 
+
     // Dados principais do formulário
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
@@ -518,6 +521,32 @@ export default function CreateForm() {
     const navigate = useNavigate();
     const selectedField = fields.find(f => f.id === selectedId) || null;
 
+
+    useEffect(() => {
+        if (id) {
+            // Modo Edição: Buscar os dados do formulário ao Backend
+            const fetchFormDetails = async () => {
+                try {
+                    const response = await fetch(`/api/Forms/${id}`);
+                    if (response.ok) {
+                        const formDados = await response.json();
+                        // Preencher as caixas com os dados vindos do C#
+                        setNome(formDados.title || formDados.Title || '');
+                        setDescricao(formDados.description || formDados.Description || '');
+                        setFields(formDados.fields || formDados.Fields || []);
+                        setAudience(formDados.audience || formDados.Audience || []);
+                    } else {
+                        alert('Erro ao carregar o formulário para edição.');
+                    }
+                } catch (error) {
+                    console.error('Erro na ligação:', error);
+                }
+            };
+
+            fetchFormDetails();
+        }
+    }, [id]);
+
     // ── Alternar público-alvo ──
     // Permite selecionar/desselecionar Professores e Funcionários.
     const toggleAudience = (value) => {
@@ -536,7 +565,7 @@ export default function CreateForm() {
         const ti = getTypeInfo(type);
 
         return {
-            id: Date.now().toString(),
+            id: crypto.randomUUID(),
             type,
             label: ti.label,
             placeholder: '',
@@ -707,10 +736,18 @@ export default function CreateForm() {
             // Identifica se o utilizador carregou em "Guardar" ou "Guardar como Rascunho".
             const isFinal = e.nativeEvent.submitter.id === 'save-final';
 
-            const response = await fetch('http://localhost:5208/api/Forms', {
-                method: 'POST',
+            // Decide se é Criação (POST) ou Edição (PUT) com base na existência do ID
+            const url = id
+                ? `http://localhost:5208/api/Forms/${id}`
+                : 'http://localhost:5208/api/Forms';
+
+            const method = id ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
+                    Id: id, // Pode ser necessário passar o ID no body para o PUT
                     Title: nome,
                     Description: descricao,
                     Audience: audience,
@@ -941,4 +978,4 @@ export default function CreateForm() {
             </form>
         </div>
     );
-}
+}   

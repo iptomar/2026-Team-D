@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * AdminDashboard Component
@@ -29,6 +29,8 @@ export default function AdminDashboard() {
     // Paginação
     const [currentPage, setCurrentPage] = useState(1);
     const formsPerPage = 12;
+
+    const navigate = useNavigate();
 
     // Carrega os formulários quando a página é aberta
     useEffect(() => {
@@ -206,7 +208,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <Link
-                    to="/create"
+                    to="/CreateForm"
                     className="inline-flex w-fit items-center justify-center rounded-md bg-green-600 px-5 py-2 font-semibold text-white transition-all hover:bg-green-700"
                 >
                     + Novo Formulário
@@ -303,13 +305,26 @@ export default function AdminDashboard() {
                                             {description}
                                         </p>
 
-                                        <button
-                                            onClick={() => handleDelete(id)}
-                                            className="mt-4 text-red-500 hover:text-red-700 transition-colors"
-                                            title="Eliminar"
-                                        >
-                                            🗑️ Eliminar
-                                        </button>
+                                        {/* Rodapé do cartão com os botões */}
+                                        <div className="mt-4 flex justify-end gap-4 border-t border-accent-border pt-4">
+
+                                            <button
+                                                onClick={() => navigate(`/edit-form/${form.id || form.Id}`)}
+                                                className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
+                                                title="Editar"
+                                            >
+                                                ✏️ Editar
+                                            </button>
+
+                                            <button
+                                                onClick={() => handleDelete(form.id || form.Id)}
+                                                className="flex items-center gap-1 text-sm font-semibold text-red-500 transition-colors hover:text-red-700"
+                                                title="Eliminar"
+                                            >
+                                                🗑️ Eliminar
+                                            </button>
+
+                                        </div>
                                     </div>
                                 );
                             })}

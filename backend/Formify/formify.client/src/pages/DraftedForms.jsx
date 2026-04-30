@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * AdminDashboard Component
@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
  * - Lista de formulários criados mas em rascunho
  */
 export default function AdminDashboard() {
+    const navigate = useNavigate(); 
+
   // TODO: Integrar com API .NET para buscar formulários
     const [forms, setForms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -83,13 +85,24 @@ export default function AdminDashboard() {
                                       <h3 className="font-bold text-lg text-text-h">{form.Title || form.title || "Sem título"}</h3>
                                       <p className="text-sm text-text mt-2">{form.Description || form.description}</p>
 
-                                      <button
-                                          onClick={() => handleDelete(form.Id || form.id)}
-                                          className="text-red-500 hover:text-red-700 transition-colors"
-                                          title="Eliminar"
-                                      >
-                                          🗑️ Eliminar
-                                      </button>
+                                      {/* Zona dos botões */}
+                                      <div className="flex justify-end gap-4 border-t border-accent-border pt-4 mt-auto">
+                                          <button
+                                              onClick={() => navigate(`/edit-form/${form.id || form.Id}`)}
+                                              className="text-blue-500 hover:text-blue-700 transition-colors text-sm font-medium"
+                                              title="Editar"
+                                          >
+                                              ✏️ Editar
+                                          </button>
+
+                                          <button
+                                              onClick={() => handleDelete(form.Id || form.id)}
+                                              className="text-red-500 hover:text-red-700 transition-colors text-sm font-medium"
+                                              title="Eliminar"
+                                          >
+                                              🗑️ Eliminar
+                                          </button>
+                                      </div>
                                   </div>
                               ))}
                   </div>
