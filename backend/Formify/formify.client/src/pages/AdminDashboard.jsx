@@ -206,7 +206,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <Link
-                    to="/create"
+                    to="/CreateForm"
                     className="inline-flex w-fit items-center justify-center rounded-md bg-green-600 px-5 py-2 font-semibold text-white transition-all hover:bg-green-700"
                 >
                     + Novo Formulário
