@@ -1,15 +1,18 @@
 [
   {
     "Id": 1,
-    "Title": "Pedido de Alteração de Sala",
-    "Description": "Formulário para solicitar alteração de sala para aulas, reuniões ou atividades institucionais.",
-    "Audience": ["Professor", "Funcionario"],
+    "Title": "Pedido de Altera\u00E7\u00E3o de Sala",
+    "Description": "Formul\u00E1rio para solicitar altera\u00E7\u00E3o de sala para aulas, reuni\u00F5es ou atividades institucionais.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f1-section-1",
         "Type": "section",
-        "Label": "Identificação",
+        "Label": "Identifica\u00E7\u00E3o",
         "Required": false,
         "Placeholder": "",
         "Order": 0,
@@ -64,7 +67,7 @@
       {
         "Id": "f1-justificacao",
         "Type": "textarea",
-        "Label": "Justificação",
+        "Label": "Justifica\u00E7\u00E3o",
         "Required": true,
         "Placeholder": "Explique o motivo do pedido",
         "Order": 5,
@@ -78,9 +81,11 @@
   },
   {
     "Id": 2,
-    "Title": "Requisição de Material Informático",
-    "Description": "Pedido de equipamentos, periféricos ou software para uso institucional.",
-    "Audience": ["Funcionario"],
+    "Title": "Requisi\u00E7\u00E3o de Material Inform\u00E1tico",
+    "Description": "Pedido de equipamentos, perif\u00E9ricos ou software para uso institucional.",
+    "Audience": [
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -97,7 +102,7 @@
       {
         "Id": "f2-nome",
         "Type": "text",
-        "Label": "Nome do funcionário",
+        "Label": "Nome do funcion\u00E1rio",
         "Required": true,
         "Placeholder": "Insira o seu nome",
         "Order": 1,
@@ -112,7 +117,13 @@
         "Required": true,
         "Placeholder": "",
         "Order": 2,
-        "Options": ["Informática", "Serviços Académicos", "Recursos Humanos", "Biblioteca", "Outro"],
+        "Options": [
+          "Inform\u00E1tica",
+          "Servi\u00E7os Acad\u00E9micos",
+          "Recursos Humanos",
+          "Biblioteca",
+          "Outro"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -123,7 +134,13 @@
         "Required": true,
         "Placeholder": "",
         "Order": 3,
-        "Options": ["Computador", "Monitor", "Teclado", "Rato", "Software"],
+        "Options": [
+          "Computador",
+          "Monitor",
+          "Teclado",
+          "Rato",
+          "Software"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -134,14 +151,19 @@
         "Required": true,
         "Placeholder": "",
         "Order": 4,
-        "Options": ["Baixa", "Normal", "Alta", "Urgente"],
+        "Options": [
+          "Baixa",
+          "Normal",
+          "Alta",
+          "Urgente"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f2-justificacao",
         "Type": "textarea",
-        "Label": "Justificação",
+        "Label": "Justifica\u00E7\u00E3o",
         "Required": true,
         "Placeholder": "Descreva a necessidade do material",
         "Order": 5,
@@ -155,9 +177,11 @@
   },
   {
     "Id": 3,
-    "Title": "Proposta de Atividade Pedagógica",
-    "Description": "Submissão de propostas de workshops, visitas de estudo, seminários ou aulas abertas.",
-    "Audience": ["Professor"],
+    "Title": "Proposta de Atividade Pedag\u00F3gica",
+    "Description": "Submiss\u00E3o de propostas de workshops, visitas de estudo, semin\u00E1rios ou aulas abertas.",
+    "Audience": [
+      "Professor"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -176,7 +200,7 @@
         "Type": "text",
         "Label": "Nome do docente",
         "Required": true,
-        "Placeholder": "Insira o nome do docente responsável",
+        "Placeholder": "Insira o nome do docente respons\u00E1vel",
         "Order": 1,
         "Options": [],
         "TableFixedRows": false,
@@ -187,7 +211,7 @@
         "Type": "text",
         "Label": "Unidade curricular",
         "Required": true,
-        "Placeholder": "Ex: Gestão de Projetos",
+        "Placeholder": "Ex: Gest\u00E3o de Projetos",
         "Order": 2,
         "Options": [],
         "TableFixedRows": false,
@@ -200,7 +224,13 @@
         "Required": true,
         "Placeholder": "",
         "Order": 3,
-        "Options": ["Workshop", "Seminário", "Visita de estudo", "Aula aberta", "Outro"],
+        "Options": [
+          "Workshop",
+          "Semin\u00E1rio",
+          "Visita de estudo",
+          "Aula aberta",
+          "Outro"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -218,7 +248,7 @@
       {
         "Id": "f3-participantes",
         "Type": "number",
-        "Label": "Número estimado de participantes",
+        "Label": "N\u00FAmero estimado de participantes",
         "Required": true,
         "Placeholder": "Ex: 25",
         "Order": 5,
@@ -232,9 +262,12 @@
   },
   {
     "Id": 4,
-    "Title": "Comunicação de Ausência",
-    "Description": "Formulário para comunicação de ausência prevista ou imprevista.",
-    "Audience": ["Professor", "Funcionario"],
+    "Title": "Comunica\u00E7\u00E3o de Aus\u00EAncia",
+    "Description": "Formul\u00E1rio para comunica\u00E7\u00E3o de aus\u00EAncia prevista ou imprevista.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -251,18 +284,24 @@
       {
         "Id": "f4-tipo-ausencia",
         "Type": "dropdown",
-        "Label": "Tipo de ausência",
+        "Label": "Tipo de aus\u00EAncia",
         "Required": true,
         "Placeholder": "",
         "Order": 1,
-        "Options": ["Doença", "Formação", "Serviço externo", "Assunto pessoal", "Outro"],
+        "Options": [
+          "Doen\u00E7a",
+          "Forma\u00E7\u00E3o",
+          "Servi\u00E7o externo",
+          "Assunto pessoal",
+          "Outro"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f4-data-inicio",
         "Type": "date",
-        "Label": "Data de início",
+        "Label": "Data de in\u00EDcio",
         "Required": true,
         "Placeholder": "",
         "Order": 2,
@@ -284,9 +323,9 @@
       {
         "Id": "f4-observacoes",
         "Type": "textarea",
-        "Label": "Observações",
+        "Label": "Observa\u00E7\u00F5es",
         "Required": false,
-        "Placeholder": "Informação adicional",
+        "Placeholder": "Informa\u00E7\u00E3o adicional",
         "Order": 4,
         "Options": [],
         "TableFixedRows": false,
@@ -298,15 +337,17 @@
   },
   {
     "Id": 5,
-    "Title": "Pedido de Manutenção",
-    "Description": "Pedido de intervenção técnica em salas, equipamentos ou espaços comuns.",
-    "Audience": ["Funcionario"],
+    "Title": "Pedido de Manuten\u00E7\u00E3o",
+    "Description": "Pedido de interven\u00E7\u00E3o t\u00E9cnica em salas, equipamentos ou espa\u00E7os comuns.",
+    "Audience": [
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f5-local",
         "Type": "text",
-        "Label": "Local da ocorrência",
+        "Label": "Local da ocorr\u00EAncia",
         "Required": true,
         "Placeholder": "Ex: Sala O103",
         "Order": 0,
@@ -321,25 +362,35 @@
         "Required": true,
         "Placeholder": "",
         "Order": 1,
-        "Options": ["Eletricidade", "Mobiliário", "Climatização", "Informática", "Limpeza", "Outro"],
+        "Options": [
+          "Eletricidade",
+          "Mobili\u00E1rio",
+          "Climatiza\u00E7\u00E3o",
+          "Inform\u00E1tica",
+          "Limpeza",
+          "Outro"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f5-urgente",
         "Type": "radio",
-        "Label": "É urgente?",
+        "Label": "\u00C9 urgente?",
         "Required": true,
         "Placeholder": "",
         "Order": 2,
-        "Options": ["Sim", "Não"],
+        "Options": [
+          "Sim",
+          "N\u00E3o"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f5-descricao",
         "Type": "textarea",
-        "Label": "Descrição do problema",
+        "Label": "Descri\u00E7\u00E3o do problema",
         "Required": true,
         "Placeholder": "Descreva o problema encontrado",
         "Order": 3,
@@ -353,9 +404,12 @@
   },
   {
     "Id": 6,
-    "Title": "Inscrição em Formação Interna",
-    "Description": "Formulário para inscrição em ações de formação internas.",
-    "Audience": ["Professor", "Funcionario"],
+    "Title": "Inscri\u00E7\u00E3o em Forma\u00E7\u00E3o Interna",
+    "Description": "Formul\u00E1rio para inscri\u00E7\u00E3o em a\u00E7\u00F5es de forma\u00E7\u00E3o internas.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -383,11 +437,17 @@
       {
         "Id": "f6-formacao",
         "Type": "dropdown",
-        "Label": "Formação pretendida",
+        "Label": "Forma\u00E7\u00E3o pretendida",
         "Required": true,
         "Placeholder": "",
         "Order": 2,
-        "Options": ["Excel intermédio", "Power BI", "Cibersegurança", "Inteligência Artificial", "Gestão de Projetos"],
+        "Options": [
+          "Excel interm\u00E9dio",
+          "Power BI",
+          "Ciberseguran\u00E7a",
+          "Intelig\u00EAncia Artificial",
+          "Gest\u00E3o de Projetos"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -398,7 +458,11 @@
         "Required": true,
         "Placeholder": "",
         "Order": 3,
-        "Options": ["Manhã", "Tarde", "Pós-laboral"],
+        "Options": [
+          "Manh\u00E3",
+          "Tarde",
+          "P\u00F3s-laboral"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       }
@@ -408,9 +472,12 @@
   },
   {
     "Id": 7,
-    "Title": "Avaliação de Evento",
-    "Description": "Questionário simples para recolha de feedback após eventos institucionais.",
-    "Audience": ["Professor", "Funcionario"],
+    "Title": "Avalia\u00E7\u00E3o de Evento",
+    "Description": "Question\u00E1rio simples para recolha de feedback ap\u00F3s eventos institucionais.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -427,11 +494,16 @@
       {
         "Id": "f7-satisfacao",
         "Type": "radio",
-        "Label": "Grau de satisfação",
+        "Label": "Grau de satisfa\u00E7\u00E3o",
         "Required": true,
         "Placeholder": "",
         "Order": 1,
-        "Options": ["Muito satisfeito", "Satisfeito", "Neutro", "Insatisfeito"],
+        "Options": [
+          "Muito satisfeito",
+          "Satisfeito",
+          "Neutro",
+          "Insatisfeito"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -442,16 +514,19 @@
         "Required": true,
         "Placeholder": "",
         "Order": 2,
-        "Options": ["Sim", "Não"],
+        "Options": [
+          "Sim",
+          "N\u00E3o"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f7-comentarios",
         "Type": "textarea",
-        "Label": "Comentários ou sugestões",
+        "Label": "Coment\u00E1rios ou sugest\u00F5es",
         "Required": false,
-        "Placeholder": "Escreva a sua opinião",
+        "Placeholder": "Escreva a sua opini\u00E3o",
         "Order": 3,
         "Options": [],
         "TableFixedRows": false,
@@ -463,9 +538,11 @@
   },
   {
     "Id": 8,
-    "Title": "Pedido de Apoio aos Serviços Académicos",
-    "Description": "Pedido de esclarecimento ou apoio relacionado com processos académicos.",
-    "Audience": ["Professor"],
+    "Title": "Pedido de Apoio aos Servi\u00E7os Acad\u00E9micos",
+    "Description": "Pedido de esclarecimento ou apoio relacionado com processos acad\u00E9micos.",
+    "Audience": [
+      "Professor"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -486,25 +563,35 @@
         "Required": true,
         "Placeholder": "",
         "Order": 1,
-        "Options": ["Pautas", "Inscrições", "Horários", "Sumários", "Estudantes", "Outro"],
+        "Options": [
+          "Pautas",
+          "Inscri\u00E7\u00F5es",
+          "Hor\u00E1rios",
+          "Sum\u00E1rios",
+          "Estudantes",
+          "Outro"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f8-urgencia",
         "Type": "radio",
-        "Label": "Nível de urgência",
+        "Label": "N\u00EDvel de urg\u00EAncia",
         "Required": true,
         "Placeholder": "",
         "Order": 2,
-        "Options": ["Normal", "Urgente"],
+        "Options": [
+          "Normal",
+          "Urgente"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f8-descricao",
         "Type": "textarea",
-        "Label": "Descrição do pedido",
+        "Label": "Descri\u00E7\u00E3o do pedido",
         "Required": true,
         "Placeholder": "Descreva o pedido com detalhe",
         "Order": 3,
@@ -518,15 +605,17 @@
   },
   {
     "Id": 9,
-    "Title": "Registo de Ocorrência",
-    "Description": "Registo interno de ocorrências em espaços, equipamentos ou serviços.",
-    "Audience": ["Funcionario"],
+    "Title": "Registo de Ocorr\u00EAncia",
+    "Description": "Registo interno de ocorr\u00EAncias em espa\u00E7os, equipamentos ou servi\u00E7os.",
+    "Audience": [
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f9-data",
         "Type": "date",
-        "Label": "Data da ocorrência",
+        "Label": "Data da ocorr\u00EAncia",
         "Required": true,
         "Placeholder": "",
         "Order": 0,
@@ -548,20 +637,26 @@
       {
         "Id": "f9-tipo",
         "Type": "dropdown",
-        "Label": "Tipo de ocorrência",
+        "Label": "Tipo de ocorr\u00EAncia",
         "Required": true,
         "Placeholder": "",
         "Order": 2,
-        "Options": ["Segurança", "Equipamento", "Infraestrutura", "Atendimento", "Outro"],
+        "Options": [
+          "Seguran\u00E7a",
+          "Equipamento",
+          "Infraestrutura",
+          "Atendimento",
+          "Outro"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f9-descricao",
         "Type": "textarea",
-        "Label": "Descrição",
+        "Label": "Descri\u00E7\u00E3o",
         "Required": true,
-        "Placeholder": "Descreva a ocorrência",
+        "Placeholder": "Descreva a ocorr\u00EAncia",
         "Order": 3,
         "Options": [],
         "TableFixedRows": false,
@@ -574,8 +669,11 @@
   {
     "Id": 10,
     "Title": "Pedido de Reserva de Equipamento",
-    "Description": "Formulário para reservar equipamentos institucionais por um período definido.",
-    "Audience": ["Professor", "Funcionario"],
+    "Description": "Formul\u00E1rio para reservar equipamentos institucionais por um per\u00EDodo definido.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
@@ -596,14 +694,20 @@
         "Required": true,
         "Placeholder": "",
         "Order": 1,
-        "Options": ["Projetor", "Computador portátil", "Câmara", "Microfone", "Colunas"],
+        "Options": [
+          "Projetor",
+          "Computador port\u00E1til",
+          "C\u00E2mara",
+          "Microfone",
+          "Colunas"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
         "Id": "f10-data",
         "Type": "date",
-        "Label": "Data de utilização",
+        "Label": "Data de utiliza\u00E7\u00E3o",
         "Required": true,
         "Placeholder": "",
         "Order": 2,
@@ -628,15 +732,17 @@
   },
   {
     "Id": 11,
-    "Title": "Plano de Substituição de Aula",
-    "Description": "Rascunho para registo de substituições de aulas entre docentes.",
-    "Audience": ["Professor"],
+    "Title": "Plano de Substitui\u00E7\u00E3o de Aula",
+    "Description": "Rascunho para registo de substitui\u00E7\u00F5es de aulas entre docentes.",
+    "Audience": [
+      "Professor"
+    ],
     "StatusDrafted": true,
     "Fields": [
       {
         "Id": "f11-docente",
         "Type": "text",
-        "Label": "Docente responsável",
+        "Label": "Docente respons\u00E1vel",
         "Required": true,
         "Placeholder": "Nome do docente",
         "Order": 0,
@@ -672,9 +778,11 @@
   },
   {
     "Id": 12,
-    "Title": "Controlo Interno de Inventário",
-    "Description": "Rascunho para inventariação simples de materiais e equipamentos.",
-    "Audience": ["Funcionario"],
+    "Title": "Controlo Interno de Invent\u00E1rio",
+    "Description": "Rascunho para inventaria\u00E7\u00E3o simples de materiais e equipamentos.",
+    "Audience": [
+      "Funcionario"
+    ],
     "StatusDrafted": true,
     "Fields": [
       {
@@ -706,7 +814,13 @@
         "Required": true,
         "Placeholder": "",
         "Order": 2,
-        "Options": ["Novo", "Bom", "Usado", "Danificado", "Abatido"],
+        "Options": [
+          "Novo",
+          "Bom",
+          "Usado",
+          "Danificado",
+          "Abatido"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       }

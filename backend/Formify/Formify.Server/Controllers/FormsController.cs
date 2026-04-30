@@ -116,5 +116,51 @@ namespace Formify.Server.Controllers
 
             return Ok(new { message = "Formulário eliminado com sucesso." });
         }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateForm(int id, [FromBody] CreateFormRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            if (string.IsNullOrWhiteSpace(request.Title))
+            {
+                return BadRequest(new { message = "O nome do formulário é obrigatório." });
+            }
+
+            if (request.Audience == null || !request.Audience.Any())
+            {
+                return BadRequest(new { message = "É obrigatório selecionar pelo menos um público-alvo." });
+            }
+
+            if (request.Fields == null || !request.Fields.Any(f => f.Type != "section"))
+            {
+                return BadRequest(new { message = "O formulário deve conter pelo menos um campo." });
+            }
+
+            // Carrega todos os formulários e procura o que tem o ID correspondente
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+            var formToUpdate = allForms.FirstOrDefault(f => f.Id == id);
+
+            if (formToUpdate == null)
+            {
+                return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
+            }
+
+            // Atualiza os dados do formulário existente
+            formToUpdate.Title = request.Title.Trim();
+            formToUpdate.Description = request.Description?.Trim();
+            formToUpdate.Audience = request.Audience;
+            formToUpdate.StatusDrafted = request.StatusDraft;
+            formToUpdate.UpdatedAt = DateTime.Now;
+            formToUpdate.Fields = request.Fields;
+
+            // Guarda as alterações
+            await _jsonHandler.SaveFormsAsync(allForms);
+
+            return Ok(new { message = "Formulário atualizado com sucesso.", form = formToUpdate });
+        }
     }
 }
