@@ -3,6 +3,7 @@ import Layout from './components/Layout/Layout';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateForm from './pages/CreateForm';
 import DraftedForms from './pages/DraftedForms';
+import ViewForm from './pages/ViewForm';
 
 export default function App() {
     return (
@@ -13,6 +14,7 @@ export default function App() {
                     <Route path="/DraftedForms" element={<DraftedForms />} />
                     <Route path="/CreateForm" element={<CreateForm />} />
                     <Route path="/edit-form/:id" element={<CreateForm />} />
+                    <Route path="/ViewForm/:id" element={<ViewForm />} />
                 </Routes>
             </Layout>
         </Router>
