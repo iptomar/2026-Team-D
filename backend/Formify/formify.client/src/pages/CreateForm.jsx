@@ -574,7 +574,10 @@ export default function CreateForm() {
                         // Faz a tradução inversa: de 'options' (vinda do C#) para 'tableColumns' (do teu React)
                         const camposFormatados = (formDados.fields || formDados.Fields || []).map(f => {
                             if (f.type === 'table' || f.Type === 'table') {
-                                return { ...f, tableColumns: f.options || f.Options || [] };
+                                return {
+                                    ...f, tableColumns: f.options || f.Options || [],
+                                    tableRows: f.tableRowCount || f.TableRowCount || 2
+                                };
                             }
                             return f;
                         });
@@ -809,7 +812,8 @@ export default function CreateForm() {
             ...field,
             order: index,
             // Se for tabela, envia 'tableColumns' dentro de 'options' para o C#
-            options: field.type === 'table' ? field.tableColumns : field.options
+            options: field.type === 'table' ? field.tableColumns : field.options,
+            tableRowCount: field.type === 'table' ? field.tableRows : undefined
         }));
 
         // 1. Validações SEMPRE obrigatórias (Rascunho ou Publicado)
@@ -901,7 +905,8 @@ export default function CreateForm() {
         const fieldsWithOrder = fields.map((field, index) => ({
             ...field,
             order: index,
-            options: field.type === 'table' ? field.tableColumns : field.options
+            options: field.type === 'table' ? field.tableColumns : field.options,
+            tableRowCount: field.type === 'table' ? field.tableRows : undefined
         }));
 
         await submeterFormulario(fieldsWithOrder, true);
