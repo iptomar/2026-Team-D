@@ -571,11 +571,14 @@ export default function CreateForm() {
                         setNome(formDados.title || formDados.Title || '');
                         setDescricao(formDados.description || formDados.Description || '');
 
-                        // Faz a tradução inversa: de 'options' (vinda do C#) para 'tableColumns' (do teu React)
+                        
                         const camposFormatados = (formDados.fields || formDados.Fields || []).map(f => {
+                            const widthFormatado = f.width || f.Width || 'full';
                             if (f.type === 'table' || f.Type === 'table') {
                                 return {
-                                    ...f, tableColumns: f.options || f.Options || [],
+                                    ...f,
+                                    width: widthFormatado,
+                                    tableColumns: f.options || f.Options || [],
                                     tableRows: f.tableRowCount || f.TableRowCount || 2
                                 };
                             }
