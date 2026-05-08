@@ -11,6 +11,7 @@
         // Posição lógica do campo dentro do formulário.
         // Representa a ordem definida por drag and drop.
         public int? Order { get; set; }
+        public string Width { get; set; } = "full";
 
         public List<string>? Options { get; set; }
 

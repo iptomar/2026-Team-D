@@ -41,10 +41,19 @@ function FieldReadOnly({ field }) {
 
         case 'dropdown':
             return (
-                <select disabled className={inputCls}>
-                    <option value="">{field.placeholder || 'Selecione...'}</option>
+                <select
+                    className={`${inputCls} cursor-default`} // Removemos o 'cursor-not-allowed' para o utilizador saber que pode clicar
+                    defaultValue=""
+                    // Impede qualquer mudança de valor se o utilizador tentar forçar via teclado
+                    onChange={(e) => e.preventDefault()}
+                >
+                    <option value="" disabled hidden>
+                        {field.placeholder || 'Clique para ver as opções...'}
+                    </option>
                     {field.options?.map((o, i) => (
-                        <option key={i}>{o}</option>
+                        <option key={i} disabled className="text-gray-400">
+                            {o}
+                        </option>
                     ))}
                 </select>
             );
@@ -54,8 +63,9 @@ function FieldReadOnly({ field }) {
             return (
                 <div className="flex flex-col gap-2 mt-1">
                     {field.options?.map((o, i) => (
-                        <label key={i} className="flex items-center gap-2 text-sm text-gray-400 cursor-not-allowed">
-                            <input type={field.type} disabled className="accent-gray-400" /> {o}
+                        <label key={i} className="flex items-center gap-2 text-sm text-gray-400 opacity-70">
+                            <input type={field.type} disabled className="accent-gray-400" />
+                            {o}
                         </label>
                     ))}
                 </div>
@@ -104,7 +114,6 @@ export default function FormViewer() {
         const fetchForm = async () => {
             try {
                 setIsLoading(true);
-                // Replace this URL with your actual endpoint
                 const response = await fetch(`/api/Forms/${id}`);
 
                 if (!response.ok) {
@@ -112,7 +121,35 @@ export default function FormViewer() {
                 }
 
                 const data = await response.json();
-                setFormData(data);
+
+                
+                const fieldsNormalizados = (data.fields || data.Fields || []).map(f => {
+                    const type = (f.type || f.Type || 'text').toLowerCase();
+
+                    // LER A LARGURA
+                    const widthFormatado = f.width || f.Width || 'full';
+
+                    if (type === 'table') {
+                        return {
+                            ...f,
+                            type: 'table',
+                            width: widthFormatado, // Guardar no React
+                            tableColumns: f.options || f.Options || [],
+                            tableRows: f.tableRowCount || f.TableRowCount || 1
+                        };
+                    }
+
+                    return {
+                        ...f,
+                        type: type,
+                        width: widthFormatado, // Guardar no React
+                        options: f.options || f.Options || []
+                    };
+                });
+
+                // Guardar no state com os campos já corrigidos
+                setFormData({ ...data, fields: fieldsNormalizados });
+
             } catch (err) {
                 setError(err.message);
             } finally {
