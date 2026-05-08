@@ -568,10 +568,18 @@ export default function CreateForm() {
                     const response = await fetch(`/api/Forms/${id}`);
                     if (response.ok) {
                         const formDados = await response.json();
-                        // Preencher as caixas com os dados vindos do C#
                         setNome(formDados.title || formDados.Title || '');
                         setDescricao(formDados.description || formDados.Description || '');
-                        setFields(formDados.fields || formDados.Fields || []);
+
+                        // Faz a tradução inversa: de 'options' (vinda do C#) para 'tableColumns' (do teu React)
+                        const camposFormatados = (formDados.fields || formDados.Fields || []).map(f => {
+                            if (f.type === 'table' || f.Type === 'table') {
+                                return { ...f, tableColumns: f.options || f.Options || [] };
+                            }
+                            return f;
+                        });
+
+                        setFields(camposFormatados);
                         setAudience(formDados.audience || formDados.Audience || []);
                     } else {
                         alert('Erro ao carregar o formulário para edição.');
@@ -800,6 +808,8 @@ export default function CreateForm() {
         const fieldsWithOrder = fields.map((field, index) => ({
             ...field,
             order: index,
+            // Se for tabela, envia 'tableColumns' dentro de 'options' para o C#
+            options: field.type === 'table' ? field.tableColumns : field.options
         }));
 
         // 1. Validações SEMPRE obrigatórias (Rascunho ou Publicado)
@@ -887,9 +897,11 @@ export default function CreateForm() {
 
     // ── Handler para confirmar publicação ──
     const handleConfirmPublish = async () => {
+        // Substitui o bloco atual por este:
         const fieldsWithOrder = fields.map((field, index) => ({
             ...field,
             order: index,
+            options: field.type === 'table' ? field.tableColumns : field.options
         }));
 
         await submeterFormulario(fieldsWithOrder, true);
