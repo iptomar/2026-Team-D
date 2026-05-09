@@ -216,7 +216,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Filtros */}
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-3 my-6">
                 <div className="flex flex-col gap-2">
                     <label htmlFor="search-form" className="font-medium text-text-h">
                         Pesquisar
@@ -280,55 +280,55 @@ export default function AdminDashboard() {
                     </div>
                 ) : (
                     <>
-                        <div className="grid auto-rows-max gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                                    {paginatedForms.map((form) => {
-                                        const id = form.id || form.Id;
-                                        const title = form.title || form.Title || 'Sem título';
-                                        const description = form.description || form.Description || 'Sem descrição';
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                            {paginatedForms.map((form) => {
+                                const id = form.id || form.Id;
+                                const title = form.title || form.Title || 'Sem título';
+                                const description = form.description || form.Description || 'Sem descrição';
 
-                                        return (
-                                            <div
-                                                key={id}
-                                                // 1. Click anywhere to navigate to View
-                                                onClick={() => navigate(`/ViewForm/${id}`)}
-                                                className="group rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-green-300 transition-all cursor-pointer bg-white"
+                                return (
+                                    <div
+                                        key={id}
+                                        // 1. Click anywhere to navigate to View
+                                        onClick={() => navigate(`/ViewForm/${id}`)}
+                                        className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-green-300 transition-all cursor-pointer bg-white"
+                                    >
+                                        <div className="mb-3 flex items-start justify-between gap-3">
+                                            <h3 className="font-bold text-lg text-text-h group-hover:text-green-700 transition-colors">
+                                                {title}
+                                            </h3>
+                                            <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-700">
+                                                Publicado
+                                            </span>
+                                        </div>
+
+                                        <p className="text-sm text-text mt-2 line-clamp-3 flex-grow">
+                                            {description}
+                                        </p>
+
+                                        <div className="mt-4 flex justify-end gap-4 border-t border-accent-border pt-4 mt-auto">
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // 2. Prevents the card click from firing
+                                                    navigate(`/edit-form/${id}`);
+                                                }}
+                                                className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
                                             >
-                                                <div className="mb-3 flex items-start justify-between gap-3">
-                                                    <h3 className="font-bold text-lg text-text-h group-hover:text-green-700 transition-colors">
-                                                        {title}
-                                                    </h3>
-                                                    <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-700">
-                                                        Publicado
-                                                    </span>
-                                                </div>
-
-                                                <p className="text-sm text-text mt-2 line-clamp-3">
-                                                    {description}
-                                                </p>
-
-                                                <div className="mt-4 flex justify-end gap-4 border-t border-accent-border pt-4">
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation(); // 2. Prevents the card click from firing
-                                                            navigate(`/edit-form/${id}`);
-                                                        }}
-                                                        className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
-                                                    >
-                                                        ✏️ Editar
-                                                    </button>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation(); // 2. Prevents the card click from firing
-                                                            handleDelete(id);
-                                                        }}
-                                                        className="flex items-center gap-1 text-sm font-semibold text-red-500 transition-colors hover:text-red-700"
-                                                    >
-                                                        🗑️ Eliminar
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        );
-                                    })}
+                                                ✏️ Editar
+                                            </button>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.stopPropagation(); // 2. Prevents the card click from firing
+                                                    handleDelete(id);
+                                                }}
+                                                className="flex items-center gap-1 text-sm font-semibold text-red-500 transition-colors hover:text-red-700"
+                                            >
+                                                🗑️ Eliminar
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
 
                         {/* Paginação */}
