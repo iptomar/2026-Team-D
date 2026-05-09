@@ -2,19 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 /**
- * AdminDashboard Component
- *
- * Página principal para visualização dos formulários publicados.
- *
- * Funcionalidades:
- * - Lista apenas formulários publicados;
- * - Permite pesquisar por nome/descrição;
- * - Permite filtrar por público-alvo/cargo;
- * - Permite ordenar por data de criação;
- * - Permite paginar os resultados;
- * - Permite eliminar formulários.
+ * AdminDashboard Component Unificado
+ * Serve tanto para listar Formulários Publicados como Rascunhos.
  */
-export default function AdminDashboard() {
+export default function AdminDashboard({ isDraft = false }) {
     // Lista de formulários carregados a partir do backend
     const [forms, setForms] = useState([]);
 
@@ -32,10 +23,17 @@ export default function AdminDashboard() {
 
     const navigate = useNavigate();
 
+    // ─── Textos Dinâmicos ───
+    // Mudam dependendo se estamos a ver Rascunhos (isDraft = true) ou Publicados
+    const pageTitle = isDraft ? "Formulários em Rascunho" : "Formulários";
+    const pageSubtitle = isDraft ? "Listagem dos formulários por concluir" : "Listagem dos formulários publicados";
+    const emptyMessage = isDraft ? "Nenhum rascunho encontrado" : "Nenhum formulário publicado encontrado";
+
     // Carrega os formulários quando a página é aberta
     useEffect(() => {
         const fetchForms = async () => {
             try {
+                setIsLoading(true);
                 const response = await fetch('http://localhost:5208/api/Forms');
 
                 if (!response.ok) {
@@ -43,9 +41,6 @@ export default function AdminDashboard() {
                 }
 
                 const data = await response.json();
-
-                // Guarda todos os formulários no estado.
-                // A filtragem dos publicados é feita mais abaixo.
                 setForms(data);
             } catch (error) {
                 console.error('Erro na integração:', error);
@@ -57,8 +52,6 @@ export default function AdminDashboard() {
         fetchForms();
     }, []);
 
-    // Normaliza texto para facilitar pesquisas e comparações.
-    // Remove acentos, transforma em minúsculas e evita erros com null/undefined.
     const normalizeText = (value) =>
         (value || '')
             .toString()
@@ -66,16 +59,13 @@ export default function AdminDashboard() {
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
 
-    // Verifica se o formulário está publicado.
-    // No modelo atual, StatusDrafted = true significa rascunho.
-    // Logo, publicado significa StatusDrafted = false.
-    const isPublished = (form) => {
+    // ─── Filtro Magno ───
+    // Verifica se o formulário corresponde ao separador atual (Rascunho vs Publicado)
+    const isTargetStatus = (form) => {
         const statusDrafted = form.statusDrafted ?? form.StatusDrafted;
-
-        return statusDrafted === false;
+        return statusDrafted === isDraft;
     };
 
-    // Obtém o público-alvo do formulário num formato normalizado.
     const getAudience = (form) => {
         const rawAudience = form.audience || form.Audience || [];
 
@@ -86,16 +76,11 @@ export default function AdminDashboard() {
         return [normalizeText(rawAudience)];
     };
 
-    // Verifica se o formulário corresponde ao cargo/público-alvo selecionado.
     const matchesCargo = (form) => {
         if (selectedCargo === 'todos') return true;
 
         const audience = getAudience(form);
 
-        // Aceita valores antigos e novos:
-        // - teacher/staff
-        // - professor/funcionario
-        // - professores/funcionarios
         const hasTeacher =
             audience.includes('teacher') ||
             audience.includes('professor') ||
@@ -119,12 +104,8 @@ export default function AdminDashboard() {
         return true;
     };
 
-    // Aplica os filtros:
-    // 1. Apenas formulários publicados;
-    // 2. Filtro por público-alvo/cargo;
-    // 3. Pesquisa por título ou descrição.
     const filteredForms = forms
-        .filter(isPublished)
+        .filter(isTargetStatus) // Agora filtra com base no isDraft!
         .filter(matchesCargo)
         .filter((form) => {
             const term = normalizeText(searchTerm.trim());
@@ -143,7 +124,6 @@ export default function AdminDashboard() {
             );
         });
 
-    // Ordena os formulários por data de criação.
     const filteredAndSortedForms = [...filteredForms].sort((a, b) => {
         const dateA = new Date(a.createdAt || a.CreatedAt || 0).getTime();
         const dateB = new Date(b.createdAt || b.CreatedAt || 0).getTime();
@@ -155,25 +135,22 @@ export default function AdminDashboard() {
         return dateB - dateA;
     });
 
-    // Calcula a paginação.
     const totalPages = Math.max(1, Math.ceil(filteredAndSortedForms.length / formsPerPage));
     const indexOfLastForm = currentPage * formsPerPage;
     const indexOfFirstForm = indexOfLastForm - formsPerPage;
     const paginatedForms = filteredAndSortedForms.slice(indexOfFirstForm, indexOfLastForm);
 
-    // Sempre que os filtros mudam, volta à primeira página.
+    // Repõe a página a 1 se mudarmos de separador (isDraft) ou alterarmos filtros
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, selectedCargo, sortDate]);
+    }, [searchTerm, selectedCargo, sortDate, isDraft]);
 
-    // Garante que a página atual nunca fica acima do número total de páginas.
     useEffect(() => {
         if (currentPage > totalPages) {
             setCurrentPage(totalPages);
         }
     }, [currentPage, totalPages]);
 
-    // Elimina um formulário no backend e atualiza a lista local.
     const handleDelete = async (id) => {
         const confirmacao = window.confirm('Tens a certeza que queres eliminar este formulário?');
 
@@ -185,7 +162,6 @@ export default function AdminDashboard() {
             });
 
             if (response.ok) {
-                // Remove o formulário da lista no ecrã imediatamente.
                 setForms(forms.filter(form => form.id !== id && form.Id !== id));
             } else {
                 alert('Erro ao eliminar formulário.');
@@ -201,9 +177,10 @@ export default function AdminDashboard() {
             {/* Cabeçalho da página */}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold text-text-h">Formulários</h2>
+                    {/* Títulos dinâmicos baseados no state isDraft */}
+                    <h2 className="text-3xl font-bold text-text-h">{pageTitle}</h2>
                     <p className="mt-2 text-lg text-text">
-                        Listagem dos formulários publicados
+                        {pageSubtitle}
                     </p>
                 </div>
 
@@ -272,7 +249,7 @@ export default function AdminDashboard() {
                 ) : filteredAndSortedForms.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
                         <p className="text-xl font-semibold text-text-h">
-                            Nenhum formulário publicado encontrado
+                            {emptyMessage}
                         </p>
                         <p className="mt-2 text-text">
                             Tenta ajustar os filtros ou publica um formulário.
@@ -289,7 +266,6 @@ export default function AdminDashboard() {
                                 return (
                                     <div
                                         key={id}
-                                        // 1. Click anywhere to navigate to View
                                         onClick={() => navigate(`/ViewForm/${id}`)}
                                         className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-green-300 transition-all cursor-pointer bg-white"
                                     >
@@ -297,9 +273,17 @@ export default function AdminDashboard() {
                                             <h3 className="font-bold text-lg text-text-h group-hover:text-green-700 transition-colors">
                                                 {title}
                                             </h3>
-                                            <span className="rounded-full bg-green-50 px-2 py-1 text-xs font-semibold text-green-700">
-                                                Publicado
-                                            </span>
+
+                                            {/* Etiqueta Visual Dinâmica */}
+                                            {isDraft ? (
+                                                <span className="rounded-full bg-amber-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-600 border border-amber-100">
+                                                    Rascunho
+                                                </span>
+                                            ) : (
+                                                <span className="rounded-full bg-green-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-green-700 border border-green-100">
+                                                    Publicado
+                                                </span>
+                                            )}
                                         </div>
 
                                         <p className="text-sm text-text mt-2 line-clamp-3 flex-grow">
@@ -309,7 +293,7 @@ export default function AdminDashboard() {
                                         <div className="mt-4 flex justify-end gap-4 border-t border-accent-border pt-4 mt-auto">
                                             <button
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); // 2. Prevents the card click from firing
+                                                    e.stopPropagation();
                                                     navigate(`/edit-form/${id}`);
                                                 }}
                                                 className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
@@ -318,7 +302,7 @@ export default function AdminDashboard() {
                                             </button>
                                             <button
                                                 onClick={(e) => {
-                                                    e.stopPropagation(); // 2. Prevents the card click from firing
+                                                    e.stopPropagation();
                                                     handleDelete(id);
                                                 }}
                                                 className="flex items-center gap-1 text-sm font-semibold text-red-500 transition-colors hover:text-red-700"
