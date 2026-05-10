@@ -79,6 +79,24 @@ namespace Formify.Server.Controllers
             return Ok(allForms);
         }
 
+        [HttpGet("published")]
+        public async Task<IActionResult> GetPublishedForms()
+        {
+            // 1. Vai buscar todos os formulários ao ficheiro JSON
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+
+            if (allForms == null)
+            {
+                return Ok(new List<Form>());
+            }
+
+            // 2. Filtra apenas os que estão publicados
+            var publishedForms = allForms.Where(f => !f.StatusDrafted).ToList();
+
+            // 3. Devolve a lista filtrada
+            return Ok(publishedForms);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
