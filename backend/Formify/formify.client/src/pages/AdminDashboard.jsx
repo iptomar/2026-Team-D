@@ -151,6 +151,44 @@ export default function AdminDashboard({ isDraft = false }) {
         }
     }, [currentPage, totalPages]);
 
+    const moveToDraft = async (id) => {
+        try {
+            const form = forms.find(f => (f.id === id || f.Id === id));
+
+            if (!form) {
+                throw new Error('Formulário não encontrado');
+            }
+
+            const response = await fetch(`http://localhost:5208/api/Forms/${id}`, {
+                method: 'PUT', // ✔ correto para o teu backend
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...form,
+                    statusDrafted: true
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar formulário');
+            }
+
+            // Atualiza UI local corretamente
+            setForms((prev) =>
+                prev.map((f) =>
+                    (f.id === id || f.Id === id)
+                        ? { ...f, statusDrafted: true }
+                        : f
+                )
+            );
+
+        } catch (error) {
+            console.error(error);
+            alert('Não foi possível mover para rascunho');
+        }
+    };
+
     const handleDelete = async (id) => {
         const confirmacao = window.confirm('Tens a certeza que queres eliminar este formulário?');
 
@@ -291,15 +329,27 @@ export default function AdminDashboard({ isDraft = false }) {
                                         </p>
 
                                         <div className="mt-4 flex justify-end gap-4 border-t border-accent-border pt-4 mt-auto">
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    navigate(`/edit-form/${id}`);
-                                                }}
-                                                className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
-                                            >
-                                                ✏️ Editar
-                                            </button>
+                                            {isDraft ? (
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        navigate(`/edit-form/${id}`);
+                                                    }}
+                                                    className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
+                                                >
+                                                    ✏️ Editar
+                                                </button>
+                                            ) : (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            moveToDraft(id);
+                                                        }}
+                                                        className="flex items-center gap-1 text-sm font-semibold text-yellow-600 transition-colors hover:text-yellow-800"
+                                                    >
+                                                        ↩️ Tornar Rascunho
+                                                    </button>
+                                            )}
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
