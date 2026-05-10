@@ -26,6 +26,9 @@ export default function AdminDashboard() {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortDate, setSortDate] = useState('newest');
 
+    const [showDraftModal, setShowDraftModal] = useState(false);
+    const [selectedForm, setSelectedForm] = useState(null);
+
     // Paginação
     const [currentPage, setCurrentPage] = useState(1);
     const formsPerPage = 12;
@@ -197,50 +200,43 @@ export default function AdminDashboard() {
         }
 
     };
+    const handleMakeDraft = (form) => {
+        setSelectedForm(form);
+        setShowDraftModal(true);
+    };
 
-    const handleMakeDraft = async (id) => {
-        const confirmacao = window.confirm(
-            'Queres mover este formulário para rascunho?'
-        );
-
-        if (!confirmacao) return;
+    const confirmMakeDraft = async () => {
+        if (!selectedForm) return;
 
         try {
-            // procurar formulário atual
-            const formAtual = forms.find(
-                (f) => (f.id || f.Id) === id
+            const response = await fetch(
+                `http://localhost:5208/api/Forms/${selectedForm.id || selectedForm.Id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        Title: selectedForm.title || selectedForm.Title,
+                        Description: selectedForm.description || selectedForm.Description,
+                        Audience: selectedForm.audience || selectedForm.Audience,
+                        Fields: selectedForm.fields || selectedForm.Fields,
+                        StatusDraft: true,
+                    }),
+                }
             );
-
-            if (!formAtual) {
-                alert('Formulário não encontrado.');
-                return;
-            }
-
-            const response = await fetch(`http://localhost:5208/api/Forms/${id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...formAtual,
-                    StatusDrafted: true,
-                }),
-            });
 
             if (!response.ok) {
                 throw new Error('Erro ao atualizar formulário');
             }
 
-            // remove imediatamente da lista dos publicados
             setForms((prev) =>
-                prev.map((form) =>
-                    (form.id || form.Id) === id
-                        ? { ...form, StatusDrafted: true }
-                        : form
-                )
+                prev.filter((f) => (f.id || f.Id) !== (selectedForm.id || selectedForm.Id))
             );
 
-            alert('Formulário movido para rascunho.');
+            setShowDraftModal(false);
+            setSelectedForm(null);
+
         } catch (error) {
             console.error(error);
             alert('Erro ao mover formulário para rascunho.');
@@ -362,7 +358,7 @@ export default function AdminDashboard() {
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            handleMakeDraft(id);
+                                                            handleMakeDraft(form);
                                                         }}
                                                         className="flex items-center gap-1 text-sm font-semibold text-amber-600 transition-colors hover:text-amber-800"
                                                     >
@@ -410,6 +406,48 @@ export default function AdminDashboard() {
                     </>
                 )}
             </div>
+
+            {/* Modal - MOVED FORA DO DIV PRINCIPAL */}
+            {showDraftModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+                        <h2 className="text-xl font-bold text-text-h">
+                            Confirmar ação
+                        </h2>
+
+                        <p className="mt-2 text-text">
+                            Queres mover este formulário para rascunho?
+                        </p>
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button
+                                onClick={() => {
+                                    setShowDraftModal(false);
+                                    setSelectedForm(null);
+                                }}
+                                className="rounded-md border px-4 py-2"
+                            >
+                                Cancelar
+                            </button>
+
+                            <button
+                                onClick={confirmMakeDraft}
+                                className="rounded-md bg-amber-600 px-4 py-2 text-white hover:bg-amber-700"
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
+
+
         </div>
+        
+
+
+
     );
 }
