@@ -66,41 +66,6 @@ function ConfirmPublishModal({ isOpen, onConfirm, onCancel, isLoading }) {
 }
 
 
-function ConfirmCancelModal({ isOpen, onConfirm, onCancel }) {
-    if (!isOpen) return null;
-
-    return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Cancelar criação?
-                </h3>
-
-                <p className="text-sm text-gray-600 mb-6">
-                    Todas as alterações não guardadas serão perdidas.
-                </p>
-
-                <div className="flex justify-end gap-3">
-                    <button
-                        type="button"
-                        onClick={onCancel}
-                        className="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 transition-all"
-                    >
-                        Continuar a editar
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={onConfirm}
-                        className="rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 transition-all"
-                    >
-                        Sim, cancelar
-                    </button>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 // ─── Preview do campo no canvas ───────────────────────────────────────────────
 // Mostra uma pré-visualização visual do campo, sem permitir edição direta.
@@ -587,7 +552,6 @@ export default function CreateForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
-    const [showCancelModal, setShowCancelModal] = useState(false);
 
     // Estados auxiliares para drag and drop
     const dragIndex = useRef(null);
@@ -1139,13 +1103,6 @@ export default function CreateForm() {
                         Guardar como Rascunho
                     </button>
 
-                    <button
-                        type="button" //  não submete o form
-                        onClick={() => setShowCancelModal(true)}
-                        className="px-6 py-2 rounded-md border border-gray-300 font-semibold text-gray-600 hover:bg-gray-50 transition-all disabled:opacity-50"
-                    >
-                        Cancelar
-                    </button>
 
                     <button
                         disabled={isLoading}
@@ -1165,11 +1122,7 @@ export default function CreateForm() {
                 onCancel={handleCancelPublish}
                 isLoading={isLoading}
             />
-            <ConfirmCancelModal
-                isOpen={showCancelModal}
-                onConfirm={() => navigate('/')}
-                onCancel={() => setShowCancelModal(false)}
-            />
+           
 
         </div>
     );
