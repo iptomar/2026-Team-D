@@ -11,4 +11,7 @@
   <ItemGroup>
     <None Remove="src\pages\DraftedForms.jsx" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="src\pages\Professor\" />
+  </ItemGroup>
 </Project>
