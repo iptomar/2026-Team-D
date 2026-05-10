@@ -17,6 +17,12 @@ export default function AdminDashboard({ isDraft = false }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [sortDate, setSortDate] = useState('newest');
 
+    // Mensagem de confirmação
+    const [confirmModal, setConfirmModal] = useState({
+        open: false,
+        id: null
+    });
+
     // Paginação
     const [currentPage, setCurrentPage] = useState(1);
     const formsPerPage = 12;
@@ -151,16 +157,14 @@ export default function AdminDashboard({ isDraft = false }) {
         }
     }, [currentPage, totalPages]);
 
-    const moveToDraft = async (id) => {
+    const confirmMoveToDraft = async () => {
+        const id = confirmModal.id;
+
         try {
             const form = forms.find(f => (f.id === id || f.Id === id));
 
-            if (!form) {
-                throw new Error('Formulário não encontrado');
-            }
-
             const response = await fetch(`http://localhost:5208/api/Forms/${id}`, {
-                method: 'PUT', // ✔ correto para o teu backend
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -174,7 +178,6 @@ export default function AdminDashboard({ isDraft = false }) {
                 throw new Error('Erro ao atualizar formulário');
             }
 
-            // Atualiza UI local corretamente
             setForms((prev) =>
                 prev.map((f) =>
                     (f.id === id || f.Id === id)
@@ -183,9 +186,11 @@ export default function AdminDashboard({ isDraft = false }) {
                 )
             );
 
+            setConfirmModal({ open: false, id: null });
+
         } catch (error) {
             console.error(error);
-            alert('Não foi possível mover para rascunho');
+            alert('Erro ao mover para rascunho');
         }
     };
 
@@ -343,7 +348,7 @@ export default function AdminDashboard({ isDraft = false }) {
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            moveToDraft(id);
+                                                            setConfirmModal({ open: true, id });
                                                         }}
                                                         className="flex items-center gap-1 text-sm font-semibold text-yellow-600 transition-colors hover:text-yellow-800"
                                                     >
@@ -392,6 +397,35 @@ export default function AdminDashboard({ isDraft = false }) {
                     </>
                 )}
             </div>
+            {confirmModal.open && (
+                <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 w-[90%] max-w-md shadow-lg">
+                        <h2 className="text-lg font-bold text-text-h">
+                            Confirmar ação
+                        </h2>
+
+                        <p className="mt-2 text-text">
+                            Tens a certeza que queres mover este formulário para rascunho?
+                        </p>
+
+                        <div className="mt-6 flex justify-end gap-3">
+                            <button
+                                onClick={() => setConfirmModal({ open: false, id: null })}
+                                className="px-4 py-2 rounded-md border border-gray-300 hover:bg-gray-100"
+                            >
+                                Cancelar
+                            </button>
+
+                            <button
+                                onClick={confirmMoveToDraft}
+                                className="px-4 py-2 rounded-md bg-yellow-500 text-white hover:bg-yellow-600"
+                            >
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
