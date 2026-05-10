@@ -835,7 +835,7 @@
     "Audience": [
       "Professor"
     ],
-    "StatusDrafted": false,
+    "StatusDrafted": true,
     "Fields": [
       {
         "Id": "fb5b62d6-8901-4648-8049-2018e26b83c3",
@@ -861,6 +861,6 @@
       }
     ],
     "CreatedAt": "2026-05-05T23:39:06.8913941+01:00",
-    "UpdatedAt": "2026-05-05T23:39:16.0738849+01:00"
+    "UpdatedAt": "2026-05-10T15:44:32.258966+01:00"
   }
 ]

@@ -173,6 +173,7 @@ export default function AdminDashboard() {
         }
     }, [currentPage, totalPages]);
 
+
     // Elimina um formulário no backend e atualiza a lista local.
     const handleDelete = async (id) => {
         const confirmacao = window.confirm('Tens a certeza que queres eliminar este formulário?');
@@ -194,7 +195,58 @@ export default function AdminDashboard() {
             console.error('Erro:', error);
             alert('Não foi possível ligar ao servidor.');
         }
+
     };
+
+    const handleMakeDraft = async (id) => {
+        const confirmacao = window.confirm(
+            'Queres mover este formulário para rascunho?'
+        );
+
+        if (!confirmacao) return;
+
+        try {
+            // procurar formulário atual
+            const formAtual = forms.find(
+                (f) => (f.id || f.Id) === id
+            );
+
+            if (!formAtual) {
+                alert('Formulário não encontrado.');
+                return;
+            }
+
+            const response = await fetch(`http://localhost:5208/api/Forms/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...formAtual,
+                    StatusDrafted: true,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Erro ao atualizar formulário');
+            }
+
+            // remove imediatamente da lista dos publicados
+            setForms((prev) =>
+                prev.map((form) =>
+                    (form.id || form.Id) === id
+                        ? { ...form, StatusDrafted: true }
+                        : form
+                )
+            );
+
+            alert('Formulário movido para rascunho.');
+        } catch (error) {
+            console.error(error);
+            alert('Erro ao mover formulário para rascunho.');
+        }
+    };
+
 
     return (
         <div className="min-h-[calc(100vh-140px)] space-y-8 flex flex-col">
@@ -309,12 +361,12 @@ export default function AdminDashboard() {
                                                 <div className="mt-4 flex justify-end gap-4 border-t border-accent-border pt-4">
                                                     <button
                                                         onClick={(e) => {
-                                                            e.stopPropagation(); // 2. Prevents the card click from firing
-                                                            navigate(`/edit-form/${id}`);
+                                                            e.stopPropagation();
+                                                            handleMakeDraft(id);
                                                         }}
-                                                        className="flex items-center gap-1 text-sm font-semibold text-blue-600 transition-colors hover:text-blue-800"
+                                                        className="flex items-center gap-1 text-sm font-semibold text-amber-600 transition-colors hover:text-amber-800"
                                                     >
-                                                        ✏️ Editar
+                                                        📄 Tornar rascunho
                                                     </button>
                                                     <button
                                                         onClick={(e) => {
