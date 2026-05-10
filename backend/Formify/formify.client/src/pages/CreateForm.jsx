@@ -1098,6 +1098,14 @@ export default function CreateForm() {
                     </button>
 
                     <button
+                        type="button" //  não submete o form
+                        onClick={() => navigate('/')} // Altera '/' para a rota da sua lista se for diferente
+                        className="px-6 py-2 rounded-md border border-gray-300 font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
                         disabled={isLoading}
                         id="save-final"
                         type="submit"
