@@ -550,6 +550,7 @@ export default function CreateForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
+    const [showCancelModal, setShowCancelModal] = useState(false);
 
     // Estados auxiliares para drag and drop
     const dragIndex = useRef(null);
@@ -841,6 +842,45 @@ export default function CreateForm() {
         await submeterFormulario(fieldsWithOrder, false);
     };
 
+    function ConfirmCancelModal({ isOpen, onConfirm, onCancel }) {
+        if (!isOpen) return null;
+
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+                <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        Cancelar criação?
+                    </h3>
+
+                    <p className="text-sm text-gray-600 mb-6">
+                        Todas as alterações não guardadas serão perdidas.
+                    </p>
+
+                    <div className="flex justify-end gap-3">
+                        <button
+                            type="button"
+                            onClick={onCancel}
+                            className="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 hover:bg-gray-50 transition-all"
+                        >
+                            Continuar a editar
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={onConfirm}
+                            className="rounded-md bg-red-600 px-4 py-2 font-medium text-white hover:bg-red-700 transition-all"
+                        >
+                            Sim, cancelar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
+
+
+
     // ── Função para submeter o formulário ao backend ──
     const submeterFormulario = async (fieldsWithOrder, isFinal) => {
         setIsLoading(true);
@@ -1099,8 +1139,8 @@ export default function CreateForm() {
 
                     <button
                         type="button" //  não submete o form
-                        onClick={() => navigate('/')} // Altera '/' para a rota da sua lista se for diferente
-                        className="px-6 py-2 rounded-md border border-gray-300 font-semibold text-gray-600 hover:bg-gray-50 transition-all"
+                        onClick={() => setShowCancelModal(true)}
+                        className="px-6 py-2 rounded-md border border-gray-300 font-semibold text-gray-600 hover:bg-gray-50 transition-all disabled:opacity-50"
                     >
                         Cancelar
                     </button>
@@ -1123,6 +1163,12 @@ export default function CreateForm() {
                 onCancel={handleCancelPublish}
                 isLoading={isLoading}
             />
+            <ConfirmCancelModal
+                isOpen={showCancelModal}
+                onConfirm={() => navigate('/')}
+                onCancel={() => setShowCancelModal(false)}
+            />
+
         </div>
     );
 }
