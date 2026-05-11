@@ -8,10 +8,4 @@
     <!-- Folder where production build objects will be placed -->
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
   </PropertyGroup>
-  <ItemGroup>
-    <None Remove="src\pages\DraftedForms.jsx" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\pages\Professor\" />
-  </ItemGroup>
 </Project>
