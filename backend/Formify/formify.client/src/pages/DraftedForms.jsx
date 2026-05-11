@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 /**
  * AdminDashboard Component
@@ -8,8 +8,6 @@ import { Link, useNavigate } from 'react-router-dom';
  * - Lista de formulários criados mas em rascunho
  */
 export default function AdminDashboard() {
-    const navigate = useNavigate(); 
-
   // TODO: Integrar com API .NET para buscar formulários
     const [forms, setForms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -78,59 +76,24 @@ export default function AdminDashboard() {
                       <p className="mt-2 text-text">Clique no botão acima para criar seu primeiro formulário</p>
                   </div>
               ) : (
-                          <div className="grid auto-rows-max gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                              {forms
-                                  .filter((form) => (form.statusDrafted || form.StatusDrafted) === true)
-                                  .map((form) => {
-                                      const id = form.id || form.Id;
-
-                                      return (
-                                          <div
-                                              key={id || Math.random()}
-                                              // 1. Click anywhere to navigate to View
-                                              onClick={() => navigate(`/ViewForm/${id}`)}
-                                              className="group flex flex-col rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer bg-white"
-                                          >
-                                              <div className="mb-3 flex items-start justify-between gap-3">
-                                                  <h3 className="font-bold text-lg text-text-h group-hover:text-blue-600 transition-colors">
-                                                      {form.Title || form.title || "Sem título"}
-                                                  </h3>
-                                                  <span className="rounded-full bg-amber-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-amber-600 border border-amber-100">
-                                                      Rascunho
-                                                  </span>
-                                              </div>
-
-                                              <p className="text-sm text-text line-clamp-2 mb-4">
-                                                  {form.Description || form.description || "Nenhuma descrição fornecida."}
-                                              </p>
-
-                                              {/* Zona dos botões */}
-                                              <div className="flex justify-end gap-4 border-t border-accent-border pt-4 mt-auto">
-                                                  <button
-                                                      onClick={(e) => {
-                                                          e.stopPropagation(); // 2. Stop navigation to View
-                                                          navigate(`/edit-form/${id}`);
-                                                      }}
-                                                      className="text-blue-500 hover:text-blue-700 transition-colors text-sm font-medium flex items-center gap-1"
-                                                      title="Editar"
-                                                  >
-                                                      ✏️ Editar
-                                                  </button>
-                                                  <button
-                                                      onClick={(e) => {
-                                                          e.stopPropagation(); // 2. Stop navigation to View
-                                                          handleDelete(id);
-                                                      }}
-                                                      className="text-red-500 hover:text-red-700 transition-colors text-sm font-medium flex items-center gap-1"
-                                                      title="Eliminar"
-                                                  >
-                                                      🗑️ Eliminar
-                                                  </button>
-                                              </div>
-                                          </div>
-                                      );
-                                  })}
+                  <div className="grid auto-rows-max gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                      {/* 3. Renderização dinâmica dos cards */}
+                       {forms.filter((form) => form.statusDrafted === true).map((form) => (
+                          <div key={form.Id} className="rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md transition-shadow">
+                              <h3 className="font-bold text-lg text-text-h">{form.title || "Sem título"}</h3>
+                              <p className="text-sm text-text mt-2">{form.description}</p>
+                              {/* Podemos mais tarde mais campos existentes dentro de cada formulário*/}
+                              {/* Adiciona este botão dentro da div do cartão do formulário */}
+                              <button
+                                  onClick={() => handleDelete(form.id || form.Id)}
+                                  className="text-red-500 hover:text-red-700 transition-colors"
+                                  title="Eliminar"
+                              >
+                                  🗑️ Eliminar
+                              </button>
                           </div>
+                      ))}
+                  </div>
               )}
       </div>
     </div>
