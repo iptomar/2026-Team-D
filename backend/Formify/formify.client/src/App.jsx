@@ -4,7 +4,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import CreateForm from './pages/CreateForm';
 import ViewForm from './pages/ViewForm';
 import ProfessorDashboard from './pages/Professor/ProfessorDashboard';
-
+import FuncionarioDashboard from './pages/funcionario/FuncionarioDashboard';
 export default function App() {
     return (
         <Router>
@@ -16,6 +16,7 @@ export default function App() {
                     <Route path="/CreateForm" element={<CreateForm />} />
                     <Route path="/edit-form/:id" element={<CreateForm />} />
                     <Route path="/ViewForm/:id" element={<ViewForm />} />
+                    <Route path="/funcionario" element={<FuncionarioDashboard />} />
                 </Routes>
             </Layout>
         </Router>
