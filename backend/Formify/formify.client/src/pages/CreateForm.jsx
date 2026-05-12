@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Toast from '../components/Toast';
 
 // ─── Tipos de elementos disponíveis na paleta do editor ──────────────────────
 // Cada elemento representa um tipo de campo que pode ser arrastado/clicado
@@ -25,6 +26,37 @@ const AUDIENCE_OPTIONS = [
 
 function getTypeInfo(type) {
     return FIELD_TYPES.find(f => f.type === type) || FIELD_TYPES[0];
+}
+
+function normalizeField(field = {}) {
+    const type = field.type ?? field.Type ?? '';
+    const isTable = type === 'table';
+
+    return {
+        id: field.id ?? field.Id,
+        type,
+        label: field.label ?? field.Label ?? '',
+        placeholder: field.placeholder ?? field.Placeholder ?? '',
+        required: field.required ?? field.Required ?? false,
+        width: field.width ?? field.Width ?? 'full',
+        options: isTable ? [] : (field.options ?? field.Options ?? []),
+        tableColumns: isTable ? (field.tableColumns ?? field.options ?? field.Options ?? []) : (field.tableColumns ?? field.TableColumns ?? []),
+        tableRows: isTable ? (field.tableRows ?? field.tableRowCount ?? field.TableRowCount ?? 2) : (field.tableRows ?? field.TableRowCount ?? 0),
+        description: field.description ?? field.Description ?? '',
+    };
+}
+
+function buildFormSnapshot(nome, descricao, audience, fields) {
+    return {
+        nome,
+        descricao,
+        audience: [...audience],
+        fields: fields.map(normalizeField),
+    };
+}
+
+function normalizeFieldList(list) {
+    return list.map(normalizeField);
 }
 
 // ─── Modal de confirmação ─────────────────────────────────────────────────────
@@ -58,6 +90,42 @@ function ConfirmPublishModal({ isOpen, onConfirm, onCancel, isLoading }) {
                         className="rounded-md bg-green-600 px-4 py-2 font-medium text-white transition-all hover:bg-green-700 disabled:opacity-50"
                     >
                         {isLoading ? 'A Publicar...' : 'Sim, publicar'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ConfirmLeaveModal({ isOpen, onConfirm, onCancel, isLoading }) {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Sair sem guardar alterações?
+                </h3>
+                <p className="text-sm text-gray-600 mb-6">
+                    Tens a certeza? Vais perder todas as alterações não guardadas.
+                </p>
+
+                <div className="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        disabled={isLoading}
+                        className="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50"
+                    >
+                        Voltar ao editor
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onConfirm}
+                        disabled={isLoading}
+                        className="rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-all hover:bg-red-700 disabled:opacity-50"
+                    >
+                        Sair
                     </button>
                 </div>
             </div>
@@ -550,15 +618,27 @@ export default function CreateForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
+    const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+    const [toasts, setToasts] = useState([]);
+    const [initialSnapshot, setInitialSnapshot] = useState(null);
 
     // Estados auxiliares para drag and drop
     const dragIndex = useRef(null);
     const [dragOverIndex, setDragOverIndex] = useState(null);
     const dragTypeRef = useRef(null);
-
     const navigate = useNavigate();
     const selectedField = fields.find(f => f.id === selectedId) || null;
 
+    const pushToast = (type, message) => {
+        const toastId = crypto.randomUUID();
+        setToasts(prev => [...prev, { id: toastId, type, message }]);
+        window.setTimeout(() => {
+            setToasts(prev => prev.filter(toast => toast.id !== toastId));
+        }, 5000);
+    };
+
+    const currentSnapshot = buildFormSnapshot(nome.trim(), descricao, audience, fields);
+    const isDirty = Boolean(id && initialSnapshot && JSON.stringify(currentSnapshot) !== JSON.stringify(initialSnapshot));
 
     useEffect(() => {
         if (id) {
@@ -568,16 +648,21 @@ export default function CreateForm() {
                     const response = await fetch(`/api/Forms/${id}`);
                     if (response.ok) {
                         const formDados = await response.json();
-                        // Preencher as caixas com os dados vindos do C#
-                        setNome(formDados.title || formDados.Title || '');
-                        setDescricao(formDados.description || formDados.Description || '');
-                        setFields(formDados.fields || formDados.Fields || []);
-                        setAudience(formDados.audience || formDados.Audience || []);
+                        const normalizedFields = normalizeFieldList(formDados.fields || formDados.Fields || []);
+                        const loadedNome = formDados.title || formDados.Title || '';
+                        const loadedDescricao = formDados.description || formDados.Description || '';
+                        const loadedAudience = formDados.audience || formDados.Audience || [];
+
+                        setNome(loadedNome);
+                        setDescricao(loadedDescricao);
+                        setFields(normalizedFields);
+                        setAudience(loadedAudience);
+                        setInitialSnapshot(buildFormSnapshot(loadedNome.trim(), loadedDescricao, loadedAudience, normalizedFields));
                     } else {
-                        alert('Erro ao carregar o formulário para edição.');
+                        pushToast('error', 'Não foi possível carregar o formulário para edição.');
                     }
-                } catch (error) {
-                    console.error('Erro na ligação:', error);
+                } catch {
+                    pushToast('error', 'Não foi possível ligar ao servidor.');
                 }
             };
 
@@ -759,7 +844,7 @@ export default function CreateForm() {
 
             // 3. Validar Opções (Dropdown, Checkbox, Radio)
             if (['dropdown', 'checkbox', 'radio'].includes(field.type)) {
-                // Regex para detetar "Opção 1", "Opção 2", "Opção 99", etc.
+                // Regex para detetar \"Opção 1\", \"Opção 2\", \"Opção 99\", etc.
                 const hasDefaultOptions = field.options.some(opt =>
                     !opt || opt.trim() === '' || /^Opção \d+$/.test(opt.trim())
                 );
@@ -771,7 +856,7 @@ export default function CreateForm() {
 
             // 4. Validar Colunas da Tabela
             if (field.type === 'table') {
-                // Regex para detetar "Coluna A", "Coluna B", "Coluna Z", etc.
+                // Regex para detetar \"Coluna A\", \"Coluna B\", \"Coluna Z\", etc.
                 const hasDefaultCols = field.tableColumns.some(col =>
                     !col || col.trim() === '' || /^Coluna [A-Z]$/.test(col.trim())
                 );
@@ -800,6 +885,9 @@ export default function CreateForm() {
         const fieldsWithOrder = fields.map((field, index) => ({
             ...field,
             order: index,
+            // Se for tabela, envia 'tableColumns' dentro de 'options' para o C#
+            options: field.type === 'table' ? field.tableColumns : field.options,
+            tableRowCount: field.type === 'table' ? field.tableRows : undefined
         }));
 
         // 1. Validações SEMPRE obrigatórias (Rascunho ou Publicado)
@@ -867,20 +955,16 @@ export default function CreateForm() {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Erro do backend:', errorText);
-                alert('Erro ao criar formulário.');
+                pushToast('error', errorText || 'Erro ao guardar o formulário.');
                 setIsLoading(false);
                 return;
             }
 
-            const data = await response.json();
-            console.log('Formulário submetido com sucesso:', data);
-
-            alert(isFinal ? 'Formulário publicado com sucesso!' : 'Rascunho guardado com sucesso!');
-            navigate('/');
-        } catch (error) {
-            console.error('Erro de ligação ao backend:', error);
-            alert('Não foi possível ligar ao backend.');
+            await response.json();
+            pushToast('success', isFinal ? 'Formulário publicado com sucesso.' : 'Rascunho guardado com sucesso.');
+            window.setTimeout(() => navigate('/'), 1400);
+         } catch {
+            pushToast('error', 'Não foi possível ligar ao backend.');
             setIsLoading(false);
         }
     };
@@ -890,10 +974,12 @@ export default function CreateForm() {
         const fieldsWithOrder = fields.map((field, index) => ({
             ...field,
             order: index,
+            options: field.type === 'table' ? field.tableColumns : field.options,
+            tableRowCount: field.type === 'table' ? field.tableRows : undefined
         }));
 
-        await submeterFormulario(fieldsWithOrder, true);
         setShowConfirmPublish(false);
+        await submeterFormulario(fieldsWithOrder, true);
     };
 
     // ── Handler para cancelar publicação ──
@@ -901,14 +987,28 @@ export default function CreateForm() {
         setShowConfirmPublish(false);
     };
 
+    const handleBackClick = () => {
+        if (isDirty) {
+            setShowLeaveConfirm(true);
+            return;
+        }
+
+        navigate('/');
+    };
+
+    const handleLeaveConfirm = () => {
+        setShowLeaveConfirm(false);
+        navigate('/');
+    };
+
     return (
         <div className="space-y-6">
             {/* Cabeçalho da página */}
             <div className="flex flex-col gap-4">
-                <Link to="/" className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80">
+                <button type="button" onClick={handleBackClick} className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80">
                     ← Voltar
-                </Link>
-                <h2 className="text-3xl font-bold text-text-h">Novo Formulário</h2>
+                </button>
+                <h2 className="text-3xl font-bold text-text-h">{id ? 'Editar Formulário' : 'Novo Formulário'}</h2>
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -986,6 +1086,7 @@ export default function CreateForm() {
                         <h3 className="text-lg font-semibold text-text-h">Campos do Formulário</h3>
                         <span className="text-sm text-gray-400">
                             {fields.filter(f => f.type !== 'section').length} campo{fields.filter(f => f.type !== 'section').length !== 1 ? 's' : ''}
+
                         </span>
                     </div>
 
@@ -995,7 +1096,7 @@ export default function CreateForm() {
                             <p className="font-bold mb-2">Não é possível publicar. O formulário não está completo:</p>
                             <ul className="list-disc pl-5 space-y-1">
                                 {typeof erroFields === 'string' ? (
-                                    <li>{erroFields}</li> /* Para os teus erros antigos de string */
+                                    <li>{erroFields}</li>
                                 ) : (
                                     erroFields.map((erro, i) => <li key={i}>{erro}</li>)
                                 )}
@@ -1108,11 +1209,29 @@ export default function CreateForm() {
                 </div>
             </form>
 
+            <div className="fixed right-6 top-6 z-[60] flex max-w-sm flex-col gap-3">
+                 {toasts.map(toast => (
+                     <Toast
+                         key={toast.id}
+                         type={toast.type}
+                         message={toast.message}
+                         onClose={() => setToasts(prev => prev.filter(item => item.id !== toast.id))}
+                     />
+                 ))}
+             </div>
+
             {/* Modal de confirmação de publicação */}
             <ConfirmPublishModal
                 isOpen={showConfirmPublish}
                 onConfirm={handleConfirmPublish}
                 onCancel={handleCancelPublish}
+                isLoading={isLoading}
+            />
+
+            <ConfirmLeaveModal
+                isOpen={showLeaveConfirm}
+                onConfirm={handleLeaveConfirm}
+                onCancel={() => setShowLeaveConfirm(false)}
                 isLoading={isLoading}
             />
         </div>
