@@ -65,6 +65,44 @@ function ConfirmPublishModal({ isOpen, onConfirm, onCancel, isLoading }) {
     );
 }
 
+// ─── Modal de confirmação de gravação de edição ───────────────────────────────
+// Pedido de confirmação antes de gravar alterações num rascunho já existente.
+function ConfirmSaveEditModal({ isOpen, onConfirm, onCancel, isLoading }) {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    Guardar Alterações?
+                </h3>
+                <p className="text-sm text-gray-600 mb-6">
+                    Vais sobrepor a versão atual do rascunho com as alterações que fizeste.
+                </p>
+
+                <div className="flex justify-end gap-3">
+                    <button
+                        type="button"
+                        onClick={onCancel}
+                        disabled={isLoading}
+                        className="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50"
+                    >
+                        Cancelar
+                    </button>
+                    <button
+                        type="button"
+                        onClick={onConfirm}
+                        disabled={isLoading}
+                        className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-all hover:bg-blue-700 disabled:opacity-50"
+                    >
+                        {isLoading ? 'A Guardar...' : 'Sim, guardar'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
 // ─── Preview do campo no canvas ───────────────────────────────────────────────
 // Mostra uma pré-visualização visual do campo, sem permitir edição direta.
 function FieldPreview({ field }) {
@@ -550,6 +588,11 @@ export default function CreateForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
+    const [showConfirmSaveEdit, setShowConfirmSaveEdit] = useState(false);
+
+    // Snapshot do estado inicial carregado em modo edição.
+    // Usado para detetar alterações por guardar (dirty state).
+    const [initialSnapshot, setInitialSnapshot] = useState(null);
 
     // Estados auxiliares para drag and drop
     const dragIndex = useRef(null);
@@ -569,10 +612,20 @@ export default function CreateForm() {
                     const response = await fetch(`/api/Forms/${id}`);
                     if (response.ok) {
                         const formDados = await response.json();
-                        setNome(formDados.title || formDados.Title || '');
-                        setDescricao(formDados.description || formDados.Description || '');
 
-                        
+                        // Só rascunhos podem ser editados. Se chegar aqui com URL direto
+                        // a um formulário publicado, bloqueia e devolve ao dashboard.
+                        const isPublished = (formDados.statusDrafted ?? formDados.StatusDrafted) === false;
+                        if (isPublished) {
+                            alert('Este formulário está publicado e não pode ser editado. Move-o primeiro para rascunho.');
+                            navigate('/');
+                            return;
+                        }
+
+                        const tituloFormatado = formDados.title || formDados.Title || '';
+                        const descricaoFormatada = formDados.description || formDados.Description || '';
+                        const audienceFormatada = formDados.audience || formDados.Audience || [];
+
                         const camposFormatados = (formDados.fields || formDados.Fields || []).map(f => {
                             const widthFormatado = f.width || f.Width || 'full';
                             if (f.type === 'table' || f.Type === 'table') {
@@ -586,8 +639,18 @@ export default function CreateForm() {
                             return f;
                         });
 
+                        setNome(tituloFormatado);
+                        setDescricao(descricaoFormatada);
                         setFields(camposFormatados);
-                        setAudience(formDados.audience || formDados.Audience || []);
+                        setAudience(audienceFormatada);
+
+                        // Guarda o snapshot inicial para detetar alterações posteriores.
+                        setInitialSnapshot(JSON.stringify({
+                            nome: tituloFormatado,
+                            descricao: descricaoFormatada,
+                            audience: audienceFormatada,
+                            fields: camposFormatados,
+                        }));
                     } else {
                         alert('Erro ao carregar o formulário para edição.');
                     }
@@ -598,7 +661,34 @@ export default function CreateForm() {
 
             fetchFormDetails();
         }
-    }, [id]);
+    }, [id, navigate]);
+
+    // ── Deteção de alterações por guardar ──
+    // Compara o estado atual com o snapshot inicial. Só é relevante em modo edição.
+    const currentSnapshot = JSON.stringify({ nome, descricao, audience, fields });
+    const isDirty = !!id && initialSnapshot !== null && initialSnapshot !== currentSnapshot;
+
+    // ── Aviso ao fechar / recarregar a tab com alterações por guardar ──
+    useEffect(() => {
+        if (!isDirty) return;
+
+        const handler = (e) => {
+            e.preventDefault();
+            // Em browsers modernos basta atribuir uma string a returnValue;
+            // o texto exato é ignorado e é mostrado o aviso nativo do browser.
+            e.returnValue = '';
+        };
+
+        window.addEventListener('beforeunload', handler);
+        return () => window.removeEventListener('beforeunload', handler);
+    }, [isDirty]);
+
+    // ── Navegação interna (botão Voltar) protegida ──
+    const handleVoltar = (e) => {
+        e.preventDefault();
+        if (isDirty && !window.confirm('Tens alterações por guardar. Sair na mesma?')) return;
+        navigate('/');
+    };
 
     // ── Alternar público-alvo ──
     // Permite selecionar/desselecionar Professores e Funcionários.
@@ -855,7 +945,14 @@ export default function CreateForm() {
             return;
         }
 
-        // Se não for final (é rascunho), submete diretamente
+        // Guardar como rascunho:
+        //  - Em modo edição: pede confirmação para sobrepor a versão anterior.
+        //  - Em modo criação: submete diretamente.
+        if (id) {
+            setShowConfirmSaveEdit(true);
+            return;
+        }
+
         await submeterFormulario(fieldsWithOrder, false);
     };
 
@@ -884,9 +981,16 @@ export default function CreateForm() {
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Erro do backend:', errorText);
-                alert('Erro ao criar formulário.');
+                // Tenta extrair a mensagem do backend (ex.: 403 quando se tenta editar publicado).
+                let backendMessage = null;
+                try {
+                    const errorJson = await response.json();
+                    backendMessage = errorJson?.message;
+                } catch {
+                    // Resposta não-JSON; segue para mensagem genérica.
+                }
+                console.error('Erro do backend:', response.status, backendMessage);
+                alert(backendMessage || (id ? 'Erro ao atualizar formulário.' : 'Erro ao criar formulário.'));
                 setIsLoading(false);
                 return;
             }
@@ -894,6 +998,8 @@ export default function CreateForm() {
             const data = await response.json();
             console.log('Formulário submetido com sucesso:', data);
 
+            // Snapshot atualizado para que o estado deixe de estar "dirty".
+            setInitialSnapshot(currentSnapshot);
             alert(isFinal ? 'Formulário publicado com sucesso!' : 'Rascunho guardado com sucesso!');
             navigate('/');
         } catch (error) {
@@ -903,17 +1009,17 @@ export default function CreateForm() {
         }
     };
 
+    // ── Construir o payload de fields com ordem e ajustes para tabela ──
+    const buildFieldsWithOrder = () => fields.map((field, index) => ({
+        ...field,
+        order: index,
+        options: field.type === 'table' ? field.tableColumns : field.options,
+        tableRowCount: field.type === 'table' ? field.tableRows : undefined,
+    }));
+
     // ── Handler para confirmar publicação ──
     const handleConfirmPublish = async () => {
-        // Substitui o bloco atual por este:
-        const fieldsWithOrder = fields.map((field, index) => ({
-            ...field,
-            order: index,
-            options: field.type === 'table' ? field.tableColumns : field.options,
-            tableRowCount: field.type === 'table' ? field.tableRows : undefined
-        }));
-
-        await submeterFormulario(fieldsWithOrder, true);
+        await submeterFormulario(buildFieldsWithOrder(), true);
         setShowConfirmPublish(false);
     };
 
@@ -922,11 +1028,25 @@ export default function CreateForm() {
         setShowConfirmPublish(false);
     };
 
+    // ── Handlers para o modal de gravação de edição (rascunho existente) ──
+    const handleConfirmSaveEdit = async () => {
+        await submeterFormulario(buildFieldsWithOrder(), false);
+        setShowConfirmSaveEdit(false);
+    };
+
+    const handleCancelSaveEdit = () => {
+        setShowConfirmSaveEdit(false);
+    };
+
     return (
         <div className="space-y-6">
             {/* Cabeçalho da página */}
             <div className="flex flex-col gap-4">
-                <Link to="/" className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80">
+                <Link
+                    to="/"
+                    onClick={handleVoltar}
+                    className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80"
+                >
                     ← Voltar
                 </Link>
                 <h2 className="text-3xl font-bold text-text-h">Novo Formulário</h2>
@@ -1134,6 +1254,14 @@ export default function CreateForm() {
                 isOpen={showConfirmPublish}
                 onConfirm={handleConfirmPublish}
                 onCancel={handleCancelPublish}
+                isLoading={isLoading}
+            />
+
+            {/* Modal de confirmação de gravação de edição (rascunho existente) */}
+            <ConfirmSaveEditModal
+                isOpen={showConfirmSaveEdit}
+                onConfirm={handleConfirmSaveEdit}
+                onCancel={handleCancelSaveEdit}
                 isLoading={isLoading}
             />
         </div>

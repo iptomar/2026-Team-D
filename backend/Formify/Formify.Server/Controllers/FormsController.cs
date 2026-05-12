@@ -167,6 +167,16 @@ namespace Formify.Server.Controllers
                 return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
             }
 
+            // Um formulário publicado não pode ser editado.
+            // A única transição permitida sobre um publicado é voltar a rascunho (StatusDraft = true).
+            if (!formToUpdate.StatusDrafted && !request.StatusDraft)
+            {
+                return StatusCode(403, new
+                {
+                    message = "Não é possível editar um formulário publicado. Mova-o primeiro para rascunho."
+                });
+            }
+
             // Atualiza os dados do formulário existente
             formToUpdate.Title = request.Title.Trim();
             formToUpdate.Description = request.Description?.Trim();
