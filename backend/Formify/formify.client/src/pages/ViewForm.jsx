@@ -31,29 +31,19 @@ function FieldReadOnly({ field }) {
             return <input disabled type="text" placeholder={field.placeholder} className={inputCls} />;
 
         case 'textarea':
-            return <textarea disabled placeholder={field.placeholder} rows={3} className={`${inputCls} resize-none`} />;
+            return <textarea disabled placeholder={field.placeholder} rows={2} className={`${inputCls} resize-none`} />;
 
         case 'number':
-            return <input disabled type="number" placeholder="0" className={inputCls} />;
+            return <input disabled type="number" placeholder={field.placeholder || '0'} className={inputCls} />;
 
         case 'date':
             return <input disabled type="date" className={inputCls} />;
 
         case 'dropdown':
             return (
-                <select
-                    className={`${inputCls} cursor-default`} // Removemos o 'cursor-not-allowed' para o utilizador saber que pode clicar
-                    defaultValue=""
-                    // Impede qualquer mudança de valor se o utilizador tentar forçar via teclado
-                    onChange={(e) => e.preventDefault()}
-                >
-                    <option value="" disabled hidden>
-                        {field.placeholder || 'Clique para ver as opções...'}
-                    </option>
-                    {field.options?.map((o, i) => (
-                        <option key={i} disabled className="text-gray-400">
-                            {o}
-                        </option>
+                <select disabled className={inputCls}>
+                    {(field.options?.length ? field.options : ['Opção 1', 'Opção 2']).map((o, i) => (
+                        <option key={i}>{o}</option>
                     ))}
                 </select>
             );
@@ -72,7 +62,7 @@ function FieldReadOnly({ field }) {
             );
 
         case 'table': {
-            const cols = field.tableColumns?.length ? field.tableColumns : ['Coluna A', 'Coluna B'];
+            const cols = field.tableColumns?.length ? field.tableColumns : ['Coluna A', 'Coluna B', 'Coluna C'];
             return (
                 <div className="overflow-x-auto rounded border border-gray-100">
                     <table className="w-full border-collapse text-xs">
@@ -86,7 +76,7 @@ function FieldReadOnly({ field }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {Array.from({ length: field.tableRows || 1 }).map((_, r) => (
+                            {Array.from({ length: field.tableRows || 2 }).map((_, r) => (
                                 <tr key={r}>
                                     {cols.map((_, i) => (
                                         <td key={i} className="border-b border-gray-100 px-3 py-2 text-gray-300">—</td>
@@ -190,7 +180,7 @@ export default function FormViewer() {
                                     <div className="h-px w-full bg-gray-100" />
                                 </div>
                                 {field.description && (
-                                    <p className="text-xs text-gray-400 mt-1">{field.description}</p>
+                                    <p className="mt-1 text-center text-xs text-gray-400">{field.description}</p>
                                 )}
                             </div>
                         );
