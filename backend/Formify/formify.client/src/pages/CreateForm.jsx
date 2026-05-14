@@ -618,7 +618,7 @@ export default function CreateForm() {
                         const isPublished = (formDados.statusDrafted ?? formDados.StatusDrafted) === false;
                         if (isPublished) {
                             alert('Este formulário está publicado e não pode ser editado. Move-o primeiro para rascunho.');
-                            navigate('/');
+                            navigate('/admin');
                             return;
                         }
 
@@ -687,7 +687,7 @@ export default function CreateForm() {
     const handleVoltar = (e) => {
         e.preventDefault();
         if (isDirty && !window.confirm('Tens alterações por guardar. Sair na mesma?')) return;
-        navigate('/');
+        navigate('/admin');
     };
 
     // ── Alternar público-alvo ──
@@ -1001,7 +1001,7 @@ export default function CreateForm() {
             // Snapshot atualizado para que o estado deixe de estar "dirty".
             setInitialSnapshot(currentSnapshot);
             alert(isFinal ? 'Formulário publicado com sucesso!' : 'Rascunho guardado com sucesso!');
-            navigate('/');
+            navigate('/admin');
         } catch (error) {
             console.error('Erro de ligação ao backend:', error);
             alert('Não foi possível ligar ao backend.');
@@ -1043,7 +1043,7 @@ export default function CreateForm() {
             {/* Cabeçalho da página */}
             <div className="flex flex-col gap-4">
                 <Link
-                    to="/"
+                    to="/admin"
                     onClick={handleVoltar}
                     className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80"
                 >

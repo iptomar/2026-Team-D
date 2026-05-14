@@ -1,5 +1,8 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateForm from './pages/CreateForm';
 import ViewForm from './pages/ViewForm';
@@ -9,8 +12,11 @@ export default function App() {
     return (
         <Router>
             <Layout>
-                <Routes>                 
-                    <Route path="/" element={<AdminDashboard isDraft={false} />} />
+                <Routes>
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/admin" element={<AdminDashboard isDraft={false} />} />
                     <Route path="/DraftedForms" element={<AdminDashboard isDraft={true} />} />
                     <Route path="/professor" element={<ProfessorDashboard />} />
                     <Route path="/CreateForm" element={<CreateForm />} />
