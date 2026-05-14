@@ -64,7 +64,7 @@ export default function Sidebar() {
           </>
         ) : (
           <>
-            <Link to="/" className={linkCls}>
+            <Link to="/admin" className={linkCls}>
               Formulários
             </Link>
             <Link to="/DraftedForms" className={linkCls}>
@@ -73,6 +73,9 @@ export default function Sidebar() {
             <Link to="/CreateForm" className={linkCls}>
               Criar Formulário
             </Link>
+            <button type="button" onClick={handleLogout} className={buttonCls}>
+              Logout
+            </button>
           </>
         )}
       </nav>

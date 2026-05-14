@@ -1,17 +1,24 @@
+import { useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 
 /**
  * Layout Component
- * 
- * Estrutura principal da aplicação com navegação lateral fixa.
+ *
+ * Estrutura principal da aplicação.
+ * Em rotas públicas (landing, login, registo) a sidebar é omitida.
  */
 export default function Layout({ children }) {
+  const location = useLocation();
+  const path = location.pathname.toLowerCase();
+  const publicRoutes = ['/', '/login', '/register'];
+  const isPublic = publicRoutes.includes(path);
+
   return (
     <div className="flex min-h-screen min-h-[100dvh] bg-white">
-      <Sidebar />
+      {!isPublic && <Sidebar />}
 
       <div className="flex min-h-screen min-h-[100dvh] flex-1 flex-col">
-        <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8">
+        <main className={`flex-1 ${isPublic ? '' : 'px-4 py-8 sm:px-6 lg:px-8'}`}>
           {children}
         </main>
 
