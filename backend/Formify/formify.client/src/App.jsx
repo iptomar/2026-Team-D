@@ -1,18 +1,28 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout/Layout';
+import Landing from './pages/Landing';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import AdminDashboard from './pages/AdminDashboard';
 import CreateForm from './pages/CreateForm';
-import DraftedForms from './pages/DraftedForms';
-
+import ViewForm from './pages/ViewForm';
+import ProfessorDashboard from './pages/Professor/ProfessorDashboard';
+import FuncionarioDashboard from './pages/funcionario/FuncionarioDashboard';
 export default function App() {
     return (
         <Router>
             <Layout>
                 <Routes>
-                    <Route path="/" element={<AdminDashboard />} />
-                    <Route path="/DraftedForms" element={<DraftedForms />} />
+                    <Route path="/" element={<Landing />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/admin" element={<AdminDashboard isDraft={false} />} />
+                    <Route path="/DraftedForms" element={<AdminDashboard isDraft={true} />} />
+                    <Route path="/professor" element={<ProfessorDashboard />} />
                     <Route path="/CreateForm" element={<CreateForm />} />
                     <Route path="/edit-form/:id" element={<CreateForm />} />
+                    <Route path="/ViewForm/:id" element={<ViewForm />} />
+                    <Route path="/funcionario" element={<FuncionarioDashboard />} />
                 </Routes>
             </Layout>
         </Router>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, cache } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toast from '../components/Toast';
 
@@ -97,17 +97,19 @@ function ConfirmPublishModal({ isOpen, onConfirm, onCancel, isLoading }) {
     );
 }
 
-function ConfirmLeaveModal({ isOpen, onConfirm, onCancel, isLoading }) {
+// ─── Modal de confirmação de gravação de edição ───────────────────────────────
+// Pedido de confirmação antes de gravar alterações num rascunho já existente.
+function ConfirmSaveEditModal({ isOpen, onConfirm, onCancel, isLoading }) {
     if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Sair sem guardar alterações?
+                    Guardar e voltar?
                 </h3>
                 <p className="text-sm text-gray-600 mb-6">
-                    Tens a certeza? Vais perder todas as alterações não guardadas.
+                    Vais guardar as alterações como rascunho antes de sair da página.
                 </p>
 
                 <div className="flex justify-end gap-3">
@@ -117,15 +119,15 @@ function ConfirmLeaveModal({ isOpen, onConfirm, onCancel, isLoading }) {
                         disabled={isLoading}
                         className="rounded-md border border-gray-300 px-4 py-2 font-medium text-gray-700 transition-all hover:bg-gray-50 disabled:opacity-50"
                     >
-                        Voltar ao editor
+                        Cancelar
                     </button>
                     <button
                         type="button"
                         onClick={onConfirm}
                         disabled={isLoading}
-                        className="rounded-md bg-red-600 px-4 py-2 font-medium text-white transition-all hover:bg-red-700 disabled:opacity-50"
+                        className="rounded-md bg-blue-600 px-4 py-2 font-medium text-white transition-all hover:bg-blue-700 disabled:opacity-50"
                     >
-                        Sair
+                        {isLoading ? 'A Guardar...' : 'Sim, guardar'}
                     </button>
                 </div>
             </div>
@@ -618,7 +620,7 @@ export default function CreateForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
-    const [showLeaveConfirm, setShowLeaveConfirm] = useState(false);
+    const [showConfirmSaveEdit, setShowConfirmSaveEdit] = useState(false);
     const [toasts, setToasts] = useState([]);
     const [initialSnapshot, setInitialSnapshot] = useState(null);
 
@@ -626,6 +628,7 @@ export default function CreateForm() {
     const dragIndex = useRef(null);
     const [dragOverIndex, setDragOverIndex] = useState(null);
     const dragTypeRef = useRef(null);
+
     const navigate = useNavigate();
     const selectedField = fields.find(f => f.id === selectedId) || null;
 
@@ -641,34 +644,64 @@ export default function CreateForm() {
     const isDirty = Boolean(id && initialSnapshot && JSON.stringify(currentSnapshot) !== JSON.stringify(initialSnapshot));
 
     useEffect(() => {
-        if (id) {
-            // Modo Edição: Buscar os dados do formulário ao Backend
-            const fetchFormDetails = async () => {
-                try {
-                    const response = await fetch(`/api/Forms/${id}`);
-                    if (response.ok) {
-                        const formDados = await response.json();
-                        const normalizedFields = normalizeFieldList(formDados.fields || formDados.Fields || []);
-                        const loadedNome = formDados.title || formDados.Title || '';
-                        const loadedDescricao = formDados.description || formDados.Description || '';
-                        const loadedAudience = formDados.audience || formDados.Audience || [];
+        if (!id) return;
 
-                        setNome(loadedNome);
-                        setDescricao(loadedDescricao);
-                        setFields(normalizedFields);
-                        setAudience(loadedAudience);
-                        setInitialSnapshot(buildFormSnapshot(loadedNome.trim(), loadedDescricao, loadedAudience, normalizedFields));
-                    } else {
-                        pushToast('error', 'Não foi possível carregar o formulário para edição.');
-                    }
-                } catch {
-                    pushToast('error', 'Não foi possível ligar ao servidor.');
+        const fetchFormDetails = async () => {
+            try {
+                const response = await fetch(`/api/Forms/${id}`);
+
+                if (!response.ok) {
+                    pushToast('error', 'Não foi possível carregar o formulário para edição.');
+                    return;
                 }
-            };
 
-            fetchFormDetails();
+                const formDados = await response.json();
+
+                const isPublished = (formDados.statusDrafted ?? formDados.StatusDrafted) === false;
+                if (isPublished) {
+                    pushToast('error', 'Este formulário está publicado e não pode ser editado.');
+                    navigate('/admin');
+                    return;
+                }
+
+                const loadedNome = formDados.title || formDados.Title || '';
+                const loadedDescricao = formDados.description || formDados.Description || '';
+                const loadedAudience = formDados.audience || formDados.Audience || [];
+                const loadedFields = normalizeFieldList(formDados.fields || formDados.Fields || []);
+
+                setNome(loadedNome);
+                setDescricao(loadedDescricao);
+                setFields(loadedFields);
+                setAudience(loadedAudience);
+                setInitialSnapshot(buildFormSnapshot(loadedNome.trim(), loadedDescricao, loadedAudience, loadedFields));
+            } catch {
+                pushToast('error', 'Não foi possível ligar ao servidor.');
+            }
+        };
+
+        fetchFormDetails();
+    }, [id, navigate]);
+
+    useEffect(() => {
+        if (!isDirty) return;
+
+        const handler = (e) => {
+            e.preventDefault();
+            e.returnValue = '';
+        };
+
+        window.addEventListener('beforeunload', handler);
+        return () => window.removeEventListener('beforeunload', handler);
+    }, [isDirty]);
+
+    const handleVoltar = () => {
+        if (isDirty) {
+            setShowConfirmSaveEdit(true);
+            return;
         }
-    }, [id]);
+
+        navigate('/admin');
+    };
 
     // ── Alternar público-alvo ──
     // Permite selecionar/desselecionar Professores e Funcionários.
@@ -925,11 +958,25 @@ export default function CreateForm() {
             return;
         }
 
-        // Se não for final (é rascunho), submete diretamente
+        // Guardar como rascunho:
+        //  - Em modo edição: pede confirmação para sobrepor a versão anterior.
+        //  - Em modo criação: submete diretamente.
+        if (id) {
+            setShowConfirmSaveEdit(true);
+            return;
+        }
+
         await submeterFormulario(fieldsWithOrder, false);
     };
 
-    // ── Função para submeter o formulário ao backend ──
+    const buildFieldsWithOrder = () => fields.map((field, index) => ({
+        ...field,
+        order: index,
+        options: field.type === 'table' ? field.tableColumns : field.options,
+        tableRowCount: field.type === 'table' ? field.tableRows : undefined,
+    }));
+
+    // ── Submissão do formulário ──
     const submeterFormulario = async (fieldsWithOrder, isFinal) => {
         setIsLoading(true);
 
@@ -941,7 +988,7 @@ export default function CreateForm() {
             const method = id ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
-                method: method,
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     Id: id,
@@ -954,43 +1001,30 @@ export default function CreateForm() {
             });
 
             if (!response.ok) {
-
                 let backendMessage = null;
 
                 try {
                     const errorJson = await response.json();
+                    backendMessage = errorJson?.message || errorJson?.title || null;
 
-                    backendMessage = errorJson?.message;
-
-                    if (errorJson.errors) {
-                        // This joins all validation messages into one string
+                    if (errorJson?.errors) {
                         backendMessage = Object.values(errorJson.errors).flat().join('\n');
                     }
-                    // 2. Check if it's a simple message (like your manual BadRequest checks)
-                    else if (errorJson.message) {
-                        backendMessage = errorJson.message;
-                    }
-                    // 3. Fallback to title
-                    else if (errorJson.title) {
-                        backendMessage = errorJson.title;
-                    }
                 } catch {
-                    // If parsing fails, we can ignore it and use a generic error message
+                    // resposta sem JSON
                 }
 
-                pushToast('error', backendMessage || 'Erro ao guardar o formulário.');
+                pushToast('error', backendMessage || (id ? 'Erro ao atualizar formulário.' : 'Erro ao criar formulário.'));
                 setIsLoading(false);
                 return;
             }
 
             await response.json();
             pushToast('success', isFinal ? 'Formulário publicado com sucesso.' : 'Rascunho guardado com sucesso.');
-
-            // Snapshot atualizado para que o estado deixe de estar "dirty".
-            setInitialSnapshot(currentSnapshot);
-
+            setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields));
+            setIsLoading(false);
             window.setTimeout(() => navigate('/admin'), 1400);
-         } catch {
+        } catch {
             pushToast('error', 'Não foi possível ligar ao backend.');
             setIsLoading(false);
         }
@@ -998,15 +1032,8 @@ export default function CreateForm() {
 
     // ── Handler para confirmar publicação ──
     const handleConfirmPublish = async () => {
-        const fieldsWithOrder = fields.map((field, index) => ({
-            ...field,
-            order: index,
-            options: field.type === 'table' ? field.tableColumns : field.options,
-            tableRowCount: field.type === 'table' ? field.tableRows : undefined
-        }));
-
+        await submeterFormulario(buildFieldsWithOrder(), true);
         setShowConfirmPublish(false);
-        await submeterFormulario(fieldsWithOrder, true);
     };
 
     // ── Handler para cancelar publicação ──
@@ -1014,25 +1041,25 @@ export default function CreateForm() {
         setShowConfirmPublish(false);
     };
 
-    const handleBackClick = () => {
-        if (isDirty) {
-            setShowLeaveConfirm(true);
-            return;
-        }
-
-        navigate('/');
+    // ── Handler para guardar edição ──
+    const handleConfirmSaveEdit = async () => {
+        await submeterFormulario(buildFieldsWithOrder(), false);
+        setShowConfirmSaveEdit(false);
     };
 
-    const handleLeaveConfirm = () => {
-        setShowLeaveConfirm(false);
-        navigate('/');
+    const handleCancelSaveEdit = () => {
+        setShowConfirmSaveEdit(false);
     };
 
     return (
         <div className="space-y-6">
             {/* Cabeçalho da página */}
             <div className="flex flex-col gap-4">
-                <button type="button" onClick={handleBackClick} className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80">
+                <button
+                    type="button"
+                    onClick={handleVoltar}
+                    className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80"
+                >
                     ← Voltar
                 </button>
                 <h2 className="text-3xl font-bold text-text-h">{id ? 'Editar Formulário' : 'Novo Formulário'}</h2>
@@ -1237,15 +1264,15 @@ export default function CreateForm() {
             </form>
 
             <div className="fixed right-6 top-6 z-[60] flex max-w-sm flex-col gap-3">
-                 {toasts.map(toast => (
-                     <Toast
-                         key={toast.id}
-                         type={toast.type}
-                         message={toast.message}
-                         onClose={() => setToasts(prev => prev.filter(item => item.id !== toast.id))}
-                     />
-                 ))}
-             </div>
+                {toasts.map(toast => (
+                    <Toast
+                        key={toast.id}
+                        type={toast.type}
+                        message={toast.message}
+                        onClose={() => setToasts(prev => prev.filter(item => item.id !== toast.id))}
+                    />
+                ))}
+            </div>
 
             {/* Modal de confirmação de publicação */}
             <ConfirmPublishModal
@@ -1255,10 +1282,11 @@ export default function CreateForm() {
                 isLoading={isLoading}
             />
 
-            <ConfirmLeaveModal
-                isOpen={showLeaveConfirm}
-                onConfirm={handleLeaveConfirm}
-                onCancel={() => setShowLeaveConfirm(false)}
+            {/* Modal de confirmação de gravação de edição (rascunho existente) */}
+            <ConfirmSaveEditModal
+                isOpen={showConfirmSaveEdit}
+                onConfirm={handleConfirmSaveEdit}
+                onCancel={handleCancelSaveEdit}
                 isLoading={isLoading}
             />
         </div>
