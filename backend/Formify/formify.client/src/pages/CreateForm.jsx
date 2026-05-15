@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, cache } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toast from '../components/Toast';
 
@@ -954,15 +954,42 @@ export default function CreateForm() {
             });
 
             if (!response.ok) {
-                const errorText = await response.text();
-                pushToast('error', errorText || 'Erro ao guardar o formulário.');
+
+                let backendMessage = null;
+
+                try {
+                    const errorJson = await response.json();
+
+                    backendMessage = errorJson?.message;
+
+                    if (errorJson.errors) {
+                        // This joins all validation messages into one string
+                        backendMessage = Object.values(errorJson.errors).flat().join('\n');
+                    }
+                    // 2. Check if it's a simple message (like your manual BadRequest checks)
+                    else if (errorJson.message) {
+                        backendMessage = errorJson.message;
+                    }
+                    // 3. Fallback to title
+                    else if (errorJson.title) {
+                        backendMessage = errorJson.title;
+                    }
+                } catch {
+                    // If parsing fails, we can ignore it and use a generic error message
+                }
+
+                pushToast('error', backendMessage || 'Erro ao guardar o formulário.');
                 setIsLoading(false);
                 return;
             }
 
             await response.json();
             pushToast('success', isFinal ? 'Formulário publicado com sucesso.' : 'Rascunho guardado com sucesso.');
-            window.setTimeout(() => navigate('/'), 1400);
+
+            // Snapshot atualizado para que o estado deixe de estar "dirty".
+            setInitialSnapshot(currentSnapshot);
+
+            window.setTimeout(() => navigate('/admin'), 1400);
          } catch {
             pushToast('error', 'Não foi possível ligar ao backend.');
             setIsLoading(false);
