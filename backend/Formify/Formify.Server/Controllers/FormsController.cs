@@ -19,29 +19,28 @@ namespace Formify.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateFormRequest request)
         {
-            // Validação automática das anotações existentes no DTO.
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(ModelState);
-            }
-
             // Garante que o formulário tem nome.
             if (string.IsNullOrWhiteSpace(request.Title))
             {
-                return BadRequest(new { message = "O nome do formulário é obrigatório." });
+                ModelState.AddModelError(nameof(request.Title), "O nome do formulário é obrigatório.");
             }
 
             // Garante que foi selecionado pelo menos um público-alvo.
             if (request.Audience == null || !request.Audience.Any())
             {
-                return BadRequest(new { message = "É obrigatório selecionar pelo menos um público-alvo." });
+                ModelState.AddModelError(nameof(request.Audience), "É obrigatório selecionar pelo menos um público-alvo.");
             }
 
             // Garante que o formulário tem pelo menos um campo real.
-            // O tipo "section" serve apenas como separador visual e não conta como campo de resposta.
             if (request.Fields == null || !request.Fields.Any(f => f.Type != "section"))
             {
-                return BadRequest(new { message = "O formulário deve conter pelo menos um campo." });
+                ModelState.AddModelError(nameof(request.Fields), "O formulário deve conter pelo menos um campo.");
+            }
+
+            // If any of our manual business checks failed, trigger the validation problem format
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
             }
 
             // Carrega os formulários existentes para gerar o próximo ID e acrescentar o novo formulário.
