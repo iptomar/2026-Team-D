@@ -1,0 +1,34 @@
+[
+  {
+    "Id": 1,
+    "Name": "Admin One",
+    "Username": "admin1",
+    "PasswordHash": "",
+    "Salt": "",
+    "Role": "admin"
+  },
+  {
+    "Id": 2,
+    "Name": "Sebasti\u00E3o Duarte",
+    "Username": "sebadje",
+    "PasswordHash": "sZ0E7YY30c6PyR3IebREA\u002BpisiC5y7F1hAQ80\u002BLWeBU=",
+    "Salt": "NTiQIU8Va9nAU\u002BMRYxbkzQ==",
+    "Role": "professor"
+  },
+  {
+    "Id": 3,
+    "Name": "Artur Costa Familia",
+    "Username": "juba",
+    "PasswordHash": "c8PDGDMduVKF2/DnlXDkp7aoLL2jypfOjIY\u002B0rTvLNU=",
+    "Salt": "01FbmI42nU1edSI0Bzc34g==",
+    "Role": "funcionario"
+  },
+  {
+    "Id": 4,
+    "Name": "Admin sistema",
+    "Username": "sysadmin",
+    "PasswordHash": "18GXjxZaiTGZI6L0HE\u002B84SaxnMup2NJIB0PWpFwfg6k=",
+    "Salt": "T7uYSfpg5kpabHCwhHXY5w==",
+    "Role": "admin"
+  }
+]
