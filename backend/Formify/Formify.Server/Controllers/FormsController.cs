@@ -96,6 +96,26 @@ namespace Formify.Server.Controllers
             return Ok(publishedForms);
         }
 
+        // estatísticas simples (contagens)
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+            var total = allForms?.Count ?? 0;
+            var published = allForms?.Count(f => !f.StatusDrafted) ?? 0;
+            var drafted = allForms?.Count(f => f.StatusDrafted) ?? 0;
+
+            return Ok(new
+            {
+                totalForms = total,
+                publishedForms = published,
+                draftedForms = drafted
+            });
+        }
+
+
+
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

@@ -6,6 +6,14 @@ import { Link, useNavigate } from 'react-router-dom';
  * Serve tanto para listar Formulários Publicados como Rascunhos.
  */
 export default function AdminDashboard({ isDraft = false }) {
+    // Estatísticas (dados em tempo real do backend)
+    const [stats, setStats] = useState({
+        totalForms: 0,
+        publishedForms: 0,
+        draftedForms: 0
+    });
+    const [isStatsLoading, setIsStatsLoading] = useState(true);
+
     // Lista de formulários carregados a partir do backend
     const [forms, setForms] = useState([]);
 
@@ -29,11 +37,24 @@ export default function AdminDashboard({ isDraft = false }) {
 
     const navigate = useNavigate();
 
-    // ─── Textos Dinâmicos ───
-    // Mudam dependendo se estamos a ver Rascunhos (isDraft = true) ou Publicados
-    const pageTitle = isDraft ? "Formulários em Rascunho" : "Formulários";
-    const pageSubtitle = isDraft ? "Listagem dos formulários por concluir" : "Listagem dos formulários publicados";
-    const emptyMessage = isDraft ? "Nenhum rascunho encontrado" : "Nenhum formulário publicado encontrado";
+    // ─── Buscar estatísticas ───
+    useEffect(() => {
+        const fetchStats = async () => {
+            try {
+                setIsStatsLoading(true);
+                const res = await fetch('http://localhost:5208/api/Forms/stats');
+                if (!res.ok) throw new Error('Erro ao obter estatísticas');
+                const data = await res.json();
+                setStats(data);
+            } catch (err) {
+                console.error('Erro a carregar stats:', err);
+            } finally {
+                setIsStatsLoading(false);
+            }
+        };
+
+        fetchStats();
+    }, []);
 
     // Carrega os formulários quando a página é aberta
     useEffect(() => {
@@ -221,9 +242,9 @@ export default function AdminDashboard({ isDraft = false }) {
             <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div>
                     {/* Títulos dinâmicos baseados no state isDraft */}
-                    <h2 className="text-3xl font-bold text-text-h">{pageTitle}</h2>
+                    <h2 className="text-3xl font-bold text-text-h">{isDraft ? "Formulários em Rascunho" : "Formulários"}</h2>
                     <p className="mt-2 text-lg text-text">
-                        {pageSubtitle}
+                        {isDraft ? "Listagem dos formulários por concluir" : "Listagem dos formulários publicados"}
                     </p>
                 </div>
 
@@ -233,6 +254,44 @@ export default function AdminDashboard({ isDraft = false }) {
                 >
                     + Novo Formulário
                 </Link>
+            </div>
+
+            {/* Blocos de estatísticas (A plataforma em números) */}
+            <div className="grid gap-4 sm:grid-cols-3">
+                <div className="rounded-lg border border-accent-border p-6 bg-white">
+                    <h3 className="text-sm font-medium text-text-h">A plataforma em números</h3>
+                    <p className="text-xs text-text mt-1">Dados em tempo real do sistema</p>
+
+                    <div className="mt-4">
+                        <div className="text-3xl font-bold text-green-700">
+                            {isStatsLoading ? '—' : stats.totalForms}
+                        </div>
+                        <div className="text-sm text-text mt-1">Formulários no total</div>
+                        <div className="text-xs text-text mt-2">A crescer com a atividade do IPT</div>
+                    </div>
+                </div>
+
+                <div className="rounded-lg border border-accent-border p-6 bg-white">
+                    <h3 className="text-sm font-medium text-text-h">Formulários publicados</h3>
+                    <p className="text-xs text-text mt-1">Disponíveis para preenchimento</p>
+
+                    <div className="mt-4">
+                        <div className="text-3xl font-bold text-green-700">
+                            {isStatsLoading ? '—' : stats.publishedForms}
+                        </div>
+                    </div>
+                </div>
+
+                <div className="rounded-lg border border-accent-border p-6 bg-white">
+                    <h3 className="text-sm font-medium text-text-h">Em rascunho</h3>
+                    <p className="text-xs text-text mt-1">Em preparação pela administração</p>
+
+                    <div className="mt-4">
+                        <div className="text-3xl font-bold text-amber-600">
+                            {isStatsLoading ? '—' : stats.draftedForms}
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* Filtros */}
@@ -292,10 +351,10 @@ export default function AdminDashboard({ isDraft = false }) {
                 ) : filteredAndSortedForms.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
                         <p className="text-xl font-semibold text-text-h">
-                            {emptyMessage}
+                            Nenhum formulário encontrado
                         </p>
                         <p className="mt-2 text-text">
-                            Tenta ajustar os filtros ou publica um formulário.
+                            Tenta ajustar os filtros ou cria um novo formulário.
                         </p>
                     </div>
                 ) : (
