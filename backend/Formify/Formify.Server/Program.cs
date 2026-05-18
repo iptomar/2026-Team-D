@@ -1,6 +1,9 @@
 using Formify.Server.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,21 +28,50 @@ builder.Services.AddControllers()
     });
 builder.Services.AddOpenApi();
 
-//teste
+// services
 builder.Services.AddSingleton<JsonHandler>();
+builder.Services.AddSingleton<UsersService>();
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("https://localhost:56709")
+        policy.WithOrigins("http://localhost:3000", "https://localhost:56709")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
 });
 
+// Configure JWT authentication
+var jwtKey = builder.Configuration["Jwt:Key"] ?? "dev-secret-key-please-change";
+var keyBytes = Encoding.UTF8.GetBytes(jwtKey);
+// Ensure key is at least 256 bits for HMAC-SHA256; if shorter, derive a 256-bit key using SHA256
+if (keyBytes.Length < 32)
+{
+    using var sha = System.Security.Cryptography.SHA256.Create();
+    keyBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(jwtKey));
+}
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(keyBytes)
+    };
+});
+
 var app = builder.Build();
-//teste
+
 app.UseDefaultFiles();
 app.MapStaticAssets();
 
@@ -53,6 +85,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseCors("AllowFrontend");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

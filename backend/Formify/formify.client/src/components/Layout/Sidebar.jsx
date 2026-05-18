@@ -28,7 +28,12 @@ export default function Sidebar() {
   };
 
   const handleLogout = () => {
-    alert('Sessão terminada (mock).');
+    // Limpar dados de autenticação no client e redirecionar para a landing
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('username');
+    // Opcional: event para componentes subscritos reagirem
+    window.dispatchEvent(new Event('app:logout'));
     navigate('/');
   };
 

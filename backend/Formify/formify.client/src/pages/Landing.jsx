@@ -64,18 +64,29 @@ export default function Landing() {
                         </p>
 
                         <div className="flex flex-col items-center gap-4 pt-2 sm:flex-row sm:justify-center lg:justify-start">
-                            <Link
-                                to="/register"
-                                className="w-full rounded-lg bg-accent px-8 py-3 text-center text-base font-semibold text-white shadow-custom transition-transform hover:-translate-y-0.5 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:w-auto"
-                            >
-                                Criar conta
-                            </Link>
-                            <Link
-                                to="/login"
-                                className="w-full rounded-lg border-2 border-accent bg-white px-8 py-3 text-center text-base font-semibold text-accent transition-colors hover:bg-accent-bg focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:w-auto"
-                            >
-                                Iniciar sessão
-                            </Link>
+                            {localStorage.getItem('token') ? (
+                                <Link
+                                    to={localStorage.getItem('role') === 'admin' ? '/admin' : localStorage.getItem('role') === 'professor' ? '/professor' : localStorage.getItem('role') === 'funcionario' ? '/funcionario' : '/'}
+                                    className="w-full rounded-lg bg-accent px-8 py-3 text-center text-base font-semibold text-white shadow-custom transition-transform hover:-translate-y-0.5 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:w-auto"
+                                >
+                                    Ver formulários
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link
+                                        to="/register"
+                                        className="w-full rounded-lg bg-accent px-8 py-3 text-center text-base font-semibold text-white shadow-custom transition-transform hover:-translate-y-0.5 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:w-auto"
+                                    >
+                                        Criar conta
+                                    </Link>
+                                    <Link
+                                        to="/login"
+                                        className="w-full rounded-lg border-2 border-accent bg-white px-8 py-3 text-center text-base font-semibold text-accent transition-colors hover:bg-accent-bg focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:w-auto"
+                                    >
+                                        Iniciar sessão
+                                    </Link>
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -188,18 +199,29 @@ export default function Landing() {
                         de forma simples e organizada.
                     </p>
                     <div className="flex flex-col gap-3 sm:flex-row">
-                        <Link
-                            to="/register"
-                            className="rounded-lg bg-white px-8 py-3 text-base font-semibold text-accent shadow-sm transition-transform hover:-translate-y-0.5"
-                        >
-                            Criar conta
-                        </Link>
-                        <Link
-                            to="/login"
-                            className="rounded-lg border-2 border-white/80 px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10"
-                        >
-                            Iniciar sessão
-                        </Link>
+                        {localStorage.getItem('token') ? (
+                            <Link
+                                to={localStorage.getItem('role') === 'admin' ? '/admin' : localStorage.getItem('role') === 'professor' ? '/professor' : localStorage.getItem('role') === 'funcionario' ? '/funcionario' : '/'}
+                                className="rounded-lg bg-white px-8 py-3 text-base font-semibold text-accent shadow-sm transition-transform hover:-translate-y-0.5"
+                            >
+                                Ver formulários
+                            </Link>
+                        ) : (
+                            <>
+                                <Link
+                                    to="/register"
+                                    className="rounded-lg bg-white px-8 py-3 text-base font-semibold text-accent shadow-sm transition-transform hover:-translate-y-0.5"
+                                >
+                                    Criar conta
+                                </Link>
+                                <Link
+                                    to="/login"
+                                    className="rounded-lg border-2 border-white/80 px-8 py-3 text-base font-semibold text-white transition-colors hover:bg-white/10"
+                                >
+                                    Iniciar sessão
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
             </section>
