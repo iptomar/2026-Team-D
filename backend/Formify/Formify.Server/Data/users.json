@@ -30,13 +30,5 @@
     "PasswordHash": "18GXjxZaiTGZI6L0HE\u002B84SaxnMup2NJIB0PWpFwfg6k=",
     "Salt": "T7uYSfpg5kpabHCwhHXY5w==",
     "Role": "admin"
-  },
-  {
-    "Id": 5,
-    "Name": "Martim",
-    "Username": "Campos",
-    "PasswordHash": "Y/MHFWm/dG9cws\u002B0AkNnKbx\u002BpPzpNJ/XBgUBs1qLcLo=",
-    "Salt": "\u002Btmow1eyKXPc45khgAKHEQ==",
-    "Role": "professor"
   }
 ]

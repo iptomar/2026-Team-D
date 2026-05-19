@@ -28,7 +28,12 @@ export default function Sidebar() {
   };
 
   const handleLogout = () => {
-    alert('Sessão terminada (mock).');
+    // Limpar dados de autenticação no client e redirecionar para a landing
+    localStorage.removeItem('token');
+    localStorage.removeItem('role');
+    localStorage.removeItem('username');
+    // Opcional: event para componentes subscritos reagirem
+    window.dispatchEvent(new Event('app:logout'));
     navigate('/');
   };
 
@@ -64,7 +69,7 @@ export default function Sidebar() {
           </>
         ) : (
           <>
-            <Link to="/" className={linkCls}>
+            <Link to="/admin" className={linkCls}>
               Formulários
             </Link>
             <Link to="/DraftedForms" className={linkCls}>
@@ -73,6 +78,9 @@ export default function Sidebar() {
             <Link to="/CreateForm" className={linkCls}>
               Criar Formulário
             </Link>
+            <button type="button" onClick={handleLogout} className={buttonCls}>
+              Logout
+            </button>
           </>
         )}
       </nav>

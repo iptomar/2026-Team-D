@@ -21,29 +21,28 @@ namespace Formify.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateFormRequest request)
         {
-            // Validação automática das anotações existentes no DTO.
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(ModelState);
-            }
-
             // Garante que o formulário tem nome.
             if (string.IsNullOrWhiteSpace(request.Title))
             {
-                return BadRequest(new { message = "O nome do formulário é obrigatório." });
+                ModelState.AddModelError(nameof(request.Title), "O nome do formulário é obrigatório.");
             }
 
             // Garante que foi selecionado pelo menos um público-alvo.
             if (request.Audience == null || !request.Audience.Any())
             {
-                return BadRequest(new { message = "É obrigatório selecionar pelo menos um público-alvo." });
+                ModelState.AddModelError(nameof(request.Audience), "É obrigatório selecionar pelo menos um público-alvo.");
             }
 
             // Garante que o formulário tem pelo menos um campo real.
-            // O tipo "section" serve apenas como separador visual e não conta como campo de resposta.
             if (request.Fields == null || !request.Fields.Any(f => f.Type != "section"))
             {
-                return BadRequest(new { message = "O formulário deve conter pelo menos um campo." });
+                ModelState.AddModelError(nameof(request.Fields), "O formulário deve conter pelo menos um campo.");
+            }
+
+            // If any of our manual business checks failed, trigger the validation problem format
+            if (!ModelState.IsValid)
+            {
+                return ValidationProblem(ModelState);
             }
 
             // Carrega os formulários existentes para gerar o próximo ID e acrescentar o novo formulário.
@@ -98,6 +97,26 @@ namespace Formify.Server.Controllers
             // 3. Devolve a lista filtrada
             return Ok(publishedForms);
         }
+
+        // estatísticas simples (contagens)
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+            var total = allForms?.Count ?? 0;
+            var published = allForms?.Count(f => !f.StatusDrafted) ?? 0;
+            var drafted = allForms?.Count(f => f.StatusDrafted) ?? 0;
+
+            return Ok(new
+            {
+                totalForms = total,
+                publishedForms = published,
+                draftedForms = drafted
+            });
+        }
+
+
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)

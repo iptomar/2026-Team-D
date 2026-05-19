@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import Toast from '../components/Toast';
 
 // ─── Tipos de elementos disponíveis na paleta do editor ──────────────────────
 // Cada elemento representa um tipo de campo que pode ser arrastado/clicado
@@ -25,6 +26,37 @@ const AUDIENCE_OPTIONS = [
 
 function getTypeInfo(type) {
     return FIELD_TYPES.find(f => f.type === type) || FIELD_TYPES[0];
+}
+
+function normalizeField(field = {}) {
+    const type = field.type ?? field.Type ?? '';
+    const isTable = type === 'table';
+
+    return {
+        id: field.id ?? field.Id,
+        type,
+        label: field.label ?? field.Label ?? '',
+        placeholder: field.placeholder ?? field.Placeholder ?? '',
+        required: field.required ?? field.Required ?? false,
+        width: field.width ?? field.Width ?? 'full',
+        options: isTable ? [] : (field.options ?? field.Options ?? []),
+        tableColumns: isTable ? (field.tableColumns ?? field.options ?? field.Options ?? []) : (field.tableColumns ?? field.TableColumns ?? []),
+        tableRows: isTable ? (field.tableRows ?? field.tableRowCount ?? field.TableRowCount ?? 2) : (field.tableRows ?? field.TableRowCount ?? 0),
+        description: field.description ?? field.Description ?? '',
+    };
+}
+
+function buildFormSnapshot(nome, descricao, audience, fields) {
+    return {
+        nome,
+        descricao,
+        audience: [...audience],
+        fields: fields.map(normalizeField),
+    };
+}
+
+function normalizeFieldList(list) {
+    return list.map(normalizeField);
 }
 
 // ─── Modal de confirmação ─────────────────────────────────────────────────────
@@ -74,10 +106,10 @@ function ConfirmSaveEditModal({ isOpen, onConfirm, onCancel, isLoading }) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
             <div className="bg-white rounded-lg shadow-lg p-6 max-w-sm mx-4">
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                    Guardar Alterações?
+                    Guardar e voltar?
                 </h3>
                 <p className="text-sm text-gray-600 mb-6">
-                    Vais sobrepor a versão atual do rascunho com as alterações que fizeste.
+                    Vais guardar as alterações como rascunho antes de sair da página.
                 </p>
 
                 <div className="flex justify-end gap-3">
@@ -589,9 +621,7 @@ export default function CreateForm() {
     const [selectedId, setSelectedId] = useState(null);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
     const [showConfirmSaveEdit, setShowConfirmSaveEdit] = useState(false);
-
-    // Snapshot do estado inicial carregado em modo edição.
-    // Usado para detetar alterações por guardar (dirty state).
+    const [toasts, setToasts] = useState([]);
     const [initialSnapshot, setInitialSnapshot] = useState(null);
 
     // Estados auxiliares para drag and drop
@@ -602,80 +632,61 @@ export default function CreateForm() {
     const navigate = useNavigate();
     const selectedField = fields.find(f => f.id === selectedId) || null;
 
+    const pushToast = (type, message) => {
+        const toastId = crypto.randomUUID();
+        setToasts(prev => [...prev, { id: toastId, type, message }]);
+        window.setTimeout(() => {
+            setToasts(prev => prev.filter(toast => toast.id !== toastId));
+        }, 5000);
+    };
 
+    const currentSnapshot = buildFormSnapshot(nome.trim(), descricao, audience, fields);
+    const isDirty = Boolean(id && initialSnapshot && JSON.stringify(currentSnapshot) !== JSON.stringify(initialSnapshot));
 
     useEffect(() => {
-        if (id) {
-            // Modo Edição: Buscar os dados do formulário ao Backend
-            const fetchFormDetails = async () => {
-                try {
-                    const response = await fetch(`/api/Forms/${id}`);
-                    if (response.ok) {
-                        const formDados = await response.json();
+        if (!id) return;
 
-                        // Só rascunhos podem ser editados. Se chegar aqui com URL direto
-                        // a um formulário publicado, bloqueia e devolve ao dashboard.
-                        const isPublished = (formDados.statusDrafted ?? formDados.StatusDrafted) === false;
-                        if (isPublished) {
-                            alert('Este formulário está publicado e não pode ser editado. Move-o primeiro para rascunho.');
-                            navigate('/');
-                            return;
-                        }
+        const fetchFormDetails = async () => {
+            try {
+                const response = await fetch(`/api/Forms/${id}`);
 
-                        const tituloFormatado = formDados.title || formDados.Title || '';
-                        const descricaoFormatada = formDados.description || formDados.Description || '';
-                        const audienceFormatada = formDados.audience || formDados.Audience || [];
-
-                        const camposFormatados = (formDados.fields || formDados.Fields || []).map(f => {
-                            const widthFormatado = f.width || f.Width || 'full';
-                            if (f.type === 'table' || f.Type === 'table') {
-                                return {
-                                    ...f,
-                                    width: widthFormatado,
-                                    tableColumns: f.options || f.Options || [],
-                                    tableRows: f.tableRowCount || f.TableRowCount || 2
-                                };
-                            }
-                            return f;
-                        });
-
-                        setNome(tituloFormatado);
-                        setDescricao(descricaoFormatada);
-                        setFields(camposFormatados);
-                        setAudience(audienceFormatada);
-
-                        // Guarda o snapshot inicial para detetar alterações posteriores.
-                        setInitialSnapshot(JSON.stringify({
-                            nome: tituloFormatado,
-                            descricao: descricaoFormatada,
-                            audience: audienceFormatada,
-                            fields: camposFormatados,
-                        }));
-                    } else {
-                        alert('Erro ao carregar o formulário para edição.');
-                    }
-                } catch (error) {
-                    console.error('Erro na ligação:', error);
+                if (!response.ok) {
+                    pushToast('error', 'Não foi possível carregar o formulário para edição.');
+                    return;
                 }
-            };
 
-            fetchFormDetails();
-        }
+                const formDados = await response.json();
+
+                const isPublished = (formDados.statusDrafted ?? formDados.StatusDrafted) === false;
+                if (isPublished) {
+                    pushToast('error', 'Este formulário está publicado e não pode ser editado.');
+                    navigate('/admin');
+                    return;
+                }
+
+                const loadedNome = formDados.title || formDados.Title || '';
+                const loadedDescricao = formDados.description || formDados.Description || '';
+                const loadedAudience = formDados.audience || formDados.Audience || [];
+                const loadedFields = normalizeFieldList(formDados.fields || formDados.Fields || []);
+
+                setNome(loadedNome);
+                setDescricao(loadedDescricao);
+                setFields(loadedFields);
+                setAudience(loadedAudience);
+                setInitialSnapshot(buildFormSnapshot(loadedNome.trim(), loadedDescricao, loadedAudience, loadedFields));
+            } catch {
+                pushToast('error', 'Não foi possível ligar ao servidor.');
+            }
+        };
+
+        fetchFormDetails();
     }, [id, navigate]);
 
-    // ── Deteção de alterações por guardar ──
-    // Compara o estado atual com o snapshot inicial. Só é relevante em modo edição.
-    const currentSnapshot = JSON.stringify({ nome, descricao, audience, fields });
-    const isDirty = !!id && initialSnapshot !== null && initialSnapshot !== currentSnapshot;
-
-    // ── Aviso ao fechar / recarregar a tab com alterações por guardar ──
     useEffect(() => {
         if (!isDirty) return;
 
         const handler = (e) => {
             e.preventDefault();
-            // Em browsers modernos basta atribuir uma string a returnValue;
-            // o texto exato é ignorado e é mostrado o aviso nativo do browser.
             e.returnValue = '';
         };
 
@@ -683,11 +694,13 @@ export default function CreateForm() {
         return () => window.removeEventListener('beforeunload', handler);
     }, [isDirty]);
 
-    // ── Navegação interna (botão Voltar) protegida ──
-    const handleVoltar = (e) => {
-        e.preventDefault();
-        if (isDirty && !window.confirm('Tens alterações por guardar. Sair na mesma?')) return;
-        navigate('/');
+    const handleVoltar = () => {
+        if (isDirty) {
+            setShowConfirmSaveEdit(true);
+            return;
+        }
+
+        navigate('/admin');
     };
 
     // ── Alternar público-alvo ──
@@ -864,7 +877,7 @@ export default function CreateForm() {
 
             // 3. Validar Opções (Dropdown, Checkbox, Radio)
             if (['dropdown', 'checkbox', 'radio'].includes(field.type)) {
-                // Regex para detetar "Opção 1", "Opção 2", "Opção 99", etc.
+                // Regex para detetar \"Opção 1\", \"Opção 2\", \"Opção 99\", etc.
                 const hasDefaultOptions = field.options.some(opt =>
                     !opt || opt.trim() === '' || /^Opção \d+$/.test(opt.trim())
                 );
@@ -876,7 +889,7 @@ export default function CreateForm() {
 
             // 4. Validar Colunas da Tabela
             if (field.type === 'table') {
-                // Regex para detetar "Coluna A", "Coluna B", "Coluna Z", etc.
+                // Regex para detetar \"Coluna A\", \"Coluna B\", \"Coluna Z\", etc.
                 const hasDefaultCols = field.tableColumns.some(col =>
                     !col || col.trim() === '' || /^Coluna [A-Z]$/.test(col.trim())
                 );
@@ -956,7 +969,14 @@ export default function CreateForm() {
         await submeterFormulario(fieldsWithOrder, false);
     };
 
-    // ── Função para submeter o formulário ao backend ──
+    const buildFieldsWithOrder = () => fields.map((field, index) => ({
+        ...field,
+        order: index,
+        options: field.type === 'table' ? field.tableColumns : field.options,
+        tableRowCount: field.type === 'table' ? field.tableRows : undefined,
+    }));
+
+    // ── Submissão do formulário ──
     const submeterFormulario = async (fieldsWithOrder, isFinal) => {
         setIsLoading(true);
 
@@ -968,7 +988,7 @@ export default function CreateForm() {
             const method = id ? 'PUT' : 'POST';
 
             const response = await fetch(url, {
-                method: method,
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     Id: id,
@@ -981,41 +1001,34 @@ export default function CreateForm() {
             });
 
             if (!response.ok) {
-                // Tenta extrair a mensagem do backend (ex.: 403 quando se tenta editar publicado).
                 let backendMessage = null;
+
                 try {
                     const errorJson = await response.json();
-                    backendMessage = errorJson?.message;
+                    backendMessage = errorJson?.message || errorJson?.title || null;
+
+                    if (errorJson?.errors) {
+                        backendMessage = Object.values(errorJson.errors).flat().join('\n');
+                    }
                 } catch {
-                    // Resposta não-JSON; segue para mensagem genérica.
+                    // resposta sem JSON
                 }
-                console.error('Erro do backend:', response.status, backendMessage);
-                alert(backendMessage || (id ? 'Erro ao atualizar formulário.' : 'Erro ao criar formulário.'));
+
+                pushToast('error', backendMessage || (id ? 'Erro ao atualizar formulário.' : 'Erro ao criar formulário.'));
                 setIsLoading(false);
                 return;
             }
 
-            const data = await response.json();
-            console.log('Formulário submetido com sucesso:', data);
-
-            // Snapshot atualizado para que o estado deixe de estar "dirty".
-            setInitialSnapshot(currentSnapshot);
-            alert(isFinal ? 'Formulário publicado com sucesso!' : 'Rascunho guardado com sucesso!');
-            navigate('/');
-        } catch (error) {
-            console.error('Erro de ligação ao backend:', error);
-            alert('Não foi possível ligar ao backend.');
+            await response.json();
+            pushToast('success', isFinal ? 'Formulário publicado com sucesso.' : 'Rascunho guardado com sucesso.');
+            setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields));
+            setIsLoading(false);
+            window.setTimeout(() => navigate('/admin'), 1400);
+        } catch {
+            pushToast('error', 'Não foi possível ligar ao backend.');
             setIsLoading(false);
         }
     };
-
-    // ── Construir o payload de fields com ordem e ajustes para tabela ──
-    const buildFieldsWithOrder = () => fields.map((field, index) => ({
-        ...field,
-        order: index,
-        options: field.type === 'table' ? field.tableColumns : field.options,
-        tableRowCount: field.type === 'table' ? field.tableRows : undefined,
-    }));
 
     // ── Handler para confirmar publicação ──
     const handleConfirmPublish = async () => {
@@ -1028,7 +1041,7 @@ export default function CreateForm() {
         setShowConfirmPublish(false);
     };
 
-    // ── Handlers para o modal de gravação de edição (rascunho existente) ──
+    // ── Handler para guardar edição ──
     const handleConfirmSaveEdit = async () => {
         await submeterFormulario(buildFieldsWithOrder(), false);
         setShowConfirmSaveEdit(false);
@@ -1042,14 +1055,14 @@ export default function CreateForm() {
         <div className="space-y-6">
             {/* Cabeçalho da página */}
             <div className="flex flex-col gap-4">
-                <Link
-                    to="/"
+                <button
+                    type="button"
                     onClick={handleVoltar}
                     className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80"
                 >
                     ← Voltar
-                </Link>
-                <h2 className="text-3xl font-bold text-text-h">Novo Formulário</h2>
+                </button>
+                <h2 className="text-3xl font-bold text-text-h">{id ? 'Editar Formulário' : 'Novo Formulário'}</h2>
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -1127,6 +1140,7 @@ export default function CreateForm() {
                         <h3 className="text-lg font-semibold text-text-h">Campos do Formulário</h3>
                         <span className="text-sm text-gray-400">
                             {fields.filter(f => f.type !== 'section').length} campo{fields.filter(f => f.type !== 'section').length !== 1 ? 's' : ''}
+
                         </span>
                     </div>
 
@@ -1136,7 +1150,7 @@ export default function CreateForm() {
                             <p className="font-bold mb-2">Não é possível publicar. O formulário não está completo:</p>
                             <ul className="list-disc pl-5 space-y-1">
                                 {typeof erroFields === 'string' ? (
-                                    <li>{erroFields}</li> /* Para os teus erros antigos de string */
+                                    <li>{erroFields}</li>
                                 ) : (
                                     erroFields.map((erro, i) => <li key={i}>{erro}</li>)
                                 )}
@@ -1248,6 +1262,17 @@ export default function CreateForm() {
                     </button>
                 </div>
             </form>
+
+            <div className="fixed right-6 top-6 z-[60] flex max-w-sm flex-col gap-3">
+                {toasts.map(toast => (
+                    <Toast
+                        key={toast.id}
+                        type={toast.type}
+                        message={toast.message}
+                        onClose={() => setToasts(prev => prev.filter(item => item.id !== toast.id))}
+                    />
+                ))}
+            </div>
 
             {/* Modal de confirmação de publicação */}
             <ConfirmPublishModal
