@@ -1,0 +1,25 @@
+[
+  {
+    "Id": "438dee20-643d-4174-a40e-afd37ffed4d8",
+    "FormId": 14,
+    "UserId": 14,
+    "Answers": {
+      "campo_nome": "Jo\u00E3o Silva",
+      "campo_idade": "35",
+      "campo_departamento": "Recursos Humanos"
+    },
+    "SubmittedAt": "2026-05-19T12:34:08.9259513+01:00"
+  },
+  {
+    "Id": "040fb06c-babb-4c8f-abdb-148e5c5b3391",
+    "FormId": 14,
+    "UserId": 14,
+    "Answers": {
+      "campo_nome": "Jo\u00E3o Silva",
+      "campo_idade": "35",
+      "campo_departamento": "Recursos Humanos",
+      "10": "350000"
+    },
+    "SubmittedAt": "2026-05-19T12:39:37.8606758+01:00"
+  }
+]
