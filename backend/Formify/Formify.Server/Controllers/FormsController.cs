@@ -1,7 +1,9 @@
 using Formify.Server.DTOs;
 using Formify.Server.Models;
 using Formify.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Formify.Server.Controllers
 {
@@ -213,53 +215,70 @@ namespace Formify.Server.Controllers
 
         // Adiciona este método dentro da classe FormsController
         [HttpPost("{formId}/submissions")]
-        public async Task<IActionResult> SubmitForm(int formId, [FromBody] SubmitFormRequest request)
+        [Authorize]
+        public async Task<IActionResult> SubmitForm(int formId, [FromBody] Dictionary<string, object> answers)
         {
-            // 1. Procurar o formulário
-            var allForms = await _jsonHandler.GetAllFormsAsync();
-            var form = allForms.FirstOrDefault(f => f.Id == formId);
-
-            // Validação A: O formulário existe?
-            if (form == null)
+            try
             {
-                return NotFound(new { message = $"Formulário com ID {formId} não encontrado." });
+                // 1. Extrair o ID e o Cargo do Utilizador diretamente do TOKEN JWT de forma segura
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var userRoleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
+
+                if (string.IsNullOrEmpty(userIdClaim) || string.IsNullOrEmpty(userRoleClaim))
+                {
+                    return Unauthorized(new { message = "Utilizador não autenticado ou token inválido." });
+                }
+
+                int userId = int.Parse(userIdClaim);
+                string userRole = userRoleClaim.ToLower();
+
+                // 2. Procurar o formulário
+                var allForms = await _jsonHandler.GetAllFormsAsync();
+                var form = allForms.FirstOrDefault(f => f.Id == formId);
+
+                if (form == null)
+                {
+                    return NotFound(new { message = $"Formulário com ID {formId} não encontrado." });
+                }
+
+                if (form.StatusDrafted)
+                {
+                    return BadRequest(new { message = "Não é possível submeter respostas para um formulário em modo rascunho." });
+                }
+
+                // 3. Validação de Permissões com base no cargo extraído do Token
+                var allowedAudiences = form.Audience != null
+                    ? form.Audience.Where(a => a != null).Select(a => a.ToLower()).ToList()
+                    : new List<string>();
+
+                if (!allowedAudiences.Contains(userRole) && !allowedAudiences.Contains("todos"))
+                {
+                    return StatusCode(403, new { message = "Acesso negado. O teu cargo não tem permissão para preencher este formulário." });
+                }
+
+                // 4. Criar a Submissão
+                var submission = new Submission
+                {
+                    FormId = formId,
+                    UserId = userId, // Seguro do token
+                    Answers = answers ?? new Dictionary<string, object>(),
+                    SubmittedAt = DateTime.Now
+                };
+
+                var allSubmissions = await _jsonHandler.GetAllSubmissionsAsync();
+                allSubmissions.Add(submission);
+                await _jsonHandler.SaveSubmissionsAsync(allSubmissions);
+
+                return Ok(new { message = "Formulário submetido com sucesso!", submissionId = submission.Id });
             }
-
-            // Validação B: O formulário está publicado?
-            if (form.StatusDrafted)
+            catch (Exception ex)
             {
-                return BadRequest(new { message = "Não é possível submeter respostas para um formulário que está em modo rascunho." });
+                return StatusCode(500, new { message = "Erro interno no servidor.", erroDetalhado = ex.Message });
             }
-
-            // Validação C: O utilizador tem permissão (Audience) para preencher?
-            // Convertemos tudo para minúsculas para evitar erros como "Funcionario" vs "funcionario"
-            var allowedAudiences = form.Audience.Select(a => a.ToLower()).ToList();
-            var userRole = request.UserRole.ToLower();
-
-            if (!allowedAudiences.Contains(userRole) && !allowedAudiences.Contains("todos"))
-            {
-                return StatusCode(403, new { message = "Acesso negado. O teu cargo não tem permissão para preencher este formulário." });
-            }
-
-            // 2. Criar o objeto da Submissão
-            var submission = new Submission
-            {
-                FormId = formId,
-                UserId = request.UserId,
-                Answers = request.Answers,
-                SubmittedAt = DateTime.Now
-            };
-
-            // 3. Guardar no ficheiro JSON das submissões
-            var allSubmissions = await _jsonHandler.GetAllSubmissionsAsync();
-            allSubmissions.Add(submission);
-            await _jsonHandler.SaveSubmissionsAsync(allSubmissions);
-
-            return Ok(new
-            {
-                message = "Formulário submetido com sucesso!",
-                submissionId = submission.Id
-            });
         }
     }
 }
+
+
+
+  
