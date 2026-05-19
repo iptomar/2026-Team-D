@@ -190,5 +190,57 @@ namespace Formify.Server.Controllers
 
             return Ok(new { message = "Formulário atualizado com sucesso.", form = formToUpdate });
         }
+
+
+        // Adiciona este método dentro da classe FormsController
+        [HttpPost("{formId}/submissions")]
+        public async Task<IActionResult> SubmitForm(int formId, [FromBody] SubmitFormRequest request)
+        {
+            // 1. Procurar o formulário
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+            var form = allForms.FirstOrDefault(f => f.Id == formId);
+
+            // Validação A: O formulário existe?
+            if (form == null)
+            {
+                return NotFound(new { message = $"Formulário com ID {formId} não encontrado." });
+            }
+
+            // Validação B: O formulário está publicado?
+            if (form.StatusDrafted)
+            {
+                return BadRequest(new { message = "Não é possível submeter respostas para um formulário que está em modo rascunho." });
+            }
+
+            // Validação C: O utilizador tem permissão (Audience) para preencher?
+            // Convertemos tudo para minúsculas para evitar erros como "Funcionario" vs "funcionario"
+            var allowedAudiences = form.Audience.Select(a => a.ToLower()).ToList();
+            var userRole = request.UserRole.ToLower();
+
+            if (!allowedAudiences.Contains(userRole) && !allowedAudiences.Contains("todos"))
+            {
+                return StatusCode(403, new { message = "Acesso negado. O teu cargo não tem permissão para preencher este formulário." });
+            }
+
+            // 2. Criar o objeto da Submissão
+            var submission = new Submission
+            {
+                FormId = formId,
+                UserId = request.UserId,
+                Answers = request.Answers,
+                SubmittedAt = DateTime.Now
+            };
+
+            // 3. Guardar no ficheiro JSON das submissões
+            var allSubmissions = await _jsonHandler.GetAllSubmissionsAsync();
+            allSubmissions.Add(submission);
+            await _jsonHandler.SaveSubmissionsAsync(allSubmissions);
+
+            return Ok(new
+            {
+                message = "Formulário submetido com sucesso!",
+                submissionId = submission.Id
+            });
+        }
     }
 }

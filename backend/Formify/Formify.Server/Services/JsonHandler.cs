@@ -23,6 +23,14 @@ namespace Formify.Server.Services
             "FormsList.json"
         );
 
+        private readonly string _filePathSubmissions = Path.Combine(
+            Directory.GetCurrentDirectory(),
+            "..",
+            "formify.client",
+            "Schema",
+            "SubmissionsList.json"
+        );
+
         public async Task<List<Form>> GetAllFormsAsync()
         {
             if (!File.Exists(_filePathList))
@@ -48,6 +56,31 @@ namespace Formify.Server.Services
             var options = new JsonSerializerOptions { WriteIndented = true };
             var json = JsonSerializer.Serialize(forms, options);
             await File.WriteAllTextAsync(_filePathList, json);
+        }
+
+        public async Task<List<Submission>> GetAllSubmissionsAsync()
+        {
+            if (!File.Exists(_filePathSubmissions))
+            {
+                return new List<Submission>();
+            }
+
+            try
+            {
+                var json = await File.ReadAllTextAsync(_filePathSubmissions);
+                return JsonSerializer.Deserialize<List<Submission>>(json) ?? new List<Submission>();
+            }
+            catch
+            {
+                return new List<Submission>();
+            }
+        }
+
+        public async Task SaveSubmissionsAsync(List<Submission> submissions)
+        {
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            var json = JsonSerializer.Serialize(submissions, options);
+            await File.WriteAllTextAsync(_filePathSubmissions, json);
         }
     }
 }
