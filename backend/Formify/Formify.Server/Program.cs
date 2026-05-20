@@ -7,6 +7,17 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Em ambiente de desenvolvimento, gerar uma JWT key aleatória a cada arranque.
+// Isto invalida todos os tokens emitidos antes do restart, forçando o utilizador
+// a re-autenticar-se (comportamento desejado em dev para evitar sessões "fantasma"
+// entre runs). Em produção lê a chave de configuração, como antes.
+if (builder.Environment.IsDevelopment())
+{
+    var randomKey = Convert.ToBase64String(
+        System.Security.Cryptography.RandomNumberGenerator.GetBytes(32));
+    builder.Configuration["Jwt:Key"] = randomKey;
+}
+
 // Add services to the container.
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>

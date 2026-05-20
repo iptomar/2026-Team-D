@@ -1,5 +1,6 @@
 using Formify.Server.Models;
 using Formify.Server.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.IdentityModel.Tokens.Jwt;
@@ -92,6 +93,36 @@ namespace Formify.Server.Controllers
             var jwt = tokenHandler.WriteToken(token);
 
             return Ok(new { token = jwt, role = user.Role, username = user.Username });
+        }
+
+        // GET /api/auth/me
+        // Valida o token JWT do utilizador autenticado e devolve os dados atuais.
+        // O frontend usa esta chamada no arranque para detetar tokens revogados,
+        // utilizadores entretanto removidos ou estados inconsistentes (devolve 401).
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetMe()
+        {
+            var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(idClaim) || !int.TryParse(idClaim, out var userId))
+            {
+                return Unauthorized(new { error = "Token inválido." });
+            }
+
+            var users = await _usersService.GetAllAsync();
+            var user = users.FirstOrDefault(u => u.Id == userId);
+            if (user == null)
+            {
+                return Unauthorized(new { error = "Utilizador já não existe." });
+            }
+
+            return Ok(new
+            {
+                userId = user.Id,
+                username = user.Username,
+                name = user.Name,
+                role = user.Role
+            });
         }
     }
 

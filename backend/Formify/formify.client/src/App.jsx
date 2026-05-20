@@ -9,6 +9,7 @@ import ViewForm from './pages/ViewForm';
 import ProfessorDashboard from './pages/Professor/ProfessorDashboard';
 import FuncionarioDashboard from './pages/Funcionario/FuncionarioDashboard';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import SessionGuard from './components/Auth/SessionGuard';
 import RespondForm from './pages/RespondForm';
 import MySubmissions from './pages/MySubmissions';
 import MySubmissionDetail from './pages/MySubmissionDetail';
@@ -16,6 +17,7 @@ import MySubmissionDetail from './pages/MySubmissionDetail';
 export default function App() {
     return (
         <Router>
+            <SessionGuard />
             <Layout>
                 <Routes>
                     <Route path="/" element={<Landing />} />
