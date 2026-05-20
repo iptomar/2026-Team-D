@@ -13,9 +13,11 @@ export default function Sidebar() {
   const navigate = useNavigate();
 
   const path = location.pathname.toLowerCase();
-  const isFuncionario = path.startsWith('/funcionario');
-  const isProfessor = path.startsWith('/professor');
-  const isUserView = isFuncionario || isProfessor;
+  const role = (localStorage.getItem('role') || '').toLowerCase();
+  const isFuncionario = path.startsWith('/funcionario') || role === 'funcionario';
+  const isProfessor = path.startsWith('/professor') || role === 'professor';
+  const isMyForms = path.startsWith('/meus-formularios');
+  const isUserView = isFuncionario || isProfessor || isMyForms;
 
   const linkCls =
     'block rounded-lg px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-accent-bg hover:text-accent';
@@ -49,13 +51,9 @@ export default function Sidebar() {
             <Link to={isFuncionario ? '/funcionario' : '/professor'} className={linkCls}>
               Formulários
             </Link>
-            <button
-              type="button"
-              onClick={() => handleFakeAction('Formulários Preenchidos')}
-              className={buttonCls}
-            >
+            <Link to="/meus-formularios" className={linkCls}>
               Formulários Preenchidos
-            </button>
+            </Link>
             <button
               type="button"
               onClick={() => handleFakeAction('Informações Pessoais')}

@@ -10,6 +10,8 @@ import ProfessorDashboard from './pages/Professor/ProfessorDashboard';
 import FuncionarioDashboard from './pages/Funcionario/FuncionarioDashboard';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import RespondForm from './pages/RespondForm';
+import MySubmissions from './pages/MySubmissions';
+import MySubmissionDetail from './pages/MySubmissionDetail';
 
 export default function App() {
     return (
@@ -35,6 +37,17 @@ export default function App() {
                     <Route path="/respond/:id" element={
                         <ProtectedRoute allowedRoles={["professor", "funcionario"]}>
                             <RespondForm />
+                        </ProtectedRoute>
+                    } />
+
+                    <Route path="/meus-formularios" element={
+                        <ProtectedRoute allowedRoles={["professor", "funcionario"]}>
+                            <MySubmissions />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/meus-formularios/:id" element={
+                        <ProtectedRoute allowedRoles={["professor", "funcionario"]}>
+                            <MySubmissionDetail />
                         </ProtectedRoute>
                     } />
                 </Routes>
