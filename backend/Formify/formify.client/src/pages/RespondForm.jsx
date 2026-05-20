@@ -68,11 +68,39 @@ export default function RespondForm() {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Para já, apenas imprimimos na consola para confirmar que o state está a funcionar!
-        console.log("A preparar para submeter ao C# as seguintes respostas:", answers);
-        window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: 'Validações frontend passadas com sucesso! (Modo Simulação)', type: 'info' } }));
+        setIsLoading(true);
+
+        try {
+            
+            const token = localStorage.getItem('token');
+
+            
+            const response = await fetch(`http://localhost:5208/api/Forms/${id}/submissions`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify(answers) 
+            });
+
+            if (response.ok) {
+               
+                window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: 'Respostas submetidas com sucesso!', type: 'success' } }));
+                navigate(-1);
+            } else {
+               
+                const errorData = await response.json();
+                window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: errorData.message || 'Acesso negado ou erro ao submeter.', type: 'error' } }));
+            }
+        } catch (error) {
+            console.error('Erro na submissão:', error);
+            window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: 'Não foi possível ligar ao servidor.', type: 'error' } }));
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     if (isLoading) return <div className="p-20 text-center text-text font-medium">A preparar o formulário...</div>;

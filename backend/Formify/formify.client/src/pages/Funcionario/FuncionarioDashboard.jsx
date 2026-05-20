@@ -35,7 +35,7 @@ export default function FuncionarioDashboard() {
     const normalizeText = (value) =>
         (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-    // Filtro à prova de bala: Apenas Publicados + Exclusivo a Funcionarios
+   
     const filteredForms = forms
         .filter(form => (form.statusDrafted ?? form.StatusDrafted) === false)
         .filter(form => {
