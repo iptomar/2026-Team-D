@@ -1,6 +1,28 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+function FloatingField({ id, label, type = 'text', value, onChange, autoComplete }) {
+    return (
+        <div className="relative">
+            <input
+                id={id}
+                type={type}
+                value={value}
+                onChange={onChange}
+                autoComplete={autoComplete}
+                placeholder=" "
+                className="peer w-full rounded border border-border px-3 pb-2 pt-5 outline-none transition-colors focus:border-accent"
+            />
+            <label
+                htmlFor={id}
+                className="pointer-events-none absolute left-3 top-2 text-xs text-text transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-text peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-accent"
+            >
+                {label}
+            </label>
+        </div>
+    );
+}
+
 export default function Register() {
     const [name, setName] = useState('');
     const [username, setUsername] = useState('');
@@ -75,10 +97,10 @@ export default function Register() {
                 </div>
 
                 <form className="space-y-4" onSubmit={handleSubmit}>
-                    <input className="w-full rounded border px-3 py-2" placeholder="Nome" value={name} onChange={e => setName(e.target.value)} />
-                    <input className="w-full rounded border px-3 py-2" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-                    <input type="password" className="w-full rounded border px-3 py-2" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-                    <input type="password" className="w-full rounded border px-3 py-2" placeholder="Confirmar Password" value={confirm} onChange={e => setConfirm(e.target.value)} />
+                    <FloatingField id="register-name" label="Nome" value={name} onChange={e => setName(e.target.value)} autoComplete="name" />
+                    <FloatingField id="register-username" label="Username" value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" />
+                    <FloatingField id="register-password" label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="new-password" />
+                    <FloatingField id="register-confirm" label="Confirmar Password" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} autoComplete="new-password" />
 
                     <label className="block text-sm">Função</label>
                     <select className="w-full rounded border px-3 py-2" value={role} onChange={e => setRole(e.target.value)}>

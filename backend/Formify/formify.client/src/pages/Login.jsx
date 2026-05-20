@@ -1,6 +1,28 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+function FloatingField({ id, label, type = 'text', value, onChange, autoComplete }) {
+    return (
+        <div className="relative">
+            <input
+                id={id}
+                type={type}
+                value={value}
+                onChange={onChange}
+                autoComplete={autoComplete}
+                placeholder=" "
+                className="peer w-full rounded border border-border px-3 pb-2 pt-5 outline-none transition-colors focus:border-accent"
+            />
+            <label
+                htmlFor={id}
+                className="pointer-events-none absolute left-3 top-2 text-xs text-text transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-sm peer-placeholder-shown:text-text peer-focus:top-2 peer-focus:translate-y-0 peer-focus:text-xs peer-focus:text-accent"
+            >
+                {label}
+            </label>
+        </div>
+    );
+}
+
 export default function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -53,8 +75,8 @@ export default function Login() {
                 </div>
 
                 <form className="space-y-4" onSubmit={handleSubmit}>
-                    <input className="w-full rounded border px-3 py-2" placeholder="Username" value={username} onChange={e => setUsername(e.target.value)} />
-                    <input type="password" className="w-full rounded border px-3 py-2" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <FloatingField id="login-username" label="Username" value={username} onChange={e => setUsername(e.target.value)} autoComplete="username" />
+                    <FloatingField id="login-password" label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="current-password" />
 
                     {error && <div className="text-red-600">{error}</div>}
 
