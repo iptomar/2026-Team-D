@@ -5,7 +5,6 @@ export default function ProfessorDashboard() {
     const [forms, setForms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Filtros reduzidos (não há filtro de Cargo, pois isto é exclusivo para Professores)
     const [searchTerm, setSearchTerm] = useState('');
     const [sortDate, setSortDate] = useState('newest');
 
@@ -36,11 +35,9 @@ export default function ProfessorDashboard() {
     const normalizeText = (value) =>
         (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-    // Aplica os filtros: Apenas Publicados + Exclusivo a Professores + Pesquisa
     const filteredForms = forms
-        .filter(form => (form.statusDrafted ?? form.StatusDrafted) === false) // Só publicados
+        .filter(form => (form.statusDrafted ?? form.StatusDrafted) === false)
         .filter(form => {
-            // Só passa se a audiência incluir professor
             const rawAudience = form.audience || form.Audience || [];
             const audienceArray = Array.isArray(rawAudience) ? rawAudience.map(normalizeText) : [normalizeText(rawAudience)];
 
@@ -125,8 +122,7 @@ export default function ProfessorDashboard() {
                                 return (
                                     <div
                                         key={id}
-                                        // Alterar para a rota real de preenchimento quando existir
-                                        onClick={() => navigate(`/ViewForm/${id}`)}
+                                        onClick={() => navigate(`/respond/${id}`)}
                                         className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer bg-white"
                                     >
                                         <h3 className="font-bold text-lg text-text-h group-hover:text-blue-600 transition-colors mb-3">

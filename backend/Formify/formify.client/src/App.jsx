@@ -9,6 +9,7 @@ import ViewForm from './pages/ViewForm';
 import ProfessorDashboard from './pages/Professor/ProfessorDashboard';
 import FuncionarioDashboard from './pages/Funcionario/FuncionarioDashboard';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
+import RespondForm from './pages/RespondForm';
 
 export default function App() {
     return (
@@ -30,6 +31,12 @@ export default function App() {
                     <Route path="/ViewForm/:id" element={<ViewForm />} />
 
                     <Route path="/funcionario" element={<ProtectedRoute allowedRoles={["funcionario"]}><FuncionarioDashboard /></ProtectedRoute>} />
+
+                    <Route path="/respond/:id" element={
+                        <ProtectedRoute allowedRoles={["professor", "funcionario"]}>
+                            <RespondForm />
+                        </ProtectedRoute>
+                    } />
                 </Routes>
             </Layout>
         </Router>
