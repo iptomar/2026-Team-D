@@ -39,8 +39,6 @@ export default function FuncionarioDashboard() {
     const filteredForms = forms
         .filter(form => (form.statusDrafted ?? form.StatusDrafted) === false)
         .filter(form => {
-            // Transforma TUDO o que vem do Audience numa string minúscula e sem acentos
-            // Isto funciona independentemente de ser um Array, uma String ou estar corrompido no JSON
             const audienceData = JSON.stringify(form.audience || form.Audience || "");
             const audienceStr = normalizeText(audienceData);
 
@@ -123,7 +121,7 @@ export default function FuncionarioDashboard() {
                                 return (
                                     <div
                                         key={id}
-                                        onClick={() => navigate(`/ViewForm/${id}`)}
+                                        onClick={() => navigate(`/respond/${id}`)}
                                         className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer bg-white"
                                     >
                                         <h3 className="font-bold text-lg text-text-h group-hover:text-blue-600 transition-colors mb-3">

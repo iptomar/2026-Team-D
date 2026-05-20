@@ -30,5 +30,13 @@
     "PasswordHash": "18GXjxZaiTGZI6L0HE\u002B84SaxnMup2NJIB0PWpFwfg6k=",
     "Salt": "T7uYSfpg5kpabHCwhHXY5w==",
     "Role": "admin"
+  },
+  {
+    "Id": 5,
+    "Name": "Prof_test",
+    "Username": "prof_test",
+    "PasswordHash": "yHWfM8LUn8HMTtTesQd0l7FD61iN\u002BhThYsDZQv/qMEs=",
+    "Salt": "egIQXzjgDM1ffTHQtp8WqQ==",
+    "Role": "professor"
   }
 ]
