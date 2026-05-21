@@ -2,16 +2,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 function FloatingField({ id, label, type = 'text', value, onChange, autoComplete }) {
+    const isPassword = type === 'password';
+    const [show, setShow] = useState(false);
+    const actualType = isPassword && show ? 'text' : type;
+
     return (
         <div className="relative">
             <input
                 id={id}
-                type={type}
+                type={actualType}
                 value={value}
                 onChange={onChange}
                 autoComplete={autoComplete}
                 placeholder=" "
-                className="peer w-full rounded border border-border px-3 pb-2 pt-5 outline-none transition-colors focus:border-accent"
+                className={`peer w-full rounded border border-border ${isPassword ? 'pr-10' : ''} px-3 pb-2 pt-5 outline-none transition-colors focus:border-accent`}
             />
             <label
                 htmlFor={id}
@@ -19,6 +23,26 @@ function FloatingField({ id, label, type = 'text', value, onChange, autoComplete
             >
                 {label}
             </label>
+            {isPassword && (
+                <button
+                    type="button"
+                    onClick={() => setShow(s => !s)}
+                    aria-label={show ? 'Ocultar password' : 'Mostrar password'}
+                    aria-pressed={show}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-text transition-colors hover:text-accent focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                    {show ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M3 3l18 18M10.6 10.6a3 3 0 0 0 4.2 4.2M9.9 4.7A10.9 10.9 0 0 1 12 4.5c5 0 9 4 10 7.5a12.4 12.4 0 0 1-3.6 4.7M6.5 6.5C4.3 8 2.7 10 2 12c1 3.5 5 7.5 10 7.5 1.6 0 3-.3 4.3-.9" />
+                        </svg>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                            <path d="M2 12s3.6-7.5 10-7.5S22 12 22 12s-3.6 7.5-10 7.5S2 12 2 12z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    )}
+                </button>
+            )}
         </div>
     );
 }
@@ -89,8 +113,15 @@ export default function Register() {
     };
 
     return (
-        <div className="flex min-h-[calc(100vh-140px)] items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+        <div className="flex min-h-[calc(100vh-140px)] items-center justify-center bg-gradient-to-br from-emerald-50 via-white to-emerald-50 px-4 py-12 sm:px-6 lg:px-8">
             <div className="w-full max-w-md space-y-6 rounded-lg border border-border bg-white p-8 shadow-custom">
+                <Link
+                    to="/"
+                    className="inline-flex w-fit items-center gap-2 text-sm font-semibold text-accent transition-opacity hover:opacity-80"
+                >
+                    ← Voltar à página inicial
+                </Link>
+
                 <div className="text-center">
                     <h1 className="text-3xl font-bold text-accent">Criar conta</h1>
                     <p className="mt-2 text-sm text-text">Preencha os dados para criar a sua conta.</p>

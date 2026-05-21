@@ -259,15 +259,13 @@ export default function AdminDashboard({ isDraft = false }) {
             {/* Blocos de estatísticas (A plataforma em números) */}
             <div className="grid gap-4 sm:grid-cols-3">
                 <div className="rounded-lg border border-accent-border p-6 bg-white">
-                    <h3 className="text-sm font-medium text-text-h">A plataforma em números</h3>
-                    <p className="text-xs text-text mt-1">Dados em tempo real do sistema</p>
+                    <h3 className="text-sm font-medium text-text-h">Formulários no total</h3>
+                    <p className="text-xs text-text mt-1">A crescer com a atividade do IPT</p>
 
                     <div className="mt-4">
                         <div className="text-3xl font-bold text-green-700">
                             {isStatsLoading ? '—' : stats.totalForms}
                         </div>
-                        <div className="text-sm text-text mt-1">Formulários no total</div>
-                        <div className="text-xs text-text mt-2">A crescer com a atividade do IPT</div>
                     </div>
                 </div>
 
