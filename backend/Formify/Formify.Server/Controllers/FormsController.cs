@@ -1,3 +1,4 @@
+using Formify.Server.Data;
 using Formify.Server.DTOs;
 using Formify.Server.Models;
 using Formify.Server.Services;
@@ -66,15 +67,16 @@ namespace Formify.Server.Controllers
             return CreatedAtAction(nameof(GetById), new { id = form.Id }, form);
         }
 
+
         [HttpGet]
         public async Task<IActionResult> GetAllForms()
         {
-            // Carrega a lista completa de formulários guardados no ficheiro JSON.
+            // 1. Load the entire list from the JSON file
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
             if (allForms == null)
             {
-                return NotFound(new { message = "No forms were found" });
+                return NotFound(new { message = $"No forms were found" });
             }
 
             return Ok(allForms);
@@ -121,13 +123,13 @@ namespace Formify.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            // Carrega a lista completa de formulários guardados no ficheiro JSON.
+            // 1. Load the entire list from the JSON file
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
-            // Procura o formulário correspondente ao ID recebido.
+            // 2. Use LINQ to find the first form that matches the ID
             var form = allForms.FirstOrDefault(f => f.Id == id);
 
-            // Se não existir, devolve 404.
+            // 3. Standard null check
             if (form == null)
             {
                 return NotFound(new { message = $"Form with ID {id} not found." });
@@ -139,10 +141,7 @@ namespace Formify.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteForm(int id)
         {
-            // Carrega os formulários existentes.
             var allForms = await _jsonHandler.GetAllFormsAsync();
-
-            // Procura o formulário a remover.
             var formToRemove = allForms.FirstOrDefault(f => f.Id == id);
 
             if (formToRemove == null)

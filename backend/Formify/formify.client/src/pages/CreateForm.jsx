@@ -600,23 +600,20 @@ function SelectedDot() {
 
 // ─── Componente principal ─────────────────────────────────────────────────────
 export default function CreateForm() {
-    // Se for edição, isto terá o ID. Se for criação, será undefined.
-    const { id } = useParams(); 
-
-    // Dados principais do formulário
+    // Estados para guardar o que o utilizador escreve
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
+    // Estado que guarda a lista de campos do formulário (cada campo tem label, tipo, etc.)
+    const [fields, setFields] = useState([]); // comentario ju
     const [audience, setAudience] = useState([]);
 
-    // Campos criados no editor visual
-    const [fields, setFields] = useState([]);
-
-    // Estados de validação
+    // estado para guardar mensagens de erro do campo nome
     const [erroNome, setErroNome] = useState('');
+    const [erroDescricao, setErroDescricao] = useState('');
+    // Limpa qualquer erro anterior do público-alvo
     const [erroAudience, setErroAudience] = useState('');
-    const [erroFields, setErroFields] = useState('');
 
-    // Estados de interface
+    //state hook para prevenir double-submits
     const [isLoading, setIsLoading] = useState(false);
     const [selectedId, setSelectedId] = useState(null);
     const [showConfirmPublish, setShowConfirmPublish] = useState(false);
@@ -624,13 +621,10 @@ export default function CreateForm() {
     const [toasts, setToasts] = useState([]);
     const [initialSnapshot, setInitialSnapshot] = useState(null);
 
-    // Estados auxiliares para drag and drop
-    const dragIndex = useRef(null);
-    const [dragOverIndex, setDragOverIndex] = useState(null);
-    const dragTypeRef = useRef(null);
+    // Guarda erros específicos de cada campo
+    const [fieldErrors, setFieldErrors] = useState({}); 
 
-    const navigate = useNavigate();
-    const selectedField = fields.find(f => f.id === selectedId) || null;
+    const navigate = useNavigate(); // Para voltarmos à página inicial depois de gravar
 
     const pushToast = (type, message) => {
         const toastId = crypto.randomUUID();
@@ -714,135 +708,83 @@ export default function CreateForm() {
         setErroAudience('');
     };
 
-    // ── Criar campo ──
-    // Cria a estrutura base de um campo novo, sem o adicionar ainda ao formulário.
-    // Isto permite reutilizar a mesma lógica tanto no clique como no drag and drop.
-    const criarCampo = (type) => {
-        const ti = getTypeInfo(type);
-
-        return {
-            id: crypto.randomUUID(),
-            type,
-            label: ti.label,
-            placeholder: '',
-            required: false,
-            width: 'full',
-            options: ['dropdown', 'checkbox', 'radio'].includes(type) ? ['Opção 1', 'Opção 2'] : [],
-            tableColumns: type === 'table' ? ['Coluna A', 'Coluna B', 'Coluna C'] : [],
-            tableRows: type === 'table' ? 2 : 0,
-            description: '',
-        };
+    // Função que altera o label (nome visível) de um campo específico
+    const alterarLabel = (id, novoLabel) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, label: novoLabel } : campo // Atualiza apenas o campo correspondente
+        );
+        // Atualiza o estado com os novos valores
+        setFields(novosCampos);
     };
 
-    // ── Adicionar campo ao formulário ──
-    // Usado quando o utilizador clica num elemento da paleta.
-    const adicionarCampo = (type) => {
-        const novo = criarCampo(type);
-
-        setFields(prev => [...prev, novo]);
-        setSelectedId(novo.id);
-        setErroFields('');
+    const alterarPlaceholder = (id, novoPlaceholder) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, placeholder: novoPlaceholder } : campo
+        );
+        setFields(novosCampos);
     };
 
-    // ── Atualizar campo selecionado ──
-    const updateField = (updated) => {
-        setFields(prev => prev.map(f => f.id === updated.id ? updated : f));
+    
+    const alterarTipo = (id, novoTipo) => {
+        setFields(fields.map(campo => {
+            if (campo.id === id) {
+                // Se mudar para tabela e não houver colunas, cria a primeira
+                const novasOpcoes = (novoTipo === 'table' && campo.options.length === 0)
+                    ? [""]
+                    : campo.options;
+
+                return { ...campo, type: novoTipo, options: novasOpcoes };
+            }
+            return campo;
+        }));
     };
 
-    // ── Remover campo do formulário ──
-    const removerCampo = (id) => {
-        setFields(prev => prev.filter(f => f.id !== id));
-
-        if (selectedId === id) {
-            setSelectedId(null);
-        }
+    // Adiciona uma nova coluna (caixa de texto vazia) à lista de opções
+    const adicionarColuna = (id) => {
+        setFields(fields.map(c =>
+            c.id === id ? { ...c, options: [...c.options, ""] } : c
+        ));
     };
 
-    // ── Drag and drop da paleta para o canvas ──
-    // Guarda o tipo de campo que está a ser arrastado a partir da paleta.
-    const handlePaletteDragStart = (e, type) => {
-        dragTypeRef.current = type;
-        dragIndex.current = null;
-
-        e.dataTransfer.effectAllowed = 'copy';
-        e.dataTransfer.setData('field-type', type);
+    // Atualiza o texto de uma coluna específica
+    const alterarColuna = (id, index, valor) => {
+        setFields(fields.map(c => {
+            if (c.id === id) {
+                const novasColunas = [...c.options];
+                novasColunas[index] = valor;
+                return { ...c, options: novasColunas };
+            }
+            return c;
+        }));
     };
 
-    // ── Início do drag de um campo já existente ──
-    // Guarda o índice do campo que está a ser reordenado.
-    const handleCardDragStart = (e, index) => {
-        dragIndex.current = index;
-        dragTypeRef.current = null;
-        setDragOverIndex(index);
 
-        e.dataTransfer.effectAllowed = 'move';
-        e.dataTransfer.setData('field-index', index.toString());
+    // Remove uma coluna específica (garantindo que sobra sempre pelo menos 1)
+    const removerColuna = (id, index) => {
+        setFields(fields.map(c => {
+            if (c.id === id) {
+                // Só remove se houver mais do que uma coluna
+                if (c.options.length > 1) {
+                    const novasColunas = c.options.filter((_, i) => i !== index);
+                    return { ...c, options: novasColunas };
+                }
+            }
+            return c;
+        }));
     };
 
-    // ── Campo sobre o qual o utilizador está a passar com o rato ──
-    const handleCardDragOver = (e, index) => {
-        e.preventDefault();
-        setDragOverIndex(index);
+    // Atualiza as configurações da tabela (o toggle das linhas e o número de linhas)
+    const alterarConfigTabela = (id, propriedade, valor) => {
+        setFields(fields.map(c =>
+            c.id === id ? { ...c, [propriedade]: valor } : c
+        ));
     };
 
-    // ── Largar em cima de um campo existente ──
-    // Permite inserir um novo campo nessa posição ou mover um campo já existente.
-    const handleCardDrop = (e, dropIndex) => {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const draggedType = dragTypeRef.current || e.dataTransfer.getData('field-type');
-
-        // Caso 1: elemento vindo da paleta
-        if (draggedType) {
-            const novo = criarCampo(draggedType);
-
-            setFields(prev => {
-                const updated = [...prev];
-                updated.splice(dropIndex, 0, novo);
-                return updated;
-            });
-
-            setSelectedId(novo.id);
-            setErroFields('');
-        }
-
-        // Caso 2: reordenar campo já existente
-        else if (dragIndex.current !== null && dragIndex.current !== dropIndex) {
-            setFields(prev => {
-                const updated = [...prev];
-                const [moved] = updated.splice(dragIndex.current, 1);
-                updated.splice(dropIndex, 0, moved);
-                return updated;
-            });
-        }
-
-        dragIndex.current = null;
-        dragTypeRef.current = null;
-        setDragOverIndex(null);
-    };
-
-    // ── Fim do drag ──
-    const handleCardDragEnd = () => {
-        dragIndex.current = null;
-        dragTypeRef.current = null;
-        setDragOverIndex(null);
-    };
-
-    // ── Largar no espaço vazio do canvas ──
-    // Se o utilizador largar fora de um campo específico, adiciona ao fim.
-    const handleCanvasDrop = (e) => {
-        e.preventDefault();
-
-        const draggedType = dragTypeRef.current || e.dataTransfer.getData('field-type');
-
-        if (draggedType) {
-            adicionarCampo(draggedType);
-        }
-
-        dragIndex.current = null;
-        dragTypeRef.current = null;
-        setDragOverIndex(null);
+    const alterarObrigatorio = (id) => {
+        const novosCampos = fields.map(campo =>
+            campo.id === id ? { ...campo, required: !campo.required } : campo
+        );
+        setFields(novosCampos);
     };
 
     // Função para verificar se ainda existem valores default no formulário
@@ -882,10 +824,12 @@ export default function CreateForm() {
                     !opt || opt.trim() === '' || /^Opção \d+$/.test(opt.trim())
                 );
 
-                if (hasDefaultOptions) {
-                    erros.push(`O campo ${nomeAmigavel} contém opções vazias ou com o nome padrão ("Opção X").`);
-                }
-            }
+     // Função que altera as opções de um campo dropdown específico
+    const alterarOptions = (id, novasOptions) => {
+        const listaOptions = novasOptions
+            .split(',')
+            .map(opcao => opcao.trim())
+            .filter(opcao => opcao !== '');
 
             // 4. Validar Colunas da Tabela
             if (field.type === 'table') {
@@ -903,58 +847,59 @@ export default function CreateForm() {
         return erros;
     };
 
-
-    // ── Submissão do formulário ──
-    // Valida os dados no frontend antes de enviar para o backend.
-    // ─── Submissão do formulário ──
+    // 2. Função que corre ao submeter o formulário
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        setIsLoading(true); // Desativa o botão
+        setErroNome('');
+        setErroDescricao('');
+        setErroAudience('');
+
+        let formValido = true;
         setErroNome('');
         setErroAudience('');
-        setErroFields([]);
+        setFieldErrors({});
 
-        const realFields = fields.filter(field => field.type !== 'section');
-        const fieldsWithOrder = fields.map((field, index) => ({
-            ...field,
-            order: index,
-            // Se for tabela, envia 'tableColumns' dentro de 'options' para o C#
-            options: field.type === 'table' ? field.tableColumns : field.options,
-            tableRowCount: field.type === 'table' ? field.tableRows : undefined
-        }));
-
-        // 1. Validações SEMPRE obrigatórias (Rascunho ou Publicado)
+        // 1. Validações base
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
-            return;
+            formValido = false;
         }
 
         if (audience.length === 0) {
-            setErroAudience('Seleciona pelo menos um público-alvo para o formulário.');
-            return;
+            setErroAudience("Tem de selecionar pelo menos um público-alvo.");
+            formValido = false;
         }
 
-        // IDENTIFICAR QUAL BOTÃO FOI CLICADO
-        const isFinal = e.nativeEvent.submitter.id === 'save-final';
+        // 2. Validações dos campos dinâmicos (Erro individual por cada input)
+        let novosErros = {};
+        let camposValidos = true;
 
-        // 2. ⭐ VALIDAÇÕES APENAS PARA QUANDO FOR PUBLICADO ⭐
-        if (isFinal) {
-            // Regra A: Tem de ter pelo menos um campo real (não conta se for só uma secção)
-            if (realFields.length === 0) {
-                setErroFields(['Adiciona pelo menos um campo ao formulário antes de publicar.']);
-                return;
+        fields.forEach(f => {
+            let errosDoCampo = {
+                label: !f.label || f.label.trim() === '',
+                placeholder: !f.placeholder || f.placeholder.trim() === '',
+                options: false
+            };
+
+            if (f.type === 'dropdown' && (f.options.length === 0 || f.options.some(opt => opt.trim() === ''))) {
+                errosDoCampo.options = true;
+            }
+            if (f.type === 'table' && (f.options.length === 0 || f.options.some(col => col.trim() === ''))) {
+                errosDoCampo.options = true;
             }
 
-            // Regra B: Os campos não podem ter os valores default
-            const errosDePreenchimento = validarFormularioCompleto(fields);
-
-            if (errosDePreenchimento.length > 0) {
-                setErroFields(errosDePreenchimento);
-                return;
+            if (errosDoCampo.label || errosDoCampo.placeholder || errosDoCampo.options) {
+                novosErros[f.id] = errosDoCampo;
+                camposValidos = false;
             }
+        });
 
-            // Se passou todas as validações, mostra o modal de confirmação
-            setShowConfirmPublish(true);
+        // 3. Se algo falhar, PÁRA aqui e não vai para o try/catch
+        if (!formValido || !camposValidos) {
+            if (!camposValidos) setFieldErrors(novosErros);
+            setIsLoading(false);
             return;
         }
 
@@ -991,12 +936,11 @@ export default function CreateForm() {
                 method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    Id: id,
                     Title: nome,
                     Description: descricao,
-                    Audience: audience,
-                    StatusDraft: !isFinal,
-                    Fields: fieldsWithOrder,
+                    StatusDraft: !isFinal, // Se o botão que disparou o evento for o de "Guardar", então o form será guardado como !Draft
+                    Fields: fields, // envia só os labels
+                    Audience: audience
                 }),
             });
 
@@ -1065,10 +1009,6 @@ export default function CreateForm() {
                 <h2 className="text-3xl font-bold text-text-h">{id ? 'Editar Formulário' : 'Novo Formulário'}</h2>
             </div>
 
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                {/* Informações básicas do formulário */}
-                <div className="flex flex-col gap-4 rounded-lg border border-accent-border bg-accent-bg p-6">
-                    {/* Nome */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="nome" className="font-medium text-text-h">
                             Nome do Formulário <span className="text-red-500">*</span>
@@ -1077,62 +1017,96 @@ export default function CreateForm() {
                             id="nome"
                             type="text"
                             value={nome}
-                            onChange={(e) => {
-                                setNome(e.target.value);
-                                setErroNome('');
-                            }}
+                            onChange={(e) => setNome(e.target.value)}
                             placeholder="Ex: Pedido de Aquisição de Material"
                             className={`rounded-md border p-2 focus:outline-none ${erroNome ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                         />
-                        {erroNome && <span className="text-red-500 text-sm">{erroNome}</span>}
+                        {erroNome && (
+                            <span className="text-red-500 text-sm">{erroNome}</span>
+                        )}
                     </div>
 
-                    {/* Descrição */}
                     <div className="flex flex-col gap-2">
-                        <label htmlFor="descricao" className="font-medium text-text-h">Descrição</label>
+                        <label htmlFor="descricao" className="font-medium text-text-h">
+                            Descrição
+                        </label>
                         <textarea
                             id="descricao"
                             value={descricao}
                             onChange={(e) => setDescricao(e.target.value)}
                             placeholder="Descreva o propósito deste formulário (opcional)..."
-                            rows={3}
-                            className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
+                            rows="4"
+                            className={`rounded-md border p-2 focus:outline-none ${erroDescricao ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
                         />
+                        {erroDescricao && <span className="text-red-500 text-sm">{erroDescricao}</span>}
                     </div>
-
-                    {/* Público-alvo */}
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-3">
                         <label className="font-medium text-text-h">
-                            Público-alvo <span className="text-red-500">*</span>
+                            Público-alvo
                         </label>
 
-                        <div className="flex flex-wrap gap-3">
-                            {AUDIENCE_OPTIONS.map(option => (
-                                <label
-                                    key={option.value}
-                                    className={`flex cursor-pointer items-center gap-2 rounded-md border px-4 py-2 text-sm transition-all
-                                        ${audience.includes(option.value)
-                                            ? 'border-green-500 bg-green-50 text-green-700'
-                                            : 'border-accent-border bg-white text-gray-600 hover:border-green-300'}`}
-                                >
-                                    <input
-                                        type="checkbox"
-                                        checked={audience.includes(option.value)}
-                                        onChange={() => toggleAudience(option.value)}
-                                        className="accent-green-600"
-                                    />
-                                    {option.label}
-                                </label>
-                            ))}
+                        <div className="flex flex-col gap-2 rounded-md border border-accent-border bg-white p-3">
+
+                            {/* Professores */}
+                            <label className="flex items-center gap-2 cursor-pointer text-sm">
+                                <input
+                                    type="checkbox"
+                                    checked={audience.includes("teacher")}
+                                    onChange={() => toggleAudience("teacher")}
+                                    className="h-4 w-4 accent-blue-600"
+                                />
+                                <span>Professores</span>
+                            </label>
+
+                            {/* Funcionários */}
+                            <label className="flex items-center gap-2 cursor-pointer text-sm">
+                                <input
+                                    type="checkbox"
+                                    checked={audience.includes("staff")}
+                                    onChange={() => toggleAudience("staff")}
+                                    className="h-4 w-4 accent-blue-600"
+                                />
+                                <span>Funcionários</span>
+                            </label>
+
+                            
+                            {erroAudience && (
+                            <span className="text-red-500 text-sm">
+                                {erroAudience}
+                            </span>
+                        )}
                         </div>
-
-                        <p className="text-xs text-gray-400">
-                            Define quem poderá visualizar e preencher este formulário depois de publicado.
-                        </p>
-
-                        {erroAudience && <span className="text-red-500 text-sm">{erroAudience}</span>}
+                        
                     </div>
-                </div>
+                    
+                    
+                    {/* Botão que permite adicionar novos campos ao formulário */}
+                    <div className="mt-4">
+                        <button
+                            type="button"
+                            onClick={adicionarCampo}
+                            className="rounded-md bg-gray-200 px-4 py-2 font-semibold transition-all hover:bg-gray-300"
+                        >
+                            + Adicionar Campo
+                        </button>
+                    </div>
+
+                    {/* Lista de campos adicionados dinamicamente */}
+                    {fields.map((campo) => (
+                        <div key={campo.id} className={`flex flex-col gap-4 mt-4 p-4 rounded-md border shadow-sm transition-all ${fieldErrors[campo.id] ? 'border-red-300 bg-red-50/30' : 'border-accent-border bg-white'}`}>
+
+                            {/* 1. Nome do Campo */}
+                            <div className="flex flex-col gap-2">
+                                <label className="font-medium text-sm text-text-h">Nome do campo</label>
+                                <input
+                                    type="text"
+                                    value={campo.label}
+                                    placeholder="Ex: Endereço ..."
+                                    onChange={(e) => alterarLabel(campo.id, e.target.value)}
+                                    className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.label ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
+                                />
+                                {fieldErrors[campo.id]?.label && <span className="text-red-500 text-sm">O nome do campo é obrigatório.</span>}
+                            </div>
 
                 {/* Editor visual de campos */}
                 <div className="flex flex-col gap-3">
@@ -1158,99 +1132,126 @@ export default function CreateForm() {
                         </div>
                     )}
 
-                    <div className="flex rounded-lg border border-gray-200 bg-white overflow-hidden" style={{ minHeight: '520px' }}>
-                        {/* Paleta de elementos */}
-                        <div className="flex flex-col gap-1.5 border-r border-gray-100 bg-gray-50 p-4 w-48 flex-shrink-0">
-                            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
-                                Elementos
-                            </p>
+                            {/* CONFIGURAÇÃO DA TABELA (Só aparece se o tipo for 'table') */}
+                            {campo.type === 'table' && (
+                                <div className="flex flex-col gap-4 mt-2 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                                    <p className="font-semibold text-sm text-text-h">Configuração da Tabela</p>
 
-                            {FIELD_TYPES.map((ft) => (
-                                <div
-                                    key={ft.type}
-                                    draggable
-                                    onDragStart={(e) => handlePaletteDragStart(e, ft.type)}
-                                    onClick={() => adicionarCampo(ft.type)}
-                                    className="flex items-center gap-2 rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs text-gray-700 cursor-grab active:cursor-grabbing hover:border-green-300 hover:bg-green-50 transition-all select-none"
-                                >
-                                    <span className={`flex h-5 w-5 items-center justify-center rounded text-[10px] font-bold flex-shrink-0 ${ft.color}`}>
-                                        {ft.icon}
-                                    </span>
-                                    {ft.label}
-                                </div>
-                            ))}
-
-                            <p className="mt-2 text-[10px] text-gray-300 text-center leading-snug">
-                                Arrasta ou clica
-                            </p>
-                        </div>
-
-                        {/* Canvas do formulário */}
-                        <div
-                            className="relative flex-1 p-4 overflow-y-auto"
-                            onDrop={handleCanvasDrop}
-                            onDragOver={(e) => e.preventDefault()}
-                            onClick={() => setSelectedId(null)}
-                            style={{
-                                backgroundImage: 'radial-gradient(circle, #d1d5db 1px, transparent 1px)',
-                                backgroundSize: '24px 24px',
-                            }}
-                        >
-                            {fields.length === 0 ? (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 pointer-events-none">
-                                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 text-3xl text-gray-200">
-                                        ⊞
+                                    {/* Caixas de texto das Colunas */}
+                                    <div className="flex flex-col gap-2">
+                                        <label className="text-sm font-medium">Colunas da Tabela</label>
+                                        {campo.options.map((coluna, idx) => (
+                                            <div key={idx} className="flex items-center gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={coluna}
+                                                    onChange={(e) => alterarColuna(campo.id, idx, e.target.value)}
+                                                    placeholder={`Nome da Coluna ${idx + 1}`}
+                                                    className={`flex-1 rounded-md border p-2 text-sm focus:outline-none ${fieldErrors[campo.id]?.options && (!coluna || coluna.trim() === '') ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removerColuna(campo.id, idx)}
+                                                    disabled={campo.options.length <= 1}
+                                                    className="flex-shrink-0 text-red-500 hover:text-red-700 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                                                    title="Remover coluna"
+                                                >
+                                                    🗑️
+                                                </button>
+                                            </div>
+                                        ))}
+                                        {fieldErrors[campo.id]?.options && <span className="text-red-500 text-sm">Todas as colunas têm de ter um nome.</span>}
                                     </div>
-                                    <p className="text-sm text-gray-300">Arrasta elementos para aqui</p>
-                                </div>
-                            ) : (
-                                <div className="grid gap-3" style={{ gridTemplateColumns: '1fr 1fr' }}>
-                                    {fields.map((campo, index) => (
-                                        <FieldCard
-                                            key={campo.id}
-                                            field={campo}
-                                            isSelected={selectedId === campo.id}
-                                            onSelect={(e) => {
-                                                e?.stopPropagation();
-                                                setSelectedId(campo.id);
-                                            }}
-                                            onRemove={() => removerCampo(campo.id)}
-                                            isDraggingOver={dragOverIndex === index}
-                                            onDragStart={(e) => handleCardDragStart(e, index)}
-                                            onDragOver={(e) => handleCardDragOver(e, index)}
-                                            onDrop={(e) => handleCardDrop(e, index)}
-                                            onDragEnd={handleCardDragEnd}
-                                        />
-                                    ))}
+
+                                    {/* Botão de Adicionar Coluna + Toggle de Linhas */}
+                                    <div className="flex flex-wrap items-center gap-6 mt-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => adicionarColuna(campo.id)}
+                                            className="bg-blue-100 text-blue-700 hover:bg-blue-200 text-sm px-4 py-2 rounded-md font-semibold transition"
+                                        >
+                                            + Adicionar Coluna
+                                        </button>
+
+                                        <label className="flex items-center gap-2 text-sm cursor-pointer font-medium">
+                                            <input
+                                                type="checkbox"
+                                                checked={campo.tableFixedRows}
+                                                onChange={(e) => alterarConfigTabela(campo.id, 'tableFixedRows', e.target.checked)}
+                                                className="w-4 h-4 cursor-pointer"
+                                            />
+                                            Número fixo de linhas?
+                                        </label>
+
+                                        {/* Caixa de Número de Linhas (Só aparece se o toggle estiver ativo) */}
+                                        {campo.tableFixedRows && (
+                                            <div className="flex items-center gap-2">
+                                                <label className="text-sm font-medium">Nº de linhas:</label>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    value={campo.tableRowCount}
+                                                    onChange={(e) => alterarConfigTabela(campo.id, 'tableRowCount', parseInt(e.target.value) || 1)}
+                                                    className="rounded-md border border-accent-border p-1 w-16 text-center focus:border-blue-500 focus:outline-none"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
+
+
+                            {/* 4. Opções do Menu Suspenso */}
+                            {campo.type === "dropdown" && (
+                                <div className="flex flex-col gap-2">
+                                    <label className="font-medium text-sm text-text-h">Opções do menu</label>
+                                    <input
+                                        type="text"
+                                        value={campo.options.join(', ')}
+                                        onChange={(e) => alterarOptions(campo.id, e.target.value)}
+                                        placeholder="Ex: Opção 1, Opção 2, Opção 3, ..."
+                                        className={`rounded-md border p-2 focus:outline-none ${fieldErrors[campo.id]?.options ? 'border-red-500' : 'border-accent-border focus:border-blue-500'}`}
+                                    />
+                                    {fieldErrors[campo.id]?.options ? (
+                                        <span className="text-red-500 text-sm">As opções não podem estar vazias.</span>
+                                    ) : (
+                                        <span className="text-xs text-gray-500">Separe as opções por vírgulas.</span>
+                                    )}
+                                </div>
+                            )}
+
+                            <label className="inline-flex items-center gap-2 text-sm font-medium mt-2">
+                                <input
+                                    type="checkbox"
+                                    checked={campo.required}
+                                    onChange={() => alterarObrigatorio(campo.id)}
+                                    className="h-4 w-4 rounded border-accent-border"
+                                />
+                                Campo obrigatório
+                            </label>
+
+                            <div className="flex justify-end mt-2">
+                                <button
+                                    type="button"
+                                    onClick={() => eliminarCampo(campo.id)}
+                                    className="flex items-center gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-600 transition-all hover:bg-red-100 hover:border-red-300"
+                                >
+                                    🗑️ Eliminar campo
+                                </button>
+                            </div>
+
                         </div>
+                    ))}
 
-                        {/* Painel lateral de edição do campo selecionado */}
-                        {selectedField && (
-                            <EditPanel
-                                field={selectedField}
-                                onClose={() => setSelectedId(null)}
-                                onUpdate={updateField}
-                            />
-                        )}
-                    </div>
-
-                    <p className="text-xs text-gray-300 text-right">
-                        Clica num campo para editar · Arrasta para reordenar · "Metade" coloca campos lado a lado
-                    </p>
-                </div>
-
-                {/* Botões de submissão */}
-                <div className="flex justify-end gap-3">
-                    <button
-                        disabled={isLoading}
-                        type="submit"
-                        id="save-draft"
-                        className="rounded-md border border-blue-300 bg-blue-50 px-6 py-2 font-semibold text-blue-700 transition-all hover:bg-blue-100 disabled:opacity-50"
-                    >
-                        Guardar como Rascunho
-                    </button>
+                    <div className="mt-6 flex justify-end gap-4 border-t border-accent-border pt-4">
+                        <button
+                            disabled={isLoading}
+                            type="submit"
+                            id="save-draft"
+                            className="rounded-md bg-blue-600 px-6 py-2 font-semibold text-white transition-all hover:bg-blue-700 disabled:opacity-50"
+                        >
+                            Guardar como Rascunho
+                        </button>
 
                     <button
                         disabled={isLoading}
