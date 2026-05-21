@@ -46,24 +46,28 @@ export default function Sidebar() {
       <nav className="space-y-2">
         {isUserView ? (
           <>
-            <Link to={isFuncionario ? '/funcionario' : '/professor'} className={linkCls}>
+            <Link
+              to={isFuncionario ? '/funcionario' : '/professor'}
+              className={linkCls}
+            >
               Formulários
             </Link>
             <button
               type="button"
               onClick={() => handleFakeAction('Formulários Preenchidos')}
               className={buttonCls}
-            >
-              Formulários Preenchidos
+             >
+            Formulários Preenchidos
             </button>
+
+            <Link to="/myinfo" className={linkCls}>
+              Informações Pessoais
+            </Link>
             <button
               type="button"
-              onClick={() => handleFakeAction('Informações Pessoais')}
+              onClick={handleLogout}
               className={buttonCls}
             >
-              Informações Pessoais
-            </button>
-            <button type="button" onClick={handleLogout} className={buttonCls}>
               Logout
             </button>
           </>
