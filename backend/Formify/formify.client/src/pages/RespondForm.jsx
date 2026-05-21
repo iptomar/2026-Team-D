@@ -111,7 +111,7 @@ export default function RespondForm() {
     const description = formData.description || formData.Description || '';
 
     return (
-        <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6">
             <button
                 onClick={() => navigate(-1)}
                 className="mb-6 text-accent font-semibold hover:text-emerald-700 transition-colors"
@@ -133,17 +133,19 @@ export default function RespondForm() {
                     </div>
                 </header>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-8">
                     {fields.map((field) => {
                         const type = field.type || field.Type;
                         const label = field.label || field.Label;
                         const fId = field.id || field.Id;
                         const req = field.required || field.Required;
                         const options = field.options || field.Options || [];
+                        const width = (field.width || field.Width || 'full').toLowerCase();
+                        const isHalf = width === 'half';
 
                         if (type === 'section') {
                             return (
-                                <div key={fId} className="pt-6 border-t border-gray-100">
+                                <div key={fId} className="col-span-1 sm:col-span-2 pt-6 border-t border-gray-100">
                                     <h2 className="text-xl font-bold text-text-h">{label}</h2>
                                     {(field.description || field.Description) && (
                                         <p className="text-sm text-text mt-1">{field.description || field.Description}</p>
@@ -153,7 +155,7 @@ export default function RespondForm() {
                         }
 
                         return (
-                            <div key={fId} className="flex flex-col gap-2">
+                            <div key={fId} className={`flex flex-col gap-2 ${isHalf ? 'sm:col-span-1' : 'col-span-1 sm:col-span-2'}`}>
                                 <label className="font-semibold text-text-h">
                                     {label} {req && <span className="text-red-500 ml-1">*</span>}
                                 </label>
@@ -270,7 +272,7 @@ export default function RespondForm() {
                         );
                     })}
 
-                    <div className="pt-8 border-t border-gray-100 flex justify-end">
+                    <div className="col-span-1 sm:col-span-2 pt-8 border-t border-gray-100 flex justify-end">
                         <button
                             type="submit"
                             className="bg-accent text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-700 transition-colors shadow-sm hover:shadow"
