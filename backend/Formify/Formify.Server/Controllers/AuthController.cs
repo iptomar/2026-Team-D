@@ -7,6 +7,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Formify.Server.Controllers
 {
@@ -92,6 +93,26 @@ namespace Formify.Server.Controllers
             var jwt = tokenHandler.WriteToken(token);
 
             return Ok(new { token = jwt, role = user.Role, username = user.Username });
+        }
+
+        [HttpGet("user/{username}")]
+        //[Authorize]
+        public async Task<IActionResult> GetUserByUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+                return BadRequest(new { error = "Username é obrigatório." });
+
+            var user = await _usersService.GetByUsernameAsync(username);
+            if (user == null)
+                return NotFound(new { error = "Utilizador não encontrado." });
+
+            return Ok(new
+            {
+                id = user.Id,
+                name = user.Name,
+                username = user.Username,
+                role = user.Role
+            });
         }
     }
 
