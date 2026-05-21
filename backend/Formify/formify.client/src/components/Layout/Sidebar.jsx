@@ -24,11 +24,6 @@ export default function Sidebar() {
   const buttonCls =
     'block w-full text-left rounded-lg px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-accent-bg hover:text-accent';
 
-  // Placeholder enquanto não existe sistema de autenticação real.
-  const handleFakeAction = (label) => {
-    alert(`${label}: funcionalidade em desenvolvimento.`);
-  };
-
   const handleLogout = () => {
     // Limpar dados de autenticação no client e redirecionar para a landing
     localStorage.removeItem('token');
