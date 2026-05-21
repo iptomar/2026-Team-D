@@ -1,15 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
- * AdminDashboard Component
- * 
- * Página principal para administradores gerenciarem formulários.
- * Funcionalidades:
- * - Lista de formulários criados
- * - Empty state com instruções quando não há formulários
- * 
- * Futura integração com API será implementada aqui.
+ * AdminDashboard Component Unificado
+ * Serve tanto para listar Formulários Publicados como Rascunhos.
  */
 export default function AdminDashboard({ isDraft = false }) {
     // Estatísticas (dados em tempo real do backend)
@@ -22,7 +16,11 @@ export default function AdminDashboard({ isDraft = false }) {
 
     // Lista de formulários carregados a partir do backend
     const [forms, setForms] = useState([]);
+
+    // Estado de carregamento da página
     const [isLoading, setIsLoading] = useState(true);
+
+    // Filtros da listagem
     const [selectedCargo, setSelectedCargo] = useState('todos');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortDate, setSortDate] = useState('newest');
@@ -62,7 +60,7 @@ export default function AdminDashboard({ isDraft = false }) {
     useEffect(() => {
         const fetchForms = async () => {
             try {
-                // Substitui pela URL real do teu endpoint .NET
+                setIsLoading(true);
                 const response = await fetch('http://localhost:5208/api/Forms');
 
                 if (!response.ok) {
@@ -70,17 +68,16 @@ export default function AdminDashboard({ isDraft = false }) {
                 }
 
                 const data = await response.json();
-                console.log(data.toString());
-                setForms(data); // Atualiza o estado com os dados do backend
+                setForms(data);
             } catch (error) {
-                console.error("Erro na integração:", error);
+                console.error('Erro na integração:', error);
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchForms();
-    }, []); // O array vazio garante que isto só corre uma vez
+    }, []);
 
     const normalizeText = (value) =>
         (value || '')
@@ -89,8 +86,16 @@ export default function AdminDashboard({ isDraft = false }) {
             .normalize('NFD')
             .replace(/[\u0300-\u036f]/g, '');
 
+    // ─── Filtro Magno ───
+    // Verifica se o formulário corresponde ao separador atual (Rascunho vs Publicado)
+    const isTargetStatus = (form) => {
+        const statusDrafted = form.statusDrafted ?? form.StatusDrafted;
+        return statusDrafted === isDraft;
+    };
+
     const getAudience = (form) => {
         const rawAudience = form.audience || form.Audience || [];
+
         if (Array.isArray(rawAudience)) {
             return rawAudience.map(normalizeText);
         }
@@ -102,8 +107,17 @@ export default function AdminDashboard({ isDraft = false }) {
         if (selectedCargo === 'todos') return true;
 
         const audience = getAudience(form);
-        const hasTeacher = audience.includes('teacher');
-        const hasStaff = audience.includes('staff');
+
+        const hasTeacher =
+            audience.includes('teacher') ||
+            audience.includes('professor') ||
+            audience.includes('professores');
+
+        const hasStaff =
+            audience.includes('staff') ||
+            audience.includes('funcionario') ||
+            audience.includes('funcionarios');
+
         const hasBoth = hasTeacher && hasStaff;
 
         if (selectedCargo === 'professores') {
@@ -114,13 +128,15 @@ export default function AdminDashboard({ isDraft = false }) {
             return hasStaff || hasBoth;
         }
 
-        return hasBoth;
+        return true;
     };
 
     const filteredForms = forms
+        .filter(isTargetStatus) // Agora filtra com base no isDraft!
         .filter(matchesCargo)
         .filter((form) => {
             const term = normalizeText(searchTerm.trim());
+
             if (!term) return true;
 
             const title = normalizeText(form.title || form.Title || '');
@@ -130,7 +146,9 @@ export default function AdminDashboard({ isDraft = false }) {
             const tokens = term.split(/\s+/).filter(Boolean);
             const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
 
-            return tokens.every((token) => words.some((word) => word.startsWith(token)));
+            return tokens.every((token) =>
+                words.some((word) => word.startsWith(token))
+            );
         });
 
     const filteredAndSortedForms = [...filteredForms].sort((a, b) => {
@@ -149,9 +167,10 @@ export default function AdminDashboard({ isDraft = false }) {
     const indexOfFirstForm = indexOfLastForm - formsPerPage;
     const paginatedForms = filteredAndSortedForms.slice(indexOfFirstForm, indexOfLastForm);
 
+    // Repõe a página a 1 se mudarmos de separador (isDraft) ou alterarmos filtros
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, selectedCargo, sortDate]);
+    }, [searchTerm, selectedCargo, sortDate, isDraft]);
 
     useEffect(() => {
         if (currentPage > totalPages) {
@@ -197,20 +216,23 @@ export default function AdminDashboard({ isDraft = false }) {
     };
 
     const handleDelete = async (id) => {
-        const confirmacao = window.confirm("Tens a certeza que queres eliminar este formulário?");
+        const confirmacao = window.confirm('Tens a certeza que queres eliminar este formulário?');
+
         if (!confirmacao) return;
 
         try {
-            const response = await fetch(`/api/Forms/${id}`, { method: 'DELETE' });
+            const response = await fetch(`http://localhost:5208/api/Forms/${id}`, {
+                method: 'DELETE',
+            });
+
             if (response.ok) {
-                // Remove o formulário da lista no ecrã imediatamente
                 setForms(forms.filter(form => form.id !== id && form.Id !== id));
             } else {
                 alert('Erro ao eliminar formulário.');
             }
         } catch (error) {
-            console.error("Erro:", error);
-            alert("Não foi possível ligar ao servidor.");
+            console.error('Erro:', error);
+            alert('Não foi possível ligar ao servidor.');
         }
     };
 
@@ -286,33 +308,37 @@ export default function AdminDashboard({ isDraft = false }) {
                     />
                 </div>
 
-          <div className="flex flex-col gap-2">
-              <label htmlFor="cargo-filter" className="font-medium text-text-h">Cargo</label>
-              <select
-                  id="cargo-filter"
-                  value={selectedCargo}
-                  onChange={(e) => setSelectedCargo(e.target.value)}
-                  className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-              >
-                  <option value="todos">Todos</option>
-                  <option value="professores">Professores</option>
-                  <option value="funcionarios">Funcionários</option>
-              </select>
-          </div>
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="cargo-filter" className="font-medium text-text-h">
+                        Cargo
+                    </label>
+                    <select
+                        id="cargo-filter"
+                        value={selectedCargo}
+                        onChange={(e) => setSelectedCargo(e.target.value)}
+                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
+                    >
+                        <option value="todos">Todos</option>
+                        <option value="professores">Professores</option>
+                        <option value="funcionarios">Funcionários</option>
+                    </select>
+                </div>
 
-          <div className="flex flex-col gap-2">
-              <label htmlFor="date-sort" className="font-medium text-text-h">Data de criação</label>
-              <select
-                  id="date-sort"
-                  value={sortDate}
-                  onChange={(e) => setSortDate(e.target.value)}
-                  className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-              >
-                  <option value="newest">Mais novos primeiro</option>
-                  <option value="oldest">Mais velhos primeiro</option>
-              </select>
-          </div>
-      </div>
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="date-sort" className="font-medium text-text-h">
+                        Data de criação
+                    </label>
+                    <select
+                        id="date-sort"
+                        value={sortDate}
+                        onChange={(e) => setSortDate(e.target.value)}
+                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
+                    >
+                        <option value="newest">Mais novos primeiro</option>
+                        <option value="oldest">Mais velhos primeiro</option>
+                    </select>
+                </div>
+            </div>
 
             {/* Secção de formulários */}
             <div className="rounded-lg flex-1 flex flex-col">
@@ -401,19 +427,20 @@ export default function AdminDashboard({ isDraft = false }) {
                             })}
                         </div>
 
-                      <div className="mt-auto pt-6 flex items-center justify-between">
-                          <button
-                              type="button"
-                              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                              disabled={currentPage === 1}
-                              className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                          >
-                              Anterior
-                          </button>
+                        {/* Paginação */}
+                        <div className="mt-auto pt-6 flex items-center justify-between">
+                            <button
+                                type="button"
+                                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                disabled={currentPage === 1}
+                                className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                                Anterior
+                            </button>
 
-                          <span className="text-sm text-text">
-                              Página {currentPage} de {totalPages}
-                          </span>
+                            <span className="text-sm text-text">
+                                Página {currentPage} de {totalPages}
+                            </span>
 
                             <button
                                 type="button"

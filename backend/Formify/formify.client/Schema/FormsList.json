@@ -1,621 +1,892 @@
 [
   {
     "Id": 1,
-    "Title": "Teste com altera\u00E7\u00E3o do backend",
-    "Description": "",
-    "Audience": [],
+    "Title": "Pedido de Altera\u00E7\u00E3o de Sala",
+    "Description": "Formul\u00E1rio para solicitar altera\u00E7\u00E3o de sala para aulas, reuni\u00F5es ou atividades institucionais.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1775597312208",
-        "Type": "text",
-        "Label": "label ",
+        "Id": "f1-section-1",
+        "Type": "section",
+        "Label": "Identifica\u00E7\u00E3o",
         "Required": false,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-nome",
+        "Type": "text",
+        "Label": "Nome completo",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 1,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-data",
+        "Type": "date",
+        "Label": "Data pretendida",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-sala-atual",
+        "Type": "text",
+        "Label": "Sala atual",
+        "Required": true,
+        "Placeholder": "Ex: O103",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-sala-pretendida",
+        "Type": "text",
+        "Label": "Sala pretendida",
+        "Required": false,
+        "Placeholder": "Ex: O204",
+        "Order": 4,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1-justificacao",
+        "Type": "textarea",
+        "Label": "Justifica\u00E7\u00E3o",
+        "Required": true,
+        "Placeholder": "Explique o motivo do pedido",
+        "Order": 5,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-07T22:28:43.3582975+01:00",
-    "UpdatedAt": "2026-04-07T22:28:43.3583018+01:00"
+    "CreatedAt": "2026-04-30T09:00:00+01:00",
+    "UpdatedAt": "2026-04-30T09:00:00+01:00"
   },
   {
     "Id": 2,
-    "Title": "Pedro",
-    "Description": "alguma coisa",
-    "Audience": [],
+    "Title": "Requisi\u00E7\u00E3o de Material Inform\u00E1tico",
+    "Description": "Pedido de equipamentos, perif\u00E9ricos ou software para uso institucional.",
+    "Audience": [
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1775659253677",
-        "Type": "text",
-        "Label": "Nome do aluno",
+        "Id": "f2-section-1",
+        "Type": "section",
+        "Label": "Dados do Pedido",
         "Required": false,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-nome",
+        "Type": "text",
+        "Label": "Nome do funcion\u00E1rio",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 1,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-departamento",
+        "Type": "dropdown",
+        "Label": "Departamento",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [
+          "Inform\u00E1tica",
+          "Servi\u00E7os Acad\u00E9micos",
+          "Recursos Humanos",
+          "Biblioteca",
+          "Outro"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-material",
+        "Type": "checkbox",
+        "Label": "Material solicitado",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 3,
+        "Width": "full",
+        "Options": [
+          "Computador",
+          "Monitor",
+          "Teclado",
+          "Rato",
+          "Software"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-prioridade",
+        "Type": "radio",
+        "Label": "Prioridade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 4,
+        "Width": "full",
+        "Options": [
+          "Baixa",
+          "Normal",
+          "Alta",
+          "Urgente"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f2-justificacao",
+        "Type": "textarea",
+        "Label": "Justifica\u00E7\u00E3o",
+        "Required": true,
+        "Placeholder": "Descreva a necessidade do material",
+        "Order": 5,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-08T15:41:15.3241351+01:00",
-    "UpdatedAt": "2026-04-08T15:41:15.3241399+01:00"
+    "CreatedAt": "2026-04-30T09:10:00+01:00",
+    "UpdatedAt": "2026-04-30T09:10:00+01:00"
   },
   {
     "Id": 3,
-    "Title": "teste",
-    "Description": "teste",
-    "Audience": [],
+    "Title": "Proposta de Atividade Pedag\u00F3gica",
+    "Description": "Submiss\u00E3o de propostas de workshops, visitas de estudo, semin\u00E1rios ou aulas abertas.",
+    "Audience": [
+      "Professor"
+    ],
     "StatusDrafted": false,
-    "Fields": [],
-    "CreatedAt": "2026-04-10T15:28:05.6871998+01:00",
-    "UpdatedAt": "2026-04-10T15:28:05.687203+01:00"
+    "Fields": [
+      {
+        "Id": "f3-section-1",
+        "Type": "section",
+        "Label": "Dados do Docente",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-docente",
+        "Type": "text",
+        "Label": "Nome do docente",
+        "Required": true,
+        "Placeholder": "Insira o nome do docente respons\u00E1vel",
+        "Order": 1,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-uc",
+        "Type": "text",
+        "Label": "Unidade curricular",
+        "Required": true,
+        "Placeholder": "Ex: Gest\u00E3o de Projetos",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-tipo",
+        "Type": "dropdown",
+        "Label": "Tipo de atividade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 3,
+        "Width": "full",
+        "Options": [
+          "Workshop",
+          "Semin\u00E1rio",
+          "Visita de estudo",
+          "Aula aberta",
+          "Outro"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-data",
+        "Type": "date",
+        "Label": "Data prevista",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 4,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f3-participantes",
+        "Type": "number",
+        "Label": "N\u00FAmero estimado de participantes",
+        "Required": true,
+        "Placeholder": "Ex: 25",
+        "Order": 5,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-30T09:20:00+01:00",
+    "UpdatedAt": "2026-04-30T09:20:00+01:00"
   },
   {
     "Id": 4,
-    "Title": "Rascunho",
-    "Description": "Rascunho",
-    "Audience": [],
-    "StatusDrafted": true,
+    "Title": "Comunica\u00E7\u00E3o de Aus\u00EAncia",
+    "Description": "Formul\u00E1rio para comunica\u00E7\u00E3o de aus\u00EAncia prevista ou imprevista.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
+    "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1775831333210",
+        "Id": "f4-nome",
         "Type": "text",
-        "Label": "Rascunho",
+        "Label": "Nome completo",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-tipo-ausencia",
+        "Type": "dropdown",
+        "Label": "Tipo de aus\u00EAncia",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "Doen\u00E7a",
+          "Forma\u00E7\u00E3o",
+          "Servi\u00E7o externo",
+          "Assunto pessoal",
+          "Outro"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-data-inicio",
+        "Type": "date",
+        "Label": "Data de in\u00EDcio",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-data-fim",
+        "Type": "date",
+        "Label": "Data de fim",
         "Required": false,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f4-observacoes",
+        "Type": "textarea",
+        "Label": "Observa\u00E7\u00F5es",
+        "Required": false,
+        "Placeholder": "Informa\u00E7\u00E3o adicional",
+        "Order": 4,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-10T15:28:59.8549571+01:00",
-    "UpdatedAt": "2026-04-10T15:28:59.8549595+01:00"
+    "CreatedAt": "2026-04-30T09:30:00+01:00",
+    "UpdatedAt": "2026-04-30T09:30:00+01:00"
+  },
+  {
+    "Id": 5,
+    "Title": "Pedido de Manuten\u00E7\u00E3o",
+    "Description": "Pedido de interven\u00E7\u00E3o t\u00E9cnica em salas, equipamentos ou espa\u00E7os comuns.",
+    "Audience": [
+      "Funcionario"
+    ],
+    "StatusDrafted": false,
+    "Fields": [
+      {
+        "Id": "f5-local",
+        "Type": "text",
+        "Label": "Local da ocorr\u00EAncia",
+        "Required": true,
+        "Placeholder": "Ex: Sala O103",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f5-categoria",
+        "Type": "dropdown",
+        "Label": "Categoria",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "Eletricidade",
+          "Mobili\u00E1rio",
+          "Climatiza\u00E7\u00E3o",
+          "Inform\u00E1tica",
+          "Limpeza",
+          "Outro"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f5-urgente",
+        "Type": "radio",
+        "Label": "\u00C9 urgente?",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [
+          "Sim",
+          "N\u00E3o"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f5-descricao",
+        "Type": "textarea",
+        "Label": "Descri\u00E7\u00E3o do problema",
+        "Required": true,
+        "Placeholder": "Descreva o problema encontrado",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-04-30T09:40:00+01:00",
+    "UpdatedAt": "2026-04-30T09:40:00+01:00"
   },
   {
     "Id": 6,
-    "Title": "Teste 2",
-    "Description": "Isto s\u00E3o muitos testes para o meu gosto",
-    "Audience": [],
+    "Title": "Inscri\u00E7\u00E3o em Forma\u00E7\u00E3o Interna",
+    "Description": "Formul\u00E1rio para inscri\u00E7\u00E3o em a\u00E7\u00F5es de forma\u00E7\u00E3o internas.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1775832885502",
-        "Type": "dropdown",
-        "Label": "Campo",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Id": "f6-nome",
+        "Type": "text",
+        "Label": "Nome completo",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
+        "Width": "full",
         "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f6-email",
+        "Type": "text",
+        "Label": "Email institucional",
+        "Required": true,
+        "Placeholder": "exemplo@ipt.pt",
+        "Order": 1,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f6-formacao",
+        "Type": "dropdown",
+        "Label": "Forma\u00E7\u00E3o pretendida",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [
+          "Excel interm\u00E9dio",
+          "Power BI",
+          "Ciberseguran\u00E7a",
+          "Intelig\u00EAncia Artificial",
+          "Gest\u00E3o de Projetos"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f6-disponibilidade",
+        "Type": "checkbox",
+        "Label": "Disponibilidade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 3,
+        "Width": "full",
+        "Options": [
+          "Manh\u00E3",
+          "Tarde",
+          "P\u00F3s-laboral"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-10T15:55:17.1819454+01:00",
-    "UpdatedAt": "2026-04-10T15:55:17.1819479+01:00"
+    "CreatedAt": "2026-04-30T09:50:00+01:00",
+    "UpdatedAt": "2026-04-30T09:50:00+01:00"
   },
   {
     "Id": 7,
-    "Title": "ffkghfk",
-    "Description": "kfgkg",
-    "Audience": [],
-    "StatusDrafted": true,
+    "Title": "Avalia\u00E7\u00E3o de Evento",
+    "Description": "Question\u00E1rio simples para recolha de feedback ap\u00F3s eventos institucionais.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
+    "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1775903389821",
-        "Type": "dropdown",
-        "Label": "gfkfg",
+        "Id": "f7-evento",
+        "Type": "text",
+        "Label": "Nome do evento",
+        "Required": true,
+        "Placeholder": "Insira o nome do evento",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f7-satisfacao",
+        "Type": "radio",
+        "Label": "Grau de satisfa\u00E7\u00E3o",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "Muito satisfeito",
+          "Satisfeito",
+          "Neutro",
+          "Insatisfeito"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f7-recomendaria",
+        "Type": "radio",
+        "Label": "Recomendaria este evento?",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [
+          "Sim",
+          "N\u00E3o"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f7-comentarios",
+        "Type": "textarea",
+        "Label": "Coment\u00E1rios ou sugest\u00F5es",
         "Required": false,
-        "Placeholder": "jgfjk",
-        "X": null,
-        "Y": null,
+        "Placeholder": "Escreva a sua opini\u00E3o",
+        "Order": 3,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-11T11:29:58.7171973+01:00",
-    "UpdatedAt": "2026-04-11T11:29:58.7172006+01:00"
+    "CreatedAt": "2026-04-30T10:00:00+01:00",
+    "UpdatedAt": "2026-04-30T10:00:00+01:00"
   },
   {
     "Id": 8,
-    "Title": "Teste tarefa #71",
-    "Description": "",
-    "Audience": [],
+    "Title": "Pedido de Apoio aos Servi\u00E7os Acad\u00E9micos",
+    "Description": "Pedido de esclarecimento ou apoio relacionado com processos acad\u00E9micos.",
+    "Audience": [
+      "Professor"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1776173619309",
+        "Id": "f8-nome",
         "Type": "text",
-        "Label": "Nome",
+        "Label": "Nome do docente",
         "Required": true,
-        "Placeholder": "Introduza o nome",
-        "X": null,
-        "Y": null,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f8-assunto",
+        "Type": "dropdown",
+        "Label": "Assunto",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "Pautas",
+          "Inscri\u00E7\u00F5es",
+          "Hor\u00E1rios",
+          "Sum\u00E1rios",
+          "Estudantes",
+          "Outro"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f8-urgencia",
+        "Type": "radio",
+        "Label": "N\u00EDvel de urg\u00EAncia",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [
+          "Normal",
+          "Urgente"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f8-descricao",
+        "Type": "textarea",
+        "Label": "Descri\u00E7\u00E3o do pedido",
+        "Required": true,
+        "Placeholder": "Descreva o pedido com detalhe",
+        "Order": 3,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-14T14:34:55.7329909+01:00",
-    "UpdatedAt": "2026-04-14T14:34:55.7329942+01:00"
+    "CreatedAt": "2026-04-30T10:10:00+01:00",
+    "UpdatedAt": "2026-04-30T10:10:00+01:00"
   },
   {
     "Id": 9,
-    "Title": "Teste 2 tarefa #71",
-    "Description": "",
-    "Audience": [],
+    "Title": "Registo de Ocorr\u00EAncia",
+    "Description": "Registo interno de ocorr\u00EAncias em espa\u00E7os, equipamentos ou servi\u00E7os.",
+    "Audience": [
+      "Funcionario"
+    ],
     "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1776173801082",
+        "Id": "f9-data",
+        "Type": "date",
+        "Label": "Data da ocorr\u00EAncia",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f9-local",
         "Type": "text",
-        "Label": "E-mail",
-        "Required": false,
-        "Placeholder": "Introduza o email",
-        "X": null,
-        "Y": null,
+        "Label": "Local",
+        "Required": true,
+        "Placeholder": "Ex: Biblioteca",
+        "Order": 1,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f9-tipo",
+        "Type": "dropdown",
+        "Label": "Tipo de ocorr\u00EAncia",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [
+          "Seguran\u00E7a",
+          "Equipamento",
+          "Infraestrutura",
+          "Atendimento",
+          "Outro"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f9-descricao",
+        "Type": "textarea",
+        "Label": "Descri\u00E7\u00E3o",
+        "Required": true,
+        "Placeholder": "Descreva a ocorr\u00EAncia",
+        "Order": 3,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-14T14:37:01.5967795+01:00",
-    "UpdatedAt": "2026-04-14T14:37:01.5967832+01:00"
+    "CreatedAt": "2026-04-30T10:20:00+01:00",
+    "UpdatedAt": "2026-04-30T10:20:00+01:00"
   },
   {
     "Id": 10,
-    "Title": "Teste 3 tarefa #71",
-    "Description": "",
-    "Audience": [],
-    "StatusDrafted": true,
+    "Title": "Pedido de Reserva de Equipamento",
+    "Description": "Formul\u00E1rio para reservar equipamentos institucionais por um per\u00EDodo definido.",
+    "Audience": [
+      "Professor",
+      "Funcionario"
+    ],
+    "StatusDrafted": false,
     "Fields": [
       {
-        "Id": "1776173866117",
-        "Type": "date",
-        "Label": "Data",
-        "Required": false,
+        "Id": "f10-nome",
+        "Type": "text",
+        "Label": "Nome do requerente",
+        "Required": true,
+        "Placeholder": "Insira o seu nome",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f10-equipamento",
+        "Type": "dropdown",
+        "Label": "Equipamento",
+        "Required": true,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "Projetor",
+          "Computador port\u00E1til",
+          "C\u00E2mara",
+          "Microfone",
+          "Colunas"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f10-data",
+        "Type": "date",
+        "Label": "Data de utiliza\u00E7\u00E3o",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f10-finalidade",
+        "Type": "textarea",
+        "Label": "Finalidade da reserva",
+        "Required": true,
+        "Placeholder": "Indique o motivo da reserva",
+        "Order": 3,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-14T14:38:01.3314342+01:00",
-    "UpdatedAt": "2026-04-14T14:38:01.3314383+01:00"
+    "CreatedAt": "2026-04-30T10:30:00+01:00",
+    "UpdatedAt": "2026-04-30T10:30:00+01:00"
   },
   {
     "Id": 11,
-    "Title": "Teste 4 tarefa #71",
-    "Description": "",
-    "Audience": [],
-    "StatusDrafted": false,
+    "Title": "Plano de Substitui\u00E7\u00E3o de Aula",
+    "Description": "Rascunho para registo de substitui\u00E7\u00F5es de aulas entre docentes.",
+    "Audience": [
+      "Professor"
+    ],
+    "StatusDrafted": true,
     "Fields": [
       {
-        "Id": "1776173936978",
-        "Type": "dropdown",
-        "Label": "Cargo",
-        "Required": false,
-        "Placeholder": "Indique o seu cargo",
-        "X": null,
-        "Y": null,
+        "Id": "f11-docente",
+        "Type": "text",
+        "Label": "Docente respons\u00E1vel",
+        "Required": true,
+        "Placeholder": "Nome do docente",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f11-uc",
+        "Type": "text",
+        "Label": "Unidade curricular ",
+        "Required": true,
+        "Placeholder": "Nome da unidade curricular",
+        "Order": 1,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f11-data",
+        "Type": "date",
+        "Label": "Data da aula",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-14T14:39:31.5545459+01:00",
-    "UpdatedAt": "2026-04-14T14:39:31.5545513+01:00"
+    "CreatedAt": "2026-04-30T10:40:00+01:00",
+    "UpdatedAt": "2026-04-30T12:58:50.8472013+01:00"
   },
   {
     "Id": 12,
-    "Title": "Teste tarefa #69",
-    "Description": "",
-    "Audience": [],
-    "StatusDrafted": false,
-    "Fields": [
-      {
-        "Id": "1776174537367",
-        "Type": "dropdown",
-        "Label": "Cargo",
-        "Required": false,
-        "Placeholder": "Insira o seu cargo",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "Docente",
-          "Funcion\u00E1rio",
-          "Aluno"
-        ],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      }
+    "Title": "Controlo Interno de Invent\u00E1rio",
+    "Description": "Rascunho para inventaria\u00E7\u00E3o simples de materiais e equipamentos.",
+    "Audience": [
+      "Funcionario"
     ],
-    "CreatedAt": "2026-04-14T14:54:11.1764946+01:00",
-    "UpdatedAt": "2026-04-14T14:54:11.1764996+01:00"
-  },
-  {
-    "Id": 13,
-    "Title": "teste",
-    "Description": "",
-    "Audience": [],
     "StatusDrafted": true,
     "Fields": [
       {
-        "Id": "1776363291381",
+        "Id": "f12-item",
         "Type": "text",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Label": "Nome do item",
+        "Required": true,
+        "Placeholder": "Ex: Monitor Dell",
+        "Order": 0,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
-        "Id": "1776363304430",
-        "Type": "text",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      }
-    ],
-    "CreatedAt": "2026-04-16T19:17:17.4679527+01:00",
-    "UpdatedAt": "2026-04-16T19:17:17.4679574+01:00"
-  },
-  {
-    "Id": 14,
-    "Title": "Teste com P\u00FAblico Alvo",
-    "Description": "",
-    "Audience": [],
-    "StatusDrafted": false,
-    "Fields": [],
-    "CreatedAt": "2026-04-16T20:10:34.8758257+01:00",
-    "UpdatedAt": "2026-04-16T20:10:34.8758273+01:00"
-  },
-  {
-    "Id": 15,
-    "Title": "Testar associa\u00E7\u00E3o do p\u00FAblico-alvo",
-    "Description": "",
-    "Audience": [],
-    "StatusDrafted": false,
-    "Fields": [
-      {
-        "Id": "1776367596723",
+        "Id": "f12-quantidade",
         "Type": "number",
-        "Label": "Endere\u00E7o",
+        "Label": "Quantidade",
         "Required": true,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      }
-    ],
-    "CreatedAt": "2026-04-16T20:27:28.2627762+01:00",
-    "UpdatedAt": "2026-04-16T20:27:28.2627777+01:00"
-  },
-  {
-    "Id": 16,
-    "Title": "teste",
-    "Description": "",
-    "Audience": [
-      "staff",
-      "teacher"
-    ],
-    "StatusDrafted": false,
-    "Fields": [],
-    "CreatedAt": "2026-04-16T20:32:57.261738+01:00",
-    "UpdatedAt": "2026-04-16T20:32:57.26174+01:00"
-  },
-  {
-    "Id": 17,
-    "Title": "teste",
-    "Description": "",
-    "Audience": [
-      "teacher",
-      "staff"
-    ],
-    "StatusDrafted": false,
-    "Fields": [],
-    "CreatedAt": "2026-04-16T20:36:13.3476495+01:00",
-    "UpdatedAt": "2026-04-16T20:36:13.3476762+01:00"
-  },
-  {
-    "Id": 18,
-    "Title": "klghklgh",
-    "Description": "gjhg",
-    "Audience": [
-      "staff"
-    ],
-    "StatusDrafted": true,
-    "Fields": [
-      {
-        "Id": "1776436058919",
-        "Type": "text",
-        "Label": "",
-        "Required": true,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Placeholder": "Ex: 5",
+        "Order": 1,
+        "Width": "full",
         "Options": [],
         "TableFixedRows": false,
         "TableRowCount": null
       },
       {
-        "Id": "1776436060720",
-        "Type": "text",
-        "Label": "jhgjhgjhg",
-        "Required": true,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      },
-      {
-        "Id": "1776436063065",
-        "Type": "text",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      }
-    ],
-    "CreatedAt": "2026-04-17T15:27:54.8898992+01:00",
-    "UpdatedAt": "2026-04-17T15:27:54.8899026+01:00"
-  },
-  {
-    "Id": 19,
-    "Title": "teste123456",
-    "Description": "",
-    "Audience": [
-      "teacher"
-    ],
-    "StatusDrafted": true,
-    "Fields": [
-      {
-        "Id": "1776436297428",
-        "Type": "text",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      },
-      {
-        "Id": "1776436297912",
-        "Type": "number",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      },
-      {
-        "Id": "1776436298384",
-        "Type": "date",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": null
-      },
-      {
-        "Id": "1776436298913",
+        "Id": "f12-estado",
         "Type": "dropdown",
-        "Label": "",
-        "Required": false,
+        "Label": "Estado",
+        "Required": true,
         "Placeholder": "",
-        "X": null,
-        "Y": null,
+        "Order": 2,
+        "Width": "full",
         "Options": [
-          "hkjhj"
+          "Novo",
+          "Bom",
+          "Usado",
+          "Danificado",
+          "Abatido"
         ],
         "TableFixedRows": false,
         "TableRowCount": null
       }
     ],
-    "CreatedAt": "2026-04-17T15:32:10.9598071+01:00",
-    "UpdatedAt": "2026-04-17T15:32:10.9598097+01:00"
-  },
-  {
-    "Id": 20,
-    "Title": "teste tabela1",
-    "Description": "",
-    "Audience": [
-      "staff"
-    ],
-    "StatusDrafted": true,
-    "Fields": [
-      {
-        "Id": "1776437628068",
-        "Type": "table",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "col1",
-          "col2",
-          "col3",
-          "col4"
-        ],
-        "TableFixedRows": true,
-        "TableRowCount": 20
-      }
-    ],
-    "CreatedAt": "2026-04-17T15:54:45.8862899+01:00",
-    "UpdatedAt": "2026-04-17T15:54:45.8862952+01:00"
-  },
-  {
-    "Id": 21,
-    "Title": "teste tabela 2",
-    "Description": "",
-    "Audience": [
-      "teacher"
-    ],
-    "StatusDrafted": false,
-    "Fields": [
-      {
-        "Id": "1776437694710",
-        "Type": "table",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "col1",
-          "col12",
-          "col123"
-        ],
-        "TableFixedRows": false,
-        "TableRowCount": 1
-      }
-    ],
-    "CreatedAt": "2026-04-17T15:55:10.1372442+01:00",
-    "UpdatedAt": "2026-04-17T15:55:10.1372462+01:00"
-  },
-  {
-    "Id": 22,
-    "Title": "teste tabela 3",
-    "Description": "",
-    "Audience": [
-      "staff"
-    ],
-    "StatusDrafted": false,
-    "Fields": [
-      {
-        "Id": "1776437720381",
-        "Type": "table",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": 1
-      }
-    ],
-    "CreatedAt": "2026-04-17T15:55:24.2203399+01:00",
-    "UpdatedAt": "2026-04-17T15:55:24.220343+01:00"
-  },
-  {
-    "Id": 23,
-    "Title": "utyuyit",
-    "Description": "",
-    "Audience": [
-      "teacher"
-    ],
-    "StatusDrafted": true,
-    "Fields": [
-      {
-        "Id": "1776440200428",
-        "Type": "dropdown",
-        "Label": "jkhjkh",
-        "Required": false,
-        "Placeholder": "jhjhjh",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": 1
-      }
-    ],
-    "CreatedAt": "2026-04-17T16:36:54.4688903+01:00",
-    "UpdatedAt": "2026-04-17T16:36:54.4688931+01:00"
-  },
-  {
-    "Id": 24,
-    "Title": "jhjhjhj",
-    "Description": "",
-    "Audience": [
-      "teacher"
-    ],
-    "StatusDrafted": false,
-    "Fields": [
-      {
-        "Id": "1776440712428",
-        "Type": "text",
-        "Label": "",
-        "Required": false,
-        "Placeholder": "",
-        "X": null,
-        "Y": null,
-        "Options": [],
-        "TableFixedRows": false,
-        "TableRowCount": 1
-      }
-    ],
-    "CreatedAt": "2026-04-17T16:45:17.0907498+01:00",
-    "UpdatedAt": "2026-04-17T16:45:17.0907526+01:00"
-  },
-  {
-    "Id": 25,
-    "Title": "lmkdlkwmd",
-    "Description": "",
-    "Audience": [
-      "teacher"
-    ],
-    "StatusDrafted": true,
-    "Fields": [
-      {
-        "Id": "1776442398899",
-        "Type": "table",
-        "Label": "kjkj",
-        "Required": false,
-        "Placeholder": "qsq",
-        "X": null,
-        "Y": null,
-        "Options": [
-          "alkdjlkd"
-        ],
-        "TableFixedRows": false,
-        "TableRowCount": 1
-      }
-    ],
-    "CreatedAt": "2026-04-17T17:15:41.09849+01:00",
-    "UpdatedAt": "2026-04-17T17:15:41.0984992+01:00"
+    "CreatedAt": "2026-04-30T10:50:00+01:00",
+    "UpdatedAt": "2026-04-30T22:32:16.6053302+01:00"
   },
   {
     "Id": 13,
     "Title": "Requerimento Inscri\u00E7\u00E3o em Exame",
     "Description": "",
     "Audience": [
-      "teacher"
+      "Professor"
     ],
     "StatusDrafted": false,
     "Fields": [
