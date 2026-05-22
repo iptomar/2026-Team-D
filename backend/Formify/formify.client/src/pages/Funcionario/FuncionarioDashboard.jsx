@@ -37,7 +37,7 @@ export default function FuncionarioDashboard() {
 
    
     const filteredForms = forms
-        .filter(form => (form.statusDrafted ?? form.StatusDrafted) === false)
+        .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
         .filter(form => {
             const audienceData = JSON.stringify(form.audience || form.Audience || "");
             const audienceStr = normalizeText(audienceData);

@@ -657,9 +657,10 @@ export default function CreateForm() {
 
                 const formDados = await response.json();
 
-                const isPublished = (formDados.statusDrafted ?? formDados.StatusDrafted) === false;
-                if (isPublished) {
-                    pushToast('error', 'Este formulário está publicado e não pode ser editado.');
+                // Arquivados só podem ser editados depois de reativados.
+                const status = (formDados.status || formDados.Status || '').toString().toLowerCase();
+                if (status === 'archived') {
+                    pushToast('error', 'Este formulário está arquivado. Reativa-o antes de o editares.');
                     navigate('/admin');
                     return;
                 }
