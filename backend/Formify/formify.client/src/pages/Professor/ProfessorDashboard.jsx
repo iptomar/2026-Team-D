@@ -36,7 +36,7 @@ export default function ProfessorDashboard() {
         (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
     const filteredForms = forms
-        .filter(form => (form.statusDrafted ?? form.StatusDrafted) === false)
+        .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
         .filter(form => {
             const rawAudience = form.audience || form.Audience || [];
             const audienceArray = Array.isArray(rawAudience) ? rawAudience.map(normalizeText) : [normalizeText(rawAudience)];

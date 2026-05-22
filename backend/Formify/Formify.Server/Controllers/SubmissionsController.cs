@@ -1,3 +1,4 @@
+using Formify.Server.Models;
 using Formify.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,9 @@ namespace Formify.Server.Controllers
                 .Select(s =>
                 {
                     var form = allForms.FirstOrDefault(f => f.Id == s.FormId);
+                    // "stale" = o formulário foi alterado depois desta submissão.
+                    var isStale = form != null && form.Version > s.FormVersion;
+                    var formArchived = form != null && form.Status == FormStatus.Archived;
                     return new
                     {
                         id = s.Id,
@@ -44,7 +48,11 @@ namespace Formify.Server.Controllers
                         formTitle = form?.Title ?? "(Formulário removido)",
                         formDescription = form?.Description,
                         submittedAt = s.SubmittedAt,
-                        status = "Submetido"
+                        status = "Submetido",
+                        formVersion = s.FormVersion,
+                        currentFormVersion = form?.Version,
+                        isStale,
+                        formArchived
                     };
                 })
                 .ToList();
@@ -80,6 +88,9 @@ namespace Formify.Server.Controllers
             var allForms = await _jsonHandler.GetAllFormsAsync();
             var form = allForms.FirstOrDefault(f => f.Id == submission.FormId);
 
+            var isStale = form != null && form.Version > submission.FormVersion;
+            var formArchived = form != null && form.Status == FormStatus.Archived;
+
             return Ok(new
             {
                 id = submission.Id,
@@ -87,7 +98,11 @@ namespace Formify.Server.Controllers
                 submittedAt = submission.SubmittedAt,
                 status = "Submetido",
                 answers = submission.Answers,
-                form
+                form,
+                formVersion = submission.FormVersion,
+                currentFormVersion = form?.Version,
+                isStale,
+                formArchived
             });
         }
 

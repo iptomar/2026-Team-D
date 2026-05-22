@@ -146,9 +146,27 @@ export default function MySubmissions() {
                                         <h3 className="font-bold text-lg text-text-h group-hover:text-accent transition-colors">
                                             {s.formTitle}
                                         </h3>
-                                        <span className="shrink-0 rounded-full bg-accent-bg px-3 py-1 text-xs font-semibold text-accent">
-                                            {s.status || 'Submetido'}
-                                        </span>
+                                        <div className="flex shrink-0 flex-col items-end gap-1">
+                                            <span className="rounded-full bg-accent-bg px-3 py-1 text-xs font-semibold text-accent">
+                                                {s.status || 'Submetido'}
+                                            </span>
+                                            {s.isStale && (
+                                                <span
+                                                    className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 border border-amber-200"
+                                                    title="O formulário foi alterado desde a tua submissão"
+                                                >
+                                                    Desatualizado
+                                                </span>
+                                            )}
+                                            {s.formArchived && (
+                                                <span
+                                                    className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-700 border border-gray-200"
+                                                    title="O formulário já não está disponível"
+                                                >
+                                                    Arquivado
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
 
                                     {s.formDescription && (
