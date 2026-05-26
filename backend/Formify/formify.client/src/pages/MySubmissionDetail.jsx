@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import StatusBadge from '../components/StatusBadge';
 
 const formatDate = (iso) => {
     if (!iso) return '—';
@@ -223,9 +224,7 @@ export default function MySubmissionDetail() {
                             )}
                         </div>
                         <div className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
-                            <span className="inline-flex w-fit items-center gap-2 rounded-full bg-accent-bg px-3 py-1 text-sm font-semibold text-accent">
-                                {data.status || 'Submetido'}
-                            </span>
+                             <StatusBadge status={data.status} />
                             {data.isStale && (
                                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
                                     Desatualizado
