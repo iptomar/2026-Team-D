@@ -16,5 +16,7 @@
         // Versão do formulário no momento da submissão. Permite detetar se o
         // formulário foi alterado depois da submissão (submissão desatualizada).
         public int FormVersion { get; set; } = 1;
+
+        public string Status { get; set; } = "Pending";
     }
 }

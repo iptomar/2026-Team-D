@@ -3,6 +3,7 @@ using Formify.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Formify.Server.DTOs;
 
 namespace Formify.Server.Controllers
 {
@@ -48,11 +49,12 @@ namespace Formify.Server.Controllers
                         formTitle = form?.Title ?? "(Formulário removido)",
                         formDescription = form?.Description,
                         submittedAt = s.SubmittedAt,
-                        status = "Submetido",
+                       // status = "Submetido",
                         formVersion = s.FormVersion,
                         currentFormVersion = form?.Version,
                         isStale,
-                        formArchived
+                        formArchived,
+                        status = s.Status ?? "Pending"
                     };
                 })
                 .ToList();
@@ -96,7 +98,7 @@ namespace Formify.Server.Controllers
                 id = submission.Id,
                 formId = submission.FormId,
                 submittedAt = submission.SubmittedAt,
-                status = "Submetido",
+                status = submission.Status ?? "Pending",
                 answers = submission.Answers,
                 form,
                 formVersion = submission.FormVersion,
@@ -112,5 +114,29 @@ namespace Formify.Server.Controllers
             var claim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             return !string.IsNullOrEmpty(claim) && int.TryParse(claim, out userId);
         }
+
+        // PUT /api/submissions/{id}/status
+        [HttpPut("{id}/status")]
+        [Authorize]
+        public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateStatusRequest request)
+        {
+            var validStatuses = new[] { "Pending", "Approved" };
+            if (!validStatuses.Contains(request.Status))
+                return BadRequest(new { message = "Estado inválido." });
+
+            var allSubmissions = await _jsonHandler.GetAllSubmissionsAsync();
+            var submission = allSubmissions.FirstOrDefault(s => s.Id == id);
+
+            if (submission == null)
+                return NotFound(new { message = "Submissão não encontrada." });
+
+            submission.Status = request.Status;
+            await _jsonHandler.SaveSubmissionsAsync(allSubmissions);
+
+            return Ok(new { message = "Estado atualizado.", status = submission.Status });
+        }
+
+
+
     }
 }
