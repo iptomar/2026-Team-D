@@ -7,7 +7,8 @@
       "Professor",
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f1-section-1",
@@ -92,7 +93,8 @@
     "Audience": [
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f2-section-1",
@@ -194,7 +196,8 @@
     "Audience": [
       "Professor"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f3-section-1",
@@ -286,7 +289,8 @@
       "Professor",
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f4-nome",
@@ -365,7 +369,8 @@
     "Audience": [
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f5-local",
@@ -437,7 +442,8 @@
       "Professor",
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f6-nome",
@@ -509,7 +515,8 @@
       "Professor",
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f7-evento",
@@ -578,7 +585,8 @@
     "Audience": [
       "Professor"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f8-nome",
@@ -649,7 +657,8 @@
     "Audience": [
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f9-data",
@@ -717,7 +726,8 @@
       "Professor",
       "Funcionario"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f10-nome",
@@ -784,7 +794,8 @@
     "Audience": [
       "Professor"
     ],
-    "StatusDrafted": true,
+    "Status": "Draft",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f11-docente",
@@ -833,7 +844,8 @@
     "Audience": [
       "Funcionario"
     ],
-    "StatusDrafted": true,
+    "Status": "Draft",
+    "Version": 1,
     "Fields": [
       {
         "Id": "f12-item",
@@ -888,7 +900,8 @@
     "Audience": [
       "Professor"
     ],
-    "StatusDrafted": false,
+    "Status": "Published",
+    "Version": 1,
     "Fields": [
       {
         "Id": "114d4208-8844-4476-8351-ef120a027d55",

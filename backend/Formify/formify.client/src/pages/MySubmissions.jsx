@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import StatusBadge from '../components/StatusBadge';
 
 const API_URL = 'http://localhost:5208/api/Submissions/me';
 
@@ -147,9 +148,7 @@ export default function MySubmissions() {
                                             {s.formTitle}
                                         </h3>
                                         <div className="flex shrink-0 flex-col items-end gap-1">
-                                            <span className="rounded-full bg-accent-bg px-3 py-1 text-xs font-semibold text-accent">
-                                                {s.status || 'Submetido'}
-                                            </span>
+                                            <StatusBadge status={s.status} />
                                             {s.isStale && (
                                                 <span
                                                     className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 border border-amber-200"
