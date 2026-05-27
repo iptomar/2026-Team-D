@@ -53,6 +53,7 @@ namespace Formify.Server.Controllers
                 Id = allForms.Any() ? allForms.Max(f => f.Id) + 1 : 1,
                 Title = request.Title.Trim(),
                 Description = request.Description?.Trim(),
+                Category = request.Category,
                 Audience = request.Audience,
                 Status = StatusFromRequest(request.StatusDraft),
                 CreatedAt = DateTime.Now,
@@ -209,6 +210,7 @@ namespace Formify.Server.Controllers
 
             formToUpdate.Title = request.Title.Trim();
             formToUpdate.Description = request.Description?.Trim();
+            formToUpdate.Category = request.Category;
             formToUpdate.Audience = request.Audience;
             formToUpdate.Status = StatusFromRequest(request.StatusDraft);
             formToUpdate.UpdatedAt = DateTime.Now;

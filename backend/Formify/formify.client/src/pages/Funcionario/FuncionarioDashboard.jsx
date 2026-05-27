@@ -118,12 +118,19 @@ export default function FuncionarioDashboard() {
                                 const title = form.title || form.Title || 'Sem titulo';
                                 const description = form.description || form.Description || 'Sem descricao';
 
+                                const category = form.category || form.Category || 'Geral';
+
                                 return (
                                     <div
                                         key={id}
                                         onClick={() => navigate(`/respond/${id}`)}
                                         className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer bg-white"
                                     >
+                                        <div className="mb-2">
+                                            <span className="inline-block rounded-full bg-blue-50 border border-blue-100 px-2 py-1 text-[10px] font-bold text-blue-700 uppercase tracking-wider">
+                                                {category}
+                                            </span>
+                                        </div>
                                         <h3 className="font-bold text-lg text-text-h group-hover:text-blue-600 transition-colors mb-3">
                                             {title}
                                         </h3>
