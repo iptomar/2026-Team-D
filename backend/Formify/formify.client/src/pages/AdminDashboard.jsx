@@ -355,6 +355,8 @@ function FormCard({ form, tab, onOpen, onEdit, onDuplicate, onArchive, onUnarchi
     const description = form.description || form.Description || 'Sem descrição';
     const status = getStatus(form);
 
+    const category = form.category || form.Category || 'Geral';
+
     const badge = {
         published: 'bg-green-50 text-green-700 border-green-100',
         draft: 'bg-amber-50 text-amber-700 border-amber-100',
@@ -373,6 +375,12 @@ function FormCard({ form, tab, onOpen, onEdit, onDuplicate, onArchive, onUnarchi
             onClick={() => onOpen(id)}
             className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-accent transition-all cursor-pointer bg-white"
         >
+            <div className="mb-2">
+                <span className="inline-block rounded-full bg-blue-50 border border-blue-100 px-2 py-1 text-[10px] font-bold text-blue-700 uppercase tracking-wider">
+                    {category}
+                </span>
+            </div>
+
             <div className="mb-3 flex items-start justify-between gap-3">
                 <h3 className="font-bold text-lg text-text-h group-hover:text-accent transition-colors">
                     {title}
