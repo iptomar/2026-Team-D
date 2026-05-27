@@ -1,11 +1,17 @@
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const CATEGORIAS = [
+    "Académicos", "Secretaria", "Recursos Humanos",
+    "Pedidos Internos", "Declarações", "Requerimentos", "Geral"
+];
+
 export default function FuncionarioDashboard() {
     const [forms, setForms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('todas');
     const [sortDate, setSortDate] = useState('newest');
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -35,7 +41,6 @@ export default function FuncionarioDashboard() {
     const normalizeText = (value) =>
         (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-   
     const filteredForms = forms
         .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
         .filter(form => {
@@ -43,6 +48,11 @@ export default function FuncionarioDashboard() {
             const audienceStr = normalizeText(audienceData);
 
             return audienceStr.includes('funcionario') || audienceStr.includes('staff');
+        })
+        .filter(form => {
+            if (selectedCategory === 'todas') return true;
+            const formCat = (form.category || form.Category || 'Geral').toLowerCase();
+            return formCat === selectedCategory.toLowerCase();
         })
         .filter(form => {
             const term = normalizeText(searchTerm.trim());
@@ -69,7 +79,7 @@ export default function FuncionarioDashboard() {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, sortDate]);
+    }, [searchTerm, selectedCategory, sortDate]);
 
     return (
         <div className="min-h-[calc(100vh-140px)] space-y-8 flex flex-col">
@@ -78,7 +88,7 @@ export default function FuncionarioDashboard() {
                 <p className="text-lg text-text">Formularios disponiveis para preenchimento</p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 my-6">
+            <div className="grid gap-4 sm:grid-cols-3 my-6">
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Pesquisar</label>
                     <input
@@ -88,6 +98,19 @@ export default function FuncionarioDashboard() {
                         placeholder="Nome do formulario..."
                         className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
                     />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label className="font-medium text-text-h">Categoria</label>
+                    <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
+                    >
+                        <option value="todas">Todas as categorias</option>
+                        {CATEGORIAS.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Ordenar por</label>
@@ -117,7 +140,6 @@ export default function FuncionarioDashboard() {
                                 const id = form.id || form.Id;
                                 const title = form.title || form.Title || 'Sem titulo';
                                 const description = form.description || form.Description || 'Sem descricao';
-
                                 const category = form.category || form.Category || 'Geral';
 
                                 return (

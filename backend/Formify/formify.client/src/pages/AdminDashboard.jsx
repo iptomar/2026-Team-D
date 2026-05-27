@@ -7,6 +7,12 @@ const TABS = [
     { key: 'archived', label: 'Arquivados', emptyHint: 'Sem formulários arquivados.' },
 ];
 
+// Lista oficial de categorias baseada na Issue #181
+const CATEGORIAS = [
+    "Académicos", "Secretaria", "Recursos Humanos",
+    "Pedidos Internos", "Declarações", "Requerimentos", "Geral"
+];
+
 const normalizeText = (value) =>
     (value || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
@@ -47,9 +53,13 @@ export default function AdminDashboard() {
     const [forms, setForms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
+    // Filtros
     const [selectedCargo, setSelectedCargo] = useState('todos');
+    const [selectedCategory, setSelectedCategory] = useState('todas');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortDate, setSortDate] = useState('newest');
+
+    // Paginação
     const [currentPage, setCurrentPage] = useState(1);
     const formsPerPage = 12;
 
@@ -95,6 +105,11 @@ export default function AdminDashboard() {
         const filtered = forms
             .filter((form) => matchesCargo(form, selectedCargo))
             .filter((form) => {
+                if (selectedCategory === 'todas') return true;
+                const formCat = (form.category || form.Category || 'Geral').toLowerCase();
+                return formCat === selectedCategory.toLowerCase();
+            })
+            .filter((form) => {
                 const term = normalizeText(searchTerm.trim());
                 if (!term) return true;
 
@@ -112,7 +127,7 @@ export default function AdminDashboard() {
             const dateB = new Date(b.createdAt || b.CreatedAt || 0).getTime();
             return sortDate === 'oldest' ? dateA - dateB : dateB - dateA;
         });
-    }, [forms, selectedCargo, searchTerm, sortDate]);
+    }, [forms, selectedCargo, selectedCategory, searchTerm, sortDate]);
 
     const totalPages = Math.max(1, Math.ceil(filteredAndSortedForms.length / formsPerPage));
     const paginatedForms = filteredAndSortedForms.slice(
@@ -124,9 +139,10 @@ export default function AdminDashboard() {
         if (currentPage > totalPages) setCurrentPage(totalPages);
     }, [currentPage, totalPages]);
 
+    // O useEffect agora "ouve" as mudanças da categoria também
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, selectedCargo, sortDate]);
+    }, [searchTerm, selectedCargo, selectedCategory, sortDate]);
 
     const removeFormFromList = (id) =>
         setForms((prev) => prev.filter((f) => (f.id ?? f.Id) !== id));
@@ -223,11 +239,10 @@ export default function AdminDashboard() {
                                 key={tab.key}
                                 type="button"
                                 onClick={() => setActiveTab(tab.key)}
-                                className={`border-b-2 px-4 py-2 text-sm font-semibold transition-colors ${
-                                    isActive
+                                className={`border-b-2 px-4 py-2 text-sm font-semibold transition-colors ${isActive
                                         ? 'border-accent text-accent'
                                         : 'border-transparent text-text hover:border-accent-border hover:text-text-h'
-                                }`}
+                                    }`}
                             >
                                 {tab.label}
                             </button>
@@ -237,7 +252,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Filtros */}
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <div className="flex flex-col gap-2">
                     <label htmlFor="search-form" className="font-medium text-text-h">Pesquisar</label>
                     <input
@@ -248,6 +263,21 @@ export default function AdminDashboard() {
                         placeholder="Nome ou palavras-chave"
                         className="rounded-md border border-accent-border bg-white p-2 focus:border-accent focus:outline-none"
                     />
+                </div>
+
+                <div className="flex flex-col gap-2">
+                    <label htmlFor="category-filter" className="font-medium text-text-h">Categoria</label>
+                    <select
+                        id="category-filter"
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="rounded-md border border-accent-border bg-white p-2 focus:border-accent focus:outline-none"
+                    >
+                        <option value="todas">Todas as categorias</option>
+                        {CATEGORIAS.map((cat) => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="flex flex-col gap-2">
@@ -338,8 +368,8 @@ export default function AdminDashboard() {
 function StatCard({ label, value, hint, accent }) {
     const valueClass =
         accent === 'amber' ? 'text-amber-600'
-        : accent === 'gray' ? 'text-gray-600'
-        : 'text-accent';
+            : accent === 'gray' ? 'text-gray-600'
+                : 'text-accent';
     return (
         <div className="rounded-lg border border-accent-border p-6 bg-white">
             <h3 className="text-sm font-medium text-text-h">{label}</h3>
@@ -385,7 +415,7 @@ function FormCard({ form, tab, onOpen, onEdit, onDuplicate, onArchive, onUnarchi
                 <h3 className="font-bold text-lg text-text-h group-hover:text-accent transition-colors">
                     {title}
                 </h3>
-                <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wider border ${badge}`}>
+                <span className={`shrink-0 rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wider border ${badge}`}>
                     {badgeLabel}
                 </span>
             </div>
