@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CATEGORIAS = [
@@ -41,40 +41,42 @@ export default function ProfessorDashboard() {
     const normalizeText = (value) =>
         (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-    const filteredForms = forms
-        .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
-        .filter(form => {
-            const rawAudience = form.audience || form.Audience || [];
-            const audienceArray = Array.isArray(rawAudience) ? rawAudience.map(normalizeText) : [normalizeText(rawAudience)];
+    const filteredAndSortedForms = useMemo(() => {
+        const filtered = forms
+            .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
+            .filter(form => {
+                const rawAudience = form.audience || form.Audience || [];
+                const audienceArray = Array.isArray(rawAudience) ? rawAudience.map(normalizeText) : [normalizeText(rawAudience)];
 
-            return audienceArray.includes('teacher') ||
-                audienceArray.includes('professor') ||
-                audienceArray.includes('professores');
-        })
-        .filter(form => {
-            if (selectedCategory === 'todas') return true;
-            const formCat = (form.category || form.Category || 'Geral').toLowerCase();
-            return formCat === selectedCategory.toLowerCase();
-        })
-        .filter(form => {
-            const term = normalizeText(searchTerm.trim());
-            if (!term) return true;
+                return audienceArray.includes('teacher') ||
+                    audienceArray.includes('professor') ||
+                    audienceArray.includes('professores');
+            })
+            .filter(form => {
+                if (selectedCategory === 'todas') return true;
+                const formCat = (form.category || form.Category || 'Geral').toLowerCase();
+                return formCat === selectedCategory.toLowerCase();
+            })
+            .filter(form => {
+                const term = normalizeText(searchTerm.trim());
+                if (!term) return true;
 
-            const title = normalizeText(form.title || form.Title || '');
-            const description = normalizeText(form.description || form.Description || '');
-            const searchableText = `${title} ${description}`;
+                const title = normalizeText(form.title || form.Title || '');
+                const description = normalizeText(form.description || form.Description || '');
+                const searchableText = `${title} ${description}`;
 
-            const tokens = term.split(/\s+/).filter(Boolean);
-            const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
+                const tokens = term.split(/\s+/).filter(Boolean);
+                const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
 
-            return tokens.every(token => words.some(word => word.startsWith(token)));
+                return tokens.every(token => words.some(word => word.startsWith(token)));
+            });
+
+        return [...filtered].sort((a, b) => {
+            const dateA = new Date(a.createdAt || a.CreatedAt || 0).getTime();
+            const dateB = new Date(b.createdAt || b.CreatedAt || 0).getTime();
+            return sortDate === 'oldest' ? dateA - dateB : dateB - dateA;
         });
-
-    const filteredAndSortedForms = [...filteredForms].sort((a, b) => {
-        const dateA = new Date(a.createdAt || a.CreatedAt || 0).getTime();
-        const dateB = new Date(b.createdAt || b.CreatedAt || 0).getTime();
-        return sortDate === 'oldest' ? dateA - dateB : dateB - dateA;
-    });
+    }, [forms, searchTerm, selectedCategory, sortDate]);
 
     const totalPages = Math.max(1, Math.ceil(filteredAndSortedForms.length / formsPerPage));
     const paginatedForms = filteredAndSortedForms.slice((currentPage - 1) * formsPerPage, currentPage * formsPerPage);
@@ -133,7 +135,7 @@ export default function ProfessorDashboard() {
                 ) : filteredAndSortedForms.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
                         <p className="text-xl font-semibold text-text-h">Nenhum formulário disponível</p>
-                        <p className="mt-2 text-text">De momento não existem formulários para o seu cargo.</p>
+                        <p className="mt-2 text-text">De momento não existem formulários para o seu cargo nesta categoria.</p>
                     </div>
                 ) : (
                     <>
@@ -170,25 +172,27 @@ export default function ProfessorDashboard() {
                             })}
                         </div>
 
-                        <div className="mt-auto pt-6 flex items-center justify-between">
-                            <button
-                                type="button"
-                                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                                disabled={currentPage === 1}
-                                className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                Anterior
-                            </button>
-                            <span className="text-sm text-text">Página {currentPage} de {totalPages}</span>
-                            <button
-                                type="button"
-                                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                                disabled={currentPage === totalPages}
-                                className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                Próxima
-                            </button>
-                        </div>
+                        {totalPages > 1 && (
+                            <div className="mt-auto pt-6 flex items-center justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                    disabled={currentPage === 1}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Anterior
+                                </button>
+                                <span className="text-sm text-text">Página {currentPage} de {totalPages}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Próxima
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </div>

@@ -29,9 +29,11 @@ const matchesCargo = (form, cargo) => {
 
     const hasTeacher = audience.includes('teacher') || audience.includes('professor') || audience.includes('professores');
     const hasStaff = audience.includes('staff') || audience.includes('funcionario') || audience.includes('funcionarios');
+    const hasStudent = audience.includes('aluno') || audience.includes('alunos') || audience.includes('student');
 
     if (cargo === 'professores') return hasTeacher;
     if (cargo === 'funcionarios') return hasStaff;
+    if (cargo === 'alunos') return hasStudent;
     return true;
 };
 
@@ -240,8 +242,8 @@ export default function AdminDashboard() {
                                 type="button"
                                 onClick={() => setActiveTab(tab.key)}
                                 className={`border-b-2 px-4 py-2 text-sm font-semibold transition-colors ${isActive
-                                        ? 'border-accent text-accent'
-                                        : 'border-transparent text-text hover:border-accent-border hover:text-text-h'
+                                    ? 'border-accent text-accent'
+                                    : 'border-transparent text-text hover:border-accent-border hover:text-text-h'
                                     }`}
                             >
                                 {tab.label}
@@ -291,6 +293,7 @@ export default function AdminDashboard() {
                         <option value="todos">Todos</option>
                         <option value="professores">Professores</option>
                         <option value="funcionarios">Funcionários</option>
+                        <option value="alunos">Alunos</option>
                     </select>
                 </div>
 
