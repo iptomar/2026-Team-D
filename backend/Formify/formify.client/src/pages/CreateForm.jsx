@@ -361,7 +361,7 @@ function EditPanel({ field, onClose, onUpdate }) {
                     </label>
                 )}
 
-                {/* Largura do campo na grelha */}
+                {/* Largura do campo na grelha  */}
                 {!isSection && (
                     <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
