@@ -1,11 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+const CATEGORIAS = [
+    "Académicos", "Secretaria", "Recursos Humanos",
+    "Pedidos Internos", "Declarações", "Requerimentos", "Geral"
+];
 
 export default function ProfessorDashboard() {
     const [forms, setForms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('todas');
     const [sortDate, setSortDate] = useState('newest');
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -35,42 +41,49 @@ export default function ProfessorDashboard() {
     const normalizeText = (value) =>
         (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-    const filteredForms = forms
-        .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
-        .filter(form => {
-            const rawAudience = form.audience || form.Audience || [];
-            const audienceArray = Array.isArray(rawAudience) ? rawAudience.map(normalizeText) : [normalizeText(rawAudience)];
+    const filteredAndSortedForms = useMemo(() => {
+        const filtered = forms
+            .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
+            .filter(form => {
+                const rawAudience = form.audience || form.Audience || [];
+                const audienceArray = Array.isArray(rawAudience) ? rawAudience.map(normalizeText) : [normalizeText(rawAudience)];
 
-            return audienceArray.includes('teacher') ||
-                audienceArray.includes('professor') ||
-                audienceArray.includes('professores');
-        })
-        .filter(form => {
-            const term = normalizeText(searchTerm.trim());
-            if (!term) return true;
+                return audienceArray.includes('teacher') ||
+                    audienceArray.includes('professor') ||
+                    audienceArray.includes('professores');
+            })
+            .filter(form => {
+                if (selectedCategory === 'todas') return true;
+                const formCat = (form.category || form.Category || 'Geral').toLowerCase();
+                return formCat === selectedCategory.toLowerCase();
+            })
+            .filter(form => {
+                const term = normalizeText(searchTerm.trim());
+                if (!term) return true;
 
-            const title = normalizeText(form.title || form.Title || '');
-            const description = normalizeText(form.description || form.Description || '');
-            const searchableText = `${title} ${description}`;
+                const title = normalizeText(form.title || form.Title || '');
+                const description = normalizeText(form.description || form.Description || '');
+                const searchableText = `${title} ${description}`;
 
-            const tokens = term.split(/\s+/).filter(Boolean);
-            const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
+                const tokens = term.split(/\s+/).filter(Boolean);
+                const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
 
-            return tokens.every(token => words.some(word => word.startsWith(token)));
+                return tokens.every(token => words.some(word => word.startsWith(token)));
+            });
+
+        return [...filtered].sort((a, b) => {
+            const dateA = new Date(a.createdAt || a.CreatedAt || 0).getTime();
+            const dateB = new Date(b.createdAt || b.CreatedAt || 0).getTime();
+            return sortDate === 'oldest' ? dateA - dateB : dateB - dateA;
         });
-
-    const filteredAndSortedForms = [...filteredForms].sort((a, b) => {
-        const dateA = new Date(a.createdAt || a.CreatedAt || 0).getTime();
-        const dateB = new Date(b.createdAt || b.CreatedAt || 0).getTime();
-        return sortDate === 'oldest' ? dateA - dateB : dateB - dateA;
-    });
+    }, [forms, searchTerm, selectedCategory, sortDate]);
 
     const totalPages = Math.max(1, Math.ceil(filteredAndSortedForms.length / formsPerPage));
     const paginatedForms = filteredAndSortedForms.slice((currentPage - 1) * formsPerPage, currentPage * formsPerPage);
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, sortDate]);
+    }, [searchTerm, selectedCategory, sortDate]);
 
     return (
         <div className="min-h-[calc(100vh-140px)] space-y-8 flex flex-col">
@@ -79,7 +92,7 @@ export default function ProfessorDashboard() {
                 <p className="text-lg text-text">Formulários disponíveis para preenchimento</p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 my-6">
+            <div className="grid gap-4 sm:grid-cols-3 my-6">
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Pesquisar</label>
                     <input
@@ -89,6 +102,19 @@ export default function ProfessorDashboard() {
                         placeholder="Nome do formulário..."
                         className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
                     />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label className="font-medium text-text-h">Categoria</label>
+                    <select
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
+                    >
+                        <option value="todas">Todas as categorias</option>
+                        {CATEGORIAS.map(cat => (
+                            <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                    </select>
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Ordenar por</label>
@@ -109,7 +135,7 @@ export default function ProfessorDashboard() {
                 ) : filteredAndSortedForms.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
                         <p className="text-xl font-semibold text-text-h">Nenhum formulário disponível</p>
-                        <p className="mt-2 text-text">De momento não existem formulários para o seu cargo.</p>
+                        <p className="mt-2 text-text">De momento não existem formulários para o seu cargo nesta categoria.</p>
                     </div>
                 ) : (
                     <>
@@ -118,7 +144,6 @@ export default function ProfessorDashboard() {
                                 const id = form.id || form.Id;
                                 const title = form.title || form.Title || 'Sem título';
                                 const description = form.description || form.Description || 'Sem descrição';
-
                                 const category = form.category || form.Category || 'Geral';
 
                                 return (
@@ -147,25 +172,27 @@ export default function ProfessorDashboard() {
                             })}
                         </div>
 
-                        <div className="mt-auto pt-6 flex items-center justify-between">
-                            <button
-                                type="button"
-                                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                                disabled={currentPage === 1}
-                                className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                Anterior
-                            </button>
-                            <span className="text-sm text-text">Página {currentPage} de {totalPages}</span>
-                            <button
-                                type="button"
-                                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                                disabled={currentPage === totalPages}
-                                className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                Próxima
-                            </button>
-                        </div>
+                        {totalPages > 1 && (
+                            <div className="mt-auto pt-6 flex items-center justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                    disabled={currentPage === 1}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Anterior
+                                </button>
+                                <span className="text-sm text-text">Página {currentPage} de {totalPages}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Próxima
+                                </button>
+                            </div>
+                        )}
                     </>
                 )}
             </div>

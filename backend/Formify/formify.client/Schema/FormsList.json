@@ -1361,5 +1361,462 @@
     "CreatedAt": "2026-05-21T16:56:02.2655777+01:00",
     "UpdatedAt": "2026-05-21T17:19:09.2970041+01:00",
     "Category": "Geral"
+  },
+  {
+    "Id": 14,
+    "Title": "C\u00F3pia de Requerimento Inscri\u00E7\u00E3o em Exame",
+    "Description": "",
+    "Audience": [
+      "Professor"
+    ],
+    "Status": "Draft",
+    "Version": 1,
+    "Fields": [
+      {
+        "Id": "114d4208-8844-4476-8351-ef120a027d55",
+        "Type": "section",
+        "Label": "Requerimento Inscri\u00E7\u00E3o em Exame",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "9223ebe8-7b7d-4a62-872c-d9639c88e6d7",
+        "Type": "dropdown",
+        "Label": "Escola",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "0f219f34-3942-4956-9854-059feefff6b1",
+        "Type": "section",
+        "Label": "1. IDENTIFICA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "071eaa04-d4b3-4f72-9c19-7880fe6898eb",
+        "Type": "textarea",
+        "Label": "Nome Completo",
+        "Required": true,
+        "Placeholder": "Nome",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b7cbaaaa-daa8-4077-87bf-c1c3e2ea7a12",
+        "Type": "number",
+        "Label": "N\u00BA Aluno",
+        "Required": true,
+        "Placeholder": "00000",
+        "Order": 4,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d1f5fece-1340-4f5e-a1b9-17aef1a6e852",
+        "Type": "dropdown",
+        "Label": "Ano",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 5,
+        "Width": "half",
+        "Options": [
+          "1\u00BA",
+          "2\u00BA",
+          "3\u00BA"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "35331f1c-e4d3-4438-bfd9-f91fa30850f8",
+        "Type": "textarea",
+        "Label": "Curso",
+        "Required": true,
+        "Placeholder": "Licenciatura em Engenharia Inform\u00E1tica",
+        "Order": 6,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "3d5cfeba-d318-4e3e-b78f-e199067fca55",
+        "Type": "section",
+        "Label": "2. \u00C9POCA DE RECURSO",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 7,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "00de2c35-0cbe-42a4-89a9-ace997dda1ed",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 8,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "98141278-c4ef-4edf-a68d-e761619e758c",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 9,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "7432141c-bf7b-4002-aa0b-f9cb93ac98be",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 10,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "879e8b39-84f4-47d6-aeec-21f28c7e31d4",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 11,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1fe74ee3-683f-4511-a88e-9bceba8d5980",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 12,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "7372bc63-eb01-4a6e-bd0b-24a640ffea9b",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 13,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "895cafee-328f-46b4-ba6e-7d5bfc2faef4",
+        "Type": "section",
+        "Label": "3. \u00C9POCA ESPECIAL",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 14,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "8226ac73-d2d4-45bd-bc43-64b1906b6907",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 15,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "09725f55-2353-4709-a97b-0e91bd63622e",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 16,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "2ede7a64-aaaf-4c55-ace0-62c5f670c29c",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 17,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c8cbda0b-c9c8-49db-b057-04e710bdf272",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 18,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "5ec4d365-1e6c-42dc-95f0-04652c657322",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 19,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "29e8ad7b-c0d9-4c42-847a-3f1aa9560b00",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 20,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "72e0cba4-d83d-4c2f-b64d-94040d6467f0",
+        "Type": "checkbox",
+        "Label": "Informa\u00E7\u00E3o Adicional (tipo de aluno)",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 21,
+        "Width": "full",
+        "Options": [
+          "Obten\u00E7\u00E3o de grau",
+          "Trabalhador Estudante/ Dirigente associativo jovem"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "3d452369-c4eb-4b22-a9c1-b5eea863a557",
+        "Type": "dropdown",
+        "Label": "Outra: ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 22,
+        "Width": "full",
+        "Options": [
+          "Vazio",
+          "Estatuto especial para estudantes portadores de defici\u00EAncia f\u00EDsica ou sensorial",
+          "Estatuto especial para estudantes gr\u00E1vidas e m\u00E3es e pais estudantes"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1a06534-4983-439a-a501-6003fc456904",
+        "Type": "section",
+        "Label": "4. EXAMES DE MELHORIA | DIRIGENTE ASSOCIATIVO JOVEM | OUTRAS SITUA\u00C7\u00D5ES",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 23,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "aa702b45-d325-471e-ab22-83e9054e51bf",
+        "Type": "text",
+        "Label": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Required": false,
+        "Placeholder": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Order": 24,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "fa545b3d-25fb-47a1-9746-f473650383f3",
+        "Type": "text",
+        "Label": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Required": false,
+        "Placeholder": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Order": 25,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "60d6abe3-6bb6-4d0f-8733-f081b8cc6a69",
+        "Type": "text",
+        "Label": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Required": false,
+        "Placeholder": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Order": 26,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "7dd93b9f-e342-45a8-b708-d196ae72da5b",
+        "Type": "text",
+        "Label": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Required": false,
+        "Placeholder": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Order": 27,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "502e17e0-0014-438d-8285-1dac4c77612a",
+        "Type": "text",
+        "Label": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Required": false,
+        "Placeholder": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Order": 28,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c304359c-c1b0-4ba9-8a92-d36b294d47ec",
+        "Type": "text",
+        "Label": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Required": false,
+        "Placeholder": "Disciplina | Outra Situa\u00E7\u00E3o",
+        "Order": 29,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b2fc403a-3610-488f-94f6-ea8438ea43dd",
+        "Type": "checkbox",
+        "Label": "Objetivo",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 30,
+        "Width": "half",
+        "Options": [
+          "Melhoria",
+          "Dirigente associativo jovem"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "42ea19f4-88d3-4f6e-b2d2-81938401bc45",
+        "Type": "checkbox",
+        "Label": "Se clicou em \u0022Melhoria\u0022, selecione a \u00E9poca",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 31,
+        "Width": "half",
+        "Options": [
+          "\u00C9poca normal",
+          "\u00C9poca de recurso",
+          "\u00C9poca especial"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "5db7d1f5-7228-4ba0-b2c8-d2809e1eedfe",
+        "Type": "section",
+        "Label": "5. O REQUERENTE",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 32,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "26bb9c28-5cbd-4748-b8c4-31743f156b37",
+        "Type": "date",
+        "Label": "Data Atual",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 33,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "8a46f9f9-da42-4d8a-a49e-5c503ad0c201",
+        "Type": "section",
+        "Label": "Assinatura do Requerente",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 34,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-05-28T03:46:08.7738475+01:00",
+    "UpdatedAt": "2026-05-28T03:47:03.0489993+01:00",
+    "Category": "Geral"
   }
 ]
