@@ -93,6 +93,7 @@ export default function RespondForm() {
             if (response.ok) {
                
                 window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: 'Respostas submetidas com sucesso!', type: 'success' } }));
+                window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: 'Por favor aguarde aprovação do seu pedido.', type: 'warning' } }));
                 navigate(-1);
             } else {
                
