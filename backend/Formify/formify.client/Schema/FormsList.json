@@ -7,8 +7,7 @@
       "Professor",
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f1-section-1",
@@ -84,8 +83,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T09:00:00+01:00",
-    "UpdatedAt": "2026-04-30T09:00:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T09:00:00+01:00"
   },
   {
     "Id": 2,
@@ -94,8 +92,7 @@
     "Audience": [
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f2-section-1",
@@ -188,8 +185,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T09:10:00+01:00",
-    "UpdatedAt": "2026-04-30T09:10:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T09:10:00+01:00"
   },
   {
     "Id": 3,
@@ -198,8 +194,7 @@
     "Audience": [
       "Professor"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f3-section-1",
@@ -281,8 +276,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T09:20:00+01:00",
-    "UpdatedAt": "2026-04-30T09:20:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T09:20:00+01:00"
   },
   {
     "Id": 4,
@@ -292,8 +286,7 @@
       "Professor",
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f4-nome",
@@ -363,8 +356,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T09:30:00+01:00",
-    "UpdatedAt": "2026-04-30T09:30:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T09:30:00+01:00"
   },
   {
     "Id": 5,
@@ -373,8 +365,7 @@
     "Audience": [
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f5-local",
@@ -436,8 +427,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T09:40:00+01:00",
-    "UpdatedAt": "2026-04-30T09:40:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T09:40:00+01:00"
   },
   {
     "Id": 6,
@@ -447,8 +437,7 @@
       "Professor",
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f6-nome",
@@ -510,8 +499,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T09:50:00+01:00",
-    "UpdatedAt": "2026-04-30T09:50:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T09:50:00+01:00"
   },
   {
     "Id": 7,
@@ -521,8 +509,7 @@
       "Professor",
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f7-evento",
@@ -582,8 +569,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T10:00:00+01:00",
-    "UpdatedAt": "2026-04-30T10:00:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T10:00:00+01:00"
   },
   {
     "Id": 8,
@@ -592,8 +578,7 @@
     "Audience": [
       "Professor"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f8-nome",
@@ -655,8 +640,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T10:10:00+01:00",
-    "UpdatedAt": "2026-04-30T10:10:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T10:10:00+01:00"
   },
   {
     "Id": 9,
@@ -665,8 +649,7 @@
     "Audience": [
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f9-data",
@@ -724,8 +707,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T10:20:00+01:00",
-    "UpdatedAt": "2026-04-30T10:20:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T10:20:00+01:00"
   },
   {
     "Id": 10,
@@ -735,8 +717,7 @@
       "Professor",
       "Funcionario"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "f10-nome",
@@ -794,8 +775,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T10:30:00+01:00",
-    "UpdatedAt": "2026-04-30T10:30:00+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T10:30:00+01:00"
   },
   {
     "Id": 11,
@@ -804,8 +784,7 @@
     "Audience": [
       "Professor"
     ],
-    "Status": "Draft",
-    "Version": 1,
+    "StatusDrafted": true,
     "Fields": [
       {
         "Id": "f11-docente",
@@ -845,8 +824,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T10:40:00+01:00",
-    "UpdatedAt": "2026-04-30T12:58:50.8472013+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T12:58:50.8472013+01:00"
   },
   {
     "Id": 12,
@@ -855,8 +833,7 @@
     "Audience": [
       "Funcionario"
     ],
-    "Status": "Draft",
-    "Version": 1,
+    "StatusDrafted": true,
     "Fields": [
       {
         "Id": "f12-item",
@@ -902,8 +879,7 @@
       }
     ],
     "CreatedAt": "2026-04-30T10:50:00+01:00",
-    "UpdatedAt": "2026-04-30T22:32:16.6053302+01:00",
-    "Category": "Geral"
+    "UpdatedAt": "2026-04-30T22:32:16.6053302+01:00"
   },
   {
     "Id": 13,
@@ -912,8 +888,7 @@
     "Audience": [
       "Professor"
     ],
-    "Status": "Published",
-    "Version": 1,
+    "StatusDrafted": false,
     "Fields": [
       {
         "Id": "114d4208-8844-4476-8351-ef120a027d55",
@@ -1359,7 +1334,9 @@
       }
     ],
     "CreatedAt": "2026-05-21T16:56:02.2655777+01:00",
+
     "UpdatedAt": "2026-05-21T17:19:09.2970041+01:00",
     "Category": "Geral"
+
   }
 ]

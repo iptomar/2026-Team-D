@@ -8,9 +8,7 @@
       "campo_idade": "35",
       "campo_departamento": "Recursos Humanos"
     },
-    "SubmittedAt": "2026-05-19T12:34:08.9259513+01:00",
-    "FormVersion": 1,
-    "Status": "Pending"
+    "SubmittedAt": "2026-05-19T12:34:08.9259513+01:00"
   },
   {
     "Id": "040fb06c-babb-4c8f-abdb-148e5c5b3391",
@@ -22,9 +20,7 @@
       "campo_departamento": "Recursos Humanos",
       "10": "350000"
     },
-    "SubmittedAt": "2026-05-19T12:39:37.8606758+01:00",
-    "FormVersion": 1,
-    "Status": "Pending"
+    "SubmittedAt": "2026-05-19T12:39:37.8606758+01:00"
   },
   {
     "Id": "6300c155-693f-4fdc-8d49-d51ed2d8a703",
@@ -34,9 +30,7 @@
       "campo_nome": "Martim Campos",
       "campo_projeto": "Formify"
     },
-    "SubmittedAt": "2026-05-19T14:56:43.3130805+01:00",
-    "FormVersion": 1,
-    "Status": "Pending"
+    "SubmittedAt": "2026-05-19T14:56:43.3130805+01:00"
   },
   {
     "Id": "17e4b54f-d43f-4a6e-9795-02df1f31f0c4",
@@ -48,36 +42,6 @@
       "f10-data": "2026-05-25",
       "f10-finalidade": "A sala x est\u00E1 sem projetor"
     },
-    "SubmittedAt": "2026-05-20T18:28:52.4764679+01:00",
-    "FormVersion": 1,
-    "Status": "Pending"
-  },
-  {
-    "Id": "2ee55e8a-3fb1-41dc-9ea2-ee3cdd2312d2",
-    "FormId": 10,
-    "UserId": 3,
-    "Answers": {
-      "f10-nome": "Ant\u00F3nio",
-      "f10-equipamento": "Microfone",
-      "f10-data": "2026-06-10",
-      "f10-finalidade": "Para uma palestra"
-    },
-    "SubmittedAt": "2026-05-26T19:18:28.3644269+01:00",
-    "FormVersion": 1,
-    "Status": "Pending"
-  },
-  {
-    "Id": "ec36efea-787c-49c4-adeb-8da2fad15885",
-    "FormId": 7,
-    "UserId": 3,
-    "Answers": {
-      "f7-evento": "InterfaceEvento",
-      "f7-satisfacao": "Satisfeito",
-      "f7-recomendaria": "Sim",
-      "f7-comentarios": ""
-    },
-    "SubmittedAt": "2026-05-26T19:24:21.3758829+01:00",
-    "FormVersion": 1,
-    "Status": "Pending"
+    "SubmittedAt": "2026-05-20T18:28:52.4764679+01:00"
   }
 ]

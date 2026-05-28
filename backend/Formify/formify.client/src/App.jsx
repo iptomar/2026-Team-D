@@ -25,7 +25,8 @@ export default function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
 
-                    <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
+                    <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard isDraft={false} /></ProtectedRoute>} />
+                    <Route path="/DraftedForms" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard isDraft={true} /></ProtectedRoute>} />
 
                     <Route path="/professor" element={<ProtectedRoute allowedRoles={["professor"]}><ProfessorDashboard /></ProtectedRoute>} />
 

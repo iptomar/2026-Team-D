@@ -8,7 +8,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Cryptography;
-using Formify.Server.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Formify.Server.Controllers
 {
