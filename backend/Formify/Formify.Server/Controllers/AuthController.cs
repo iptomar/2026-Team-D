@@ -31,7 +31,7 @@ namespace Formify.Server.Controllers
             if (string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password) || string.IsNullOrWhiteSpace(dto.Role))
                 return BadRequest(new { error = "Todos os campos são obrigatórios." });
 
-            var allowedRoles = new[] { "professor", "funcionario", "aluno" };
+            var allowedRoles = new[] { "professor", "funcionario" };
             if (!allowedRoles.Contains(dto.Role.ToLower()))
                 return BadRequest(new { error = "Role inválida." });
 

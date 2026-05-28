@@ -96,7 +96,6 @@ export default function Register() {
                     // redirecionar conforme role
                     if (data.role === 'professor') navigate('/professor');
                     else if (data.role === 'funcionario') navigate('/funcionario');
-                    else if (data.role === 'aluno') navigate('/aluno'); // <-- NOVO
                     else if (data.role === 'admin') navigate('/admin');
                     else navigate('/');
                 } else {
@@ -138,7 +137,6 @@ export default function Register() {
                     <select className="w-full rounded border px-3 py-2" value={role} onChange={e => setRole(e.target.value)}>
                         <option value="professor">Professor</option>
                         <option value="funcionario">Funcionário</option>
-                        <option value="aluno">Aluno</option> {/* <-- NOVO */}
                     </select>
 
                     {error && <div className="text-red-600">{error}</div>}

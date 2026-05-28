@@ -37,7 +37,6 @@ const FIELD_TYPES = [
 const AUDIENCE_OPTIONS = [
     { value: 'Professor', label: 'Professores' },
     { value: 'Funcionario', label: 'Funcionários' },
-    { value: 'Aluno', label: 'Alunos' },
 ];
 
 function getTypeInfo(type) {
