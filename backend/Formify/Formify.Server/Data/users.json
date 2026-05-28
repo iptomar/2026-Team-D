@@ -46,5 +46,13 @@
     "PasswordHash": "5lLdhZo9mdEDR2sAXdpfTre7trHCsk/IvwmiP8X3uPU=",
     "Salt": "n6MHG0BKSJ2U5cGZq9fQvg==",
     "Role": "professor"
+  },
+  {
+    "Id": 7,
+    "Name": "Aluno1",
+    "Username": "aluno1",
+    "PasswordHash": "KVPKp2SaI5AqQJuuS0atzRmJgYs/o65tEaoVXuz3eh8=",
+    "Salt": "7BoQUn\u002BLF5c3ppICfnlOdA==",
+    "Role": "aluno"
   }
 ]
