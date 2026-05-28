@@ -20,9 +20,13 @@ export default function RespondForm() {
 
                 const data = await response.json();
 
-                // Bloqueia rascunhos no Frontend
-                if (data.statusDrafted || data.StatusDrafted) {
-                    window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: 'Este formulário não aceita respostas.', type: 'error' } }));
+                // Só formulários publicados aceitam respostas (não rascunhos nem arquivados)
+                const status = (data.status || data.Status || '').toString().toLowerCase();
+                if (status !== 'published') {
+                    const message = status === 'archived'
+                        ? 'Este formulário foi arquivado e já não aceita respostas.'
+                        : 'Este formulário não aceita respostas.';
+                    window.dispatchEvent(new CustomEvent('app:toast', { detail: { message, type: 'error' } }));
                     navigate(-1);
                     return;
                 }
@@ -112,7 +116,7 @@ export default function RespondForm() {
     const description = formData.description || formData.Description || '';
 
     return (
-        <div className="max-w-3xl mx-auto py-12 px-4 sm:px-6">
+        <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6">
             <button
                 onClick={() => navigate(-1)}
                 className="mb-6 text-accent font-semibold hover:text-emerald-700 transition-colors"
@@ -134,17 +138,24 @@ export default function RespondForm() {
                     </div>
                 </header>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form
+                    onSubmit={handleSubmit}
+                    className="grid grid-cols-1 gap-x-8 gap-y-8 sm:grid-cols-2"
+                >
                     {fields.map((field) => {
                         const type = field.type || field.Type;
                         const label = field.label || field.Label;
                         const fId = field.id || field.Id;
                         const req = field.required || field.Required;
                         const options = field.options || field.Options || [];
+                        const width = field.width || field.Width || 'full';
+                        const colSpan = width === 'half' && type !== 'section'
+                            ? 'sm:col-span-1'
+                            : 'col-span-1 sm:col-span-2';
 
                         if (type === 'section') {
                             return (
-                                <div key={fId} className="pt-6 border-t border-gray-100">
+                                <div key={fId} className="col-span-1 pt-6 border-t border-gray-100 sm:col-span-2">
                                     <h2 className="text-xl font-bold text-text-h">{label}</h2>
                                     {(field.description || field.Description) && (
                                         <p className="text-sm text-text mt-1">{field.description || field.Description}</p>
@@ -154,7 +165,7 @@ export default function RespondForm() {
                         }
 
                         return (
-                            <div key={fId} className="flex flex-col gap-2">
+                            <div key={fId} className={`${colSpan} flex flex-col gap-2`}>
                                 <label className="font-semibold text-text-h">
                                     {label} {req && <span className="text-red-500 ml-1">*</span>}
                                 </label>
@@ -271,7 +282,7 @@ export default function RespondForm() {
                         );
                     })}
 
-                    <div className="pt-8 border-t border-gray-100 flex justify-end">
+                    <div className="col-span-1 pt-8 border-t border-gray-100 flex justify-end sm:col-span-2">
                         <button
                             type="submit"
                             className="bg-accent text-white px-8 py-3 rounded-lg font-bold hover:bg-emerald-700 transition-colors shadow-sm hover:shadow"
