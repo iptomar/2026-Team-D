@@ -1,11 +1,40 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-/**
- * AdminDashboard Component Unificado
- * Serve tanto para listar Formulários Publicados como Rascunhos.
- */
-export default function AdminDashboard({ isDraft = false }) {
+const TABS = [
+    { key: 'published', label: 'Publicados', emptyHint: 'Nenhum formulário publicado.' },
+    { key: 'draft', label: 'Rascunhos', emptyHint: 'Nenhum rascunho.' },
+    { key: 'archived', label: 'Arquivados', emptyHint: 'Sem formulários arquivados.' },
+];
+
+const normalizeText = (value) =>
+    (value || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+const getStatus = (form) => (form.status || form.Status || 'Draft').toString().toLowerCase();
+
+const getAudienceList = (form) => {
+    const raw = form.audience || form.Audience || [];
+    return Array.isArray(raw) ? raw.map(normalizeText) : [normalizeText(raw)];
+};
+
+const matchesCargo = (form, cargo) => {
+    if (cargo === 'todos') return true;
+    const audience = getAudienceList(form);
+
+    const hasTeacher = audience.includes('teacher') || audience.includes('professor') || audience.includes('professores');
+    const hasStaff = audience.includes('staff') || audience.includes('funcionario') || audience.includes('funcionarios');
+
+    if (cargo === 'professores') return hasTeacher;
+    if (cargo === 'funcionarios') return hasStaff;
+    return true;
+};
+
+export default function AdminDashboard() {
+    const navigate = useNavigate();
+
+    // Tab ativa: 'published' | 'draft' | 'archived'
+    const [activeTab, setActiveTab] = useState('published');
+
     // Estatísticas (dados em tempo real do backend)
     const [stats, setStats] = useState({
         totalForms: 0,
@@ -20,6 +49,7 @@ export default function AdminDashboard({ isDraft = false }) {
     // Estado de carregamento da página
     const [isLoading, setIsLoading] = useState(true);
 
+
     // Filtros da listagem
     const [selectedCargo, setSelectedCargo] = useState('todos');
     const [searchTerm, setSearchTerm] = useState('');
@@ -32,6 +62,7 @@ export default function AdminDashboard({ isDraft = false }) {
     });
 
     // Paginação
+
     const [currentPage, setCurrentPage] = useState(1);
     const formsPerPage = 12;
 
@@ -137,14 +168,26 @@ export default function AdminDashboard({ isDraft = false }) {
         .filter((form) => {
             const term = normalizeText(searchTerm.trim());
 
-            if (!term) return true;
+    useEffect(() => {
+        loadForms(activeTab);
+        setCurrentPage(1);
+    }, [activeTab]);
 
-            const title = normalizeText(form.title || form.Title || '');
-            const description = normalizeText(form.description || form.Description || '');
-            const searchableText = `${title} ${description}`;
+    const filteredAndSortedForms = useMemo(() => {
+        const filtered = forms
+            .filter((form) => matchesCargo(form, selectedCargo))
+            .filter((form) => {
+                const term = normalizeText(searchTerm.trim());
+                if (!term) return true;
 
-            const tokens = term.split(/\s+/).filter(Boolean);
-            const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
+                const title = normalizeText(form.title || form.Title || '');
+                const description = normalizeText(form.description || form.Description || '');
+                const searchableText = `${title} ${description}`;
+
+                const tokens = term.split(/\s+/).filter(Boolean);
+                const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
+                return tokens.every((token) => words.some((word) => word.startsWith(token)));
+            });
 
             return tokens.every((token) =>
                 words.some((word) => word.startsWith(token))
@@ -427,16 +470,63 @@ export default function AdminDashboard({ isDraft = false }) {
                             })}
                         </div>
 
-                        {/* Paginação */}
-                        <div className="mt-auto pt-6 flex items-center justify-between">
-                            <button
-                                type="button"
-                                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                                disabled={currentPage === 1}
-                                className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                                Anterior
-                            </button>
+                        {totalPages > 1 && (
+                            <div className="mt-auto pt-6 flex items-center justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                    disabled={currentPage === 1}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Anterior
+                                </button>
+                                <span className="text-sm text-text">Página {currentPage} de {totalPages}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Próxima
+                                </button>
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+        </div>
+    );
+}
+
+function StatCard({ label, value, hint, accent }) {
+    const valueClass =
+        accent === 'amber' ? 'text-amber-600'
+        : accent === 'gray' ? 'text-gray-600'
+        : 'text-accent';
+    return (
+        <div className="rounded-lg border border-accent-border p-6 bg-white">
+            <h3 className="text-sm font-medium text-text-h">{label}</h3>
+            <p className="text-xs text-text mt-1">{hint}</p>
+            <div className={`mt-4 text-3xl font-bold ${valueClass}`}>{value}</div>
+        </div>
+    );
+}
+
+function FormCard({ form, tab, onOpen, onEdit, onDuplicate, onArchive, onUnarchive, onDelete }) {
+    const id = form.id ?? form.Id;
+    const title = form.title || form.Title || 'Sem título';
+    const description = form.description || form.Description || 'Sem descrição';
+    const status = getStatus(form);
+
+    const category = form.category || form.Category || 'Geral';
+
+    const badge = {
+        published: 'bg-green-50 text-green-700 border-green-100',
+        draft: 'bg-amber-50 text-amber-700 border-amber-100',
+        archived: 'bg-gray-100 text-gray-600 border-gray-200',
+    }[status] || 'bg-gray-100 text-gray-600 border-gray-200';
+
+    const badgeLabel = { published: 'Publicado', draft: 'Rascunho', archived: 'Arquivado' }[status] || status;
 
                             <span className="text-sm text-text">
                                 Página {currentPage} de {totalPages}
@@ -461,9 +551,14 @@ export default function AdminDashboard({ isDraft = false }) {
                             Confirmar ação
                         </h2>
 
-                        <p className="mt-2 text-text">
-                            Tens a certeza que queres mover este formulário para rascunho?
-                        </p>
+            <div className="mb-3 flex items-start justify-between gap-3">
+                <h3 className="font-bold text-lg text-text-h group-hover:text-accent transition-colors">
+                    {title}
+                </h3>
+                <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wider border ${badge}`}>
+                    {badgeLabel}
+                </span>
+            </div>
 
                         <div className="mt-6 flex justify-end gap-3">
                             <button

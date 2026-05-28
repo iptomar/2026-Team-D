@@ -68,9 +68,11 @@ export default function Sidebar() {
             <Link to="/admin" className={linkCls}>
               Formulários
             </Link>
+
             <Link to="/DraftedForms" className={linkCls}>
               Formulários em Rascunho
             </Link>
+
             <Link to="/CreateForm" className={linkCls}>
               Criar Formulário
             </Link>

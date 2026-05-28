@@ -36,7 +36,7 @@ export default function ProfessorDashboard() {
         (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
     const filteredForms = forms
-        .filter(form => (form.statusDrafted ?? form.StatusDrafted) === false)
+        .filter(form => ((form.status || form.Status || '').toString().toLowerCase()) === 'published')
         .filter(form => {
             const rawAudience = form.audience || form.Audience || [];
             const audienceArray = Array.isArray(rawAudience) ? rawAudience.map(normalizeText) : [normalizeText(rawAudience)];
@@ -118,6 +118,8 @@ export default function ProfessorDashboard() {
                                 const id = form.id || form.Id;
                                 const title = form.title || form.Title || 'Sem título';
                                 const description = form.description || form.Description || 'Sem descrição';
+
+                                const category = form.category || form.Category || 'Geral';
 
                                 return (
                                     <div
