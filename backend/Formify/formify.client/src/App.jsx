@@ -8,7 +8,6 @@ import CreateForm from './pages/CreateForm';
 import ViewForm from './pages/ViewForm';
 import ProfessorDashboard from './pages/Professor/ProfessorDashboard';
 import FuncionarioDashboard from './pages/Funcionario/FuncionarioDashboard';
-import AlunoDashboard from "./pages/Aluno/AlunoDashboard";
 import MyInfo from './pages/MyInfo';
 import ProtectedRoute from './components/Auth/ProtectedRoute';
 import SessionGuard from './components/Auth/SessionGuard';
@@ -26,33 +25,33 @@ export default function App() {
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
 
-                    <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
+                    <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard isDraft={false} /></ProtectedRoute>} />
+                    <Route path="/DraftedForms" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard isDraft={true} /></ProtectedRoute>} />
 
                     <Route path="/professor" element={<ProtectedRoute allowedRoles={["professor"]}><ProfessorDashboard /></ProtectedRoute>} />
-                    <Route path="/funcionario" element={<ProtectedRoute allowedRoles={["funcionario"]}><FuncionarioDashboard /></ProtectedRoute>} />
-                    <Route path="/aluno" element={<ProtectedRoute allowedRoles={["aluno"]}><AlunoDashboard /></ProtectedRoute>} />
 
                     <Route path="/CreateForm" element={<ProtectedRoute allowedRoles={["admin"]}><CreateForm /></ProtectedRoute>} />
                     <Route path="/edit-form/:id" element={<ProtectedRoute allowedRoles={["admin"]}><CreateForm /></ProtectedRoute>} />
 
                     <Route path="/ViewForm/:id" element={<ViewForm />} />
 
+                    <Route path="/funcionario" element={<ProtectedRoute allowedRoles={["funcionario"]}><FuncionarioDashboard /></ProtectedRoute>} />
 
-                    <Route path="/myinfo" element={<ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}><MyInfo /></ProtectedRoute>} />
+                    <Route path="/myinfo" element={<ProtectedRoute allowedRoles={["professor", "funcionario"]}><MyInfo /></ProtectedRoute>} />
 
                     <Route path="/respond/:id" element={
-                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}>
+                        <ProtectedRoute allowedRoles={["professor", "funcionario"]}>
                             <RespondForm />
                         </ProtectedRoute>
                     } />
 
                     <Route path="/meus-formularios" element={
-                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}>
+                        <ProtectedRoute allowedRoles={["professor", "funcionario"]}>
                             <MySubmissions />
                         </ProtectedRoute>
                     } />
                     <Route path="/meus-formularios/:id" element={
-                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}>
+                        <ProtectedRoute allowedRoles={["professor", "funcionario"]}>
                             <MySubmissionDetail />
                         </ProtectedRoute>
                     } />

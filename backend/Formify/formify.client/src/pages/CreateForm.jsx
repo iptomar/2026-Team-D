@@ -2,21 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Toast from '../components/Toast';
 
-/// ─── Categorias disponíveis para os formulários ─────────────────────────────
-/// Estas categorias são usadas para organizar os formulários e devem estar alinhadas
-// com aquilo que o backend espera receber. Podem ser usadas para filtrar formulários
-// na interface de visualização, mas não são obrigatórias para a criação de um formulário.
-
-const CATEGORIAS_DISPONIVEIS = [
-    "Académicos",
-    "Secretaria",
-    "Recursos Humanos",
-    "Pedidos Internos",
-    "Declarações",
-    "Requerimentos",
-    "Geral"
-];
-
 // ─── Tipos de elementos disponíveis na paleta do editor ──────────────────────
 // Cada elemento representa um tipo de campo que pode ser arrastado/clicado
 // para dentro do formulário.
@@ -37,7 +22,6 @@ const FIELD_TYPES = [
 const AUDIENCE_OPTIONS = [
     { value: 'Professor', label: 'Professores' },
     { value: 'Funcionario', label: 'Funcionários' },
-    { value: 'Aluno', label: 'Alunos' },
 ];
 
 function getTypeInfo(type) {
@@ -361,7 +345,7 @@ function EditPanel({ field, onClose, onUpdate }) {
                     </label>
                 )}
 
-                {/* Largura do campo na grelha  */}
+                {/* Largura do campo na grelha */}
                 {!isSection && (
                     <div className="flex flex-col gap-1.5">
                         <label className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
@@ -624,8 +608,6 @@ export default function CreateForm() {
     const [descricao, setDescricao] = useState('');
     const [audience, setAudience] = useState([]);
 
-    const [category, setCategory] = useState(CATEGORIAS_DISPONIVEIS[0]);
-
     // Campos criados no editor visual
     const [fields, setFields] = useState([]);
 
@@ -675,10 +657,9 @@ export default function CreateForm() {
 
                 const formDados = await response.json();
 
-                // Arquivados só podem ser editados depois de reativados.
-                const status = (formDados.status || formDados.Status || '').toString().toLowerCase();
-                if (status === 'archived') {
-                    pushToast('error', 'Este formulário está arquivado. Reativa-o antes de o editares.');
+                const isPublished = (formDados.statusDrafted ?? formDados.StatusDrafted) === false;
+                if (isPublished) {
+                    pushToast('error', 'Este formulário está publicado e não pode ser editado.');
                     navigate('/admin');
                     return;
                 }
@@ -1013,7 +994,6 @@ export default function CreateForm() {
                     Id: id,
                     Title: nome,
                     Description: descricao,
-                    category: category,
                     Audience: audience,
                     StatusDraft: !isFinal,
                     Fields: fieldsWithOrder,
@@ -1118,19 +1098,6 @@ export default function CreateForm() {
                             rows={3}
                             className="rounded-md border border-accent-border p-2 focus:border-blue-500 focus:outline-none"
                         />
-                    </div>
-
-                    <div className="flex flex-col gap-2 mb-4">
-                        <label className="font-medium text-text-h">Categoria</label>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-                        >
-                            {CATEGORIAS_DISPONIVEIS.map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
                     </div>
 
                     {/* Público-alvo */}

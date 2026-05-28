@@ -16,7 +16,5 @@ namespace Formify.Server.DTOs
 
         public bool StatusDraft { get; set; } = true;
         public List<Field> Fields { get; set; } = new List<Field>();
-
-        public string Category { get; set; } = "Geral";
     }
 }
