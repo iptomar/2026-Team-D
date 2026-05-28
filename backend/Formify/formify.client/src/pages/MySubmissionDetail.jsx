@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import StatusBadge from '../components/StatusBadge';
 
 const formatDate = (iso) => {
     if (!iso) return '—';
@@ -16,12 +17,121 @@ const formatDate = (iso) => {
     }
 };
 
-const formatAnswer = (value) => {
-    if (value === null || value === undefined || value === '') return '—';
-    if (Array.isArray(value)) return value.join(', ');
-    if (typeof value === 'object') return JSON.stringify(value, null, 2);
-    return String(value);
-};
+const isEmpty = (value) =>
+    value === null ||
+    value === undefined ||
+    value === '' ||
+    (Array.isArray(value) && value.length === 0);
+
+function AnswerValue({ field, value }) {
+    const type = (field.type || field.Type || 'text').toLowerCase();
+
+    if (isEmpty(value)) {
+        return <p className="text-sm italic text-gray-400">Sem resposta</p>;
+    }
+
+    switch (type) {
+        case 'textarea':
+            return (
+                <p className="whitespace-pre-wrap text-sm text-text-h">
+                    {String(value)}
+                </p>
+            );
+
+        case 'checkbox': {
+            const items = Array.isArray(value) ? value : [value];
+            return (
+                <ul className="space-y-1">
+                    {items.map((item, i) => (
+                        <li key={i} className="flex items-center gap-2 text-sm text-text-h">
+                            <span
+                                className="flex h-4 w-4 items-center justify-center rounded border border-accent bg-accent text-[10px] text-white"
+                                aria-hidden="true"
+                            >
+                                ✓
+                            </span>
+                            {String(item)}
+                        </li>
+                    ))}
+                </ul>
+            );
+        }
+
+        case 'radio':
+        case 'dropdown':
+            return (
+                <span className="inline-flex items-center rounded-md bg-accent-bg px-3 py-1 text-sm font-medium text-accent">
+                    {String(value)}
+                </span>
+            );
+
+        case 'date': {
+            let formatted = String(value);
+            try {
+                const d = new Date(value);
+                if (!isNaN(d.getTime())) {
+                    formatted = d.toLocaleDateString('pt-PT');
+                }
+            } catch {
+                // mantém o valor original
+            }
+            return <p className="text-sm text-text-h">{formatted}</p>;
+        }
+
+        default:
+            return <p className="text-sm text-text-h">{String(value)}</p>;
+    }
+}
+
+function TableAnswer({ field, answers }) {
+    const columns = field.options || field.Options || [];
+    const rowCount = field.tableRowCount || field.TableRowCount || 1;
+    const fId = field.id || field.Id;
+
+    return (
+        <div className="overflow-x-auto rounded-lg border border-accent-border">
+            <table className="w-full border-collapse text-sm">
+                <thead className="bg-accent-bg/40">
+                    <tr>
+                        <th className="border-b border-accent-border px-3 py-2 text-center text-xs font-semibold text-text-h">
+                            Nº
+                        </th>
+                        {columns.map((col, i) => (
+                            <th
+                                key={i}
+                                className="border-b border-accent-border px-3 py-2 text-left text-xs font-semibold text-text-h"
+                            >
+                                {col}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {Array.from({ length: rowCount }).map((_, r) => (
+                        <tr key={r} className="border-b border-gray-100 last:border-b-0">
+                            <td className="px-3 py-2 text-center text-xs text-text">
+                                {r + 1}
+                            </td>
+                            {columns.map((_, c) => {
+                                const cellId = `${fId}-r${r}-c${c}`;
+                                const cell = answers[cellId];
+                                return (
+                                    <td key={c} className="px-3 py-2 text-sm text-text-h">
+                                        {isEmpty(cell) ? (
+                                            <span className="italic text-gray-400">—</span>
+                                        ) : (
+                                            String(cell)
+                                        )}
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+}
 
 export default function MySubmissionDetail() {
     const { id } = useParams();
@@ -70,25 +180,20 @@ export default function MySubmissionDetail() {
     const fields = data?.form?.fields || data?.form?.Fields || [];
     const answers = data?.answers || {};
 
-    // Constrói linhas (pergunta, resposta) percorrendo os campos do formulário pela
-    // ordem original. Para garantir cobertura, depois acrescenta respostas extra
-    // cuja chave não corresponda a nenhum campo conhecido.
-    const knownIds = new Set(fields.map((f) => f.id || f.Id));
-    const orderedRows = fields
-        .filter((f) => (f.type || f.Type) !== 'section')
-        .map((f) => {
-            const fid = f.id || f.Id;
-            return {
-                key: fid,
-                label: f.label || f.Label || fid,
-                value: answers[fid],
-            };
-        });
-    const extraRows = Object.entries(answers)
-        .filter(([k]) => !knownIds.has(k))
-        .map(([k, v]) => ({ key: k, label: k, value: v }));
+    // Respostas com chaves que não correspondem a nenhum campo do formulário
+    // (por ex. células de tabela, cujo id é "<fieldId>-r<x>-c<y>"). Estas
+    // ficam de fora do fluxo normal e só aparecem se houver respostas órfãs.
+    const fieldIds = new Set(fields.map((f) => f.id || f.Id));
+    const tableCellPrefixes = fields
+        .filter((f) => (f.type || f.Type) === 'table')
+        .map((f) => `${f.id || f.Id}-r`);
 
-    const rows = [...orderedRows, ...extraRows];
+    const orphanAnswers = Object.entries(answers).filter(([key]) => {
+        if (fieldIds.has(key)) return false;
+        // Ignora chaves de células de tabela conhecidas; já são renderizadas
+        // dentro do componente da tabela.
+        return !tableCellPrefixes.some((p) => key.startsWith(p));
+    });
 
     return (
         <div className="space-y-6">
@@ -118,34 +223,116 @@ export default function MySubmissionDetail() {
                                 </p>
                             )}
                         </div>
-                        <span className="inline-flex w-fit shrink-0 items-center gap-2 rounded-full bg-accent-bg px-3 py-1 text-sm font-semibold text-accent">
-                            {data.status || 'Submetido'}
-                        </span>
+                        <div className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
+                             <StatusBadge status={data.status} />
+                            {data.isStale && (
+                                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
+                                    Desatualizado
+                                </span>
+                            )}
+                            {data.formArchived && (
+                                <span className="inline-flex w-fit items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+                                    Arquivado
+                                </span>
+                            )}
+                        </div>
                     </div>
+
+                    {data.isStale && (
+                        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+                            <strong>Nota:</strong> este formulário foi alterado pelo administrador depois da tua
+                            submissão (versão atual <strong>{data.currentFormVersion}</strong>, versão da tua
+                            resposta <strong>{data.formVersion}</strong>). As perguntas e respostas mostradas em baixo
+                            podem não corresponder exatamente à versão atual do formulário.
+                        </div>
+                    )}
+
+                    {data.formArchived && (
+                        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4 text-sm text-gray-700">
+                            <strong>Nota:</strong> este formulário foi arquivado pelo administrador e já não está
+                            disponível para novas submissões. A tua resposta continua acessível como histórico.
+                        </div>
+                    )}
 
                     <div className="rounded-lg border border-accent-border bg-white p-4 text-sm text-text">
                         <span className="font-semibold text-text-h">Submetido a:</span>{' '}
                         {formatDate(data.submittedAt)}
                     </div>
 
-                    <div className="rounded-lg border border-accent-border bg-white shadow-sm">
-                        <h3 className="border-b border-accent-border px-6 py-4 text-lg font-bold text-text-h">
+                    {/* Respostas com o mesmo layout em grid do formulário original */}
+                    <div className="rounded-lg border border-accent-border bg-white p-6 shadow-sm sm:p-8">
+                        <h3 className="mb-6 border-b border-accent-border pb-4 text-lg font-bold text-text-h">
                             Respostas
                         </h3>
 
-                        {rows.length === 0 ? (
-                            <p className="px-6 py-8 text-center text-text">Esta submissão não tem respostas registadas.</p>
+                        {fields.length === 0 && orphanAnswers.length === 0 ? (
+                            <p className="py-4 text-center text-text">
+                                Esta submissão não tem respostas registadas.
+                            </p>
                         ) : (
-                            <dl className="divide-y divide-gray-100">
-                                {rows.map((row) => (
-                                    <div key={row.key} className="grid gap-1 px-6 py-4 sm:grid-cols-3 sm:gap-4">
-                                        <dt className="text-sm font-semibold text-text-h sm:col-span-1">{row.label}</dt>
-                                        <dd className="whitespace-pre-wrap text-sm text-text sm:col-span-2">
-                                            {formatAnswer(row.value)}
-                                        </dd>
+                            <div className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2">
+                                {fields.map((field) => {
+                                    const type = (field.type || field.Type || 'text').toLowerCase();
+                                    const fId = field.id || field.Id;
+                                    const label = field.label || field.Label || fId;
+                                    const width = field.width || field.Width || 'full';
+                                    const isHalf = width === 'half' && type !== 'section';
+                                    const span = isHalf ? 'sm:col-span-1' : 'col-span-1 sm:col-span-2';
+
+                                    if (type === 'section') {
+                                        return (
+                                            <div key={fId} className="col-span-1 mt-4 sm:col-span-2">
+                                                <div className="flex items-center gap-4">
+                                                    <h4 className="whitespace-nowrap text-sm font-bold uppercase tracking-widest text-text-h">
+                                                        {label}
+                                                    </h4>
+                                                    <div className="h-px w-full bg-accent-border" />
+                                                </div>
+                                            </div>
+                                        );
+                                    }
+
+                                    return (
+                                        <div key={fId} className={`${span} flex flex-col gap-2`}>
+                                            <label className="text-sm font-semibold text-text-h">
+                                                {label}
+                                            </label>
+                                            {type === 'table' ? (
+                                                <TableAnswer field={field} answers={answers} />
+                                            ) : (
+                                                <div className="rounded-md border border-accent-border bg-accent-bg/30 p-3">
+                                                    <AnswerValue field={field} value={answers[fId]} />
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+
+                                {orphanAnswers.length > 0 && (
+                                    <div className="col-span-1 mt-6 border-t border-accent-border pt-6 sm:col-span-2">
+                                        <p className="mb-3 text-xs font-semibold uppercase tracking-widest text-text">
+                                            Outras respostas
+                                        </p>
+                                        <dl className="space-y-2">
+                                            {orphanAnswers.map(([key, value]) => (
+                                                <div
+                                                    key={key}
+                                                    className="grid grid-cols-1 gap-1 sm:grid-cols-3 sm:gap-4"
+                                                >
+                                                    <dt className="text-sm font-semibold text-text-h">{key}</dt>
+                                                    <dd className="whitespace-pre-wrap text-sm text-text sm:col-span-2">
+                                                        {Array.isArray(value)
+                                                            ? value.join(', ')
+                                                            : typeof value === 'object'
+                                                                ? JSON.stringify(value)
+                                                                : String(value)}
+                                                    </dd>
+                                                </div>
+                                            ))}
+                                        </dl>
                                     </div>
-                                ))}
-                            </dl>
+                                )}
+                            </div>
                         )}
                     </div>
                 </>

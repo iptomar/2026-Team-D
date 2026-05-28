@@ -8,7 +8,7 @@ using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Security.Cryptography;
-using Microsoft.AspNetCore.Authorization;
+using Formify.Server.DTOs;
 
 namespace Formify.Server.Controllers
 {
@@ -31,7 +31,7 @@ namespace Formify.Server.Controllers
             if (string.IsNullOrWhiteSpace(dto.Name) || string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password) || string.IsNullOrWhiteSpace(dto.Role))
                 return BadRequest(new { error = "Todos os campos são obrigatórios." });
 
-            var allowedRoles = new[] { "professor", "funcionario" };
+            var allowedRoles = new[] { "professor", "funcionario", "aluno" };
             if (!allowedRoles.Contains(dto.Role.ToLower()))
                 return BadRequest(new { error = "Role inválida." });
 

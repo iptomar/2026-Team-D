@@ -20,11 +20,11 @@ export default function Landing() {
                 if (!response.ok) throw new Error('Erro ao obter formulários');
 
                 const data = await response.json();
-                const total = Array.isArray(data) ? data.length : 0;
-                const drafts = Array.isArray(data)
-                    ? data.filter(f => (f.statusDrafted ?? f.StatusDrafted) === true).length
-                    : 0;
-                const published = total - drafts;
+                const list = Array.isArray(data) ? data : [];
+                const statusOf = (f) => (f.status || f.Status || '').toString().toLowerCase();
+                const drafts = list.filter((f) => statusOf(f) === 'draft').length;
+                const published = list.filter((f) => statusOf(f) === 'published').length;
+                const total = drafts + published;
 
                 setStats({ total, published, drafts });
             } catch (error) {
