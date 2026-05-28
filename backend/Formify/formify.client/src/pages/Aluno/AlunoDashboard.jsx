@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const CATEGORIAS = [
@@ -6,7 +6,7 @@ const CATEGORIAS = [
     "Pedidos Internos", "Declarações", "Requerimentos", "Geral"
 ];
 
-export default function FuncionarioDashboard() {
+export default function AlunoDashboard() {
     const [forms, setForms] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -25,7 +25,6 @@ export default function FuncionarioDashboard() {
                 setIsLoading(true);
                 const response = await fetch('http://localhost:5208/api/Forms');
                 if (!response.ok) throw new Error('Erro ao procurar formularios');
-
                 const data = await response.json();
                 setForms(data);
             } catch (error) {
@@ -34,12 +33,10 @@ export default function FuncionarioDashboard() {
                 setIsLoading(false);
             }
         };
-
         fetchForms();
     }, []);
 
-    const normalizeText = (value) =>
-        (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const normalizeText = (value) => (value || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
     const filteredAndSortedForms = useMemo(() => {
         const filtered = forms
@@ -47,7 +44,7 @@ export default function FuncionarioDashboard() {
             .filter(form => {
                 const audienceData = JSON.stringify(form.audience || form.Audience || "");
                 const audienceStr = normalizeText(audienceData);
-                return audienceStr.includes('funcionario') || audienceStr.includes('staff');
+                return audienceStr.includes('aluno') || audienceStr.includes('student') || audienceStr.includes('estudante');
             })
             .filter(form => {
                 if (selectedCategory === 'todas') return true;
@@ -57,14 +54,9 @@ export default function FuncionarioDashboard() {
             .filter(form => {
                 const term = normalizeText(searchTerm.trim());
                 if (!term) return true;
-
-                const title = normalizeText(form.title || form.Title || '');
-                const description = normalizeText(form.description || form.Description || '');
-                const searchableText = `${title} ${description}`;
-
+                const searchableText = `${normalizeText(form.title || form.Title || '')} ${normalizeText(form.description || form.Description || '')}`;
                 const tokens = term.split(/\s+/).filter(Boolean);
                 const words = searchableText.split(/[^a-z0-9]+/).filter(Boolean);
-
                 return tokens.every(token => words.some(word => word.startsWith(token)));
             });
 
@@ -78,48 +70,30 @@ export default function FuncionarioDashboard() {
     const totalPages = Math.max(1, Math.ceil(filteredAndSortedForms.length / formsPerPage));
     const paginatedForms = filteredAndSortedForms.slice((currentPage - 1) * formsPerPage, currentPage * formsPerPage);
 
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [searchTerm, selectedCategory, sortDate]);
+    useEffect(() => { setCurrentPage(1); }, [searchTerm, selectedCategory, sortDate]);
 
     return (
         <div className="min-h-[calc(100vh-140px)] space-y-8 flex flex-col">
             <div className="flex flex-col gap-4">
-                <h2 className="text-3xl font-bold text-text-h">Área do Funcionário</h2>
+                <h2 className="text-3xl font-bold text-text-h">Área do Estudante</h2>
                 <p className="text-lg text-text">Formulários disponíveis para preenchimento</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3 my-6">
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Pesquisar</label>
-                    <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        placeholder="Nome do formulário..."
-                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-                    />
+                    <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} placeholder="Nome do formulário..." className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none" />
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Categoria</label>
-                    <select
-                        value={selectedCategory}
-                        onChange={(e) => setSelectedCategory(e.target.value)}
-                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-                    >
+                    <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none">
                         <option value="todas">Todas as categorias</option>
-                        {CATEGORIAS.map(cat => (
-                            <option key={cat} value={cat}>{cat}</option>
-                        ))}
+                        {CATEGORIAS.map(cat => <option key={cat} value={cat}>{cat}</option>)}
                     </select>
                 </div>
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Ordenar por</label>
-                    <select
-                        value={sortDate}
-                        onChange={(e) => setSortDate(e.target.value)}
-                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-                    >
+                    <select value={sortDate} onChange={(e) => setSortDate(e.target.value)} className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none">
                         <option value="newest">Mais recentes</option>
                         <option value="oldest">Mais antigos</option>
                     </select>
@@ -132,7 +106,7 @@ export default function FuncionarioDashboard() {
                 ) : filteredAndSortedForms.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
                         <p className="text-xl font-semibold text-text-h">Nenhum formulário disponível</p>
-                        <p className="mt-2 text-text">De momento não existem formulários para funcionários nesta categoria.</p>
+                        <p className="mt-2 text-text">De momento não existem formulários para estudantes.</p>
                     </div>
                 ) : (
                     <>
@@ -144,50 +118,24 @@ export default function FuncionarioDashboard() {
                                 const category = form.category || form.Category || 'Geral';
 
                                 return (
-                                    <div
-                                        key={id}
-                                        onClick={() => navigate(`/respond/${id}`)}
-                                        className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer bg-white"
-                                    >
+                                    <div key={id} onClick={() => navigate(`/respond/${id}`)} className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all cursor-pointer bg-white">
                                         <div className="mb-2">
-                                            <span className="inline-block rounded-full bg-blue-50 border border-blue-100 px-2 py-1 text-[10px] font-bold text-blue-700 uppercase tracking-wider">
-                                                {category}
-                                            </span>
+                                            <span className="inline-block rounded-full bg-blue-50 border border-blue-100 px-2 py-1 text-[10px] font-bold text-blue-700 uppercase tracking-wider">{category}</span>
                                         </div>
-                                        <h3 className="font-bold text-lg text-text-h group-hover:text-blue-600 transition-colors mb-3">
-                                            {title}
-                                        </h3>
+                                        <h3 className="font-bold text-lg text-text-h group-hover:text-blue-600 transition-colors mb-3">{title}</h3>
                                         <p className="text-sm text-text line-clamp-3 flex-grow">{description}</p>
-
                                         <div className="mt-4 pt-4 border-t border-gray-100 mt-auto">
-                                            <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-800 flex items-center gap-2">
-                                                Responder →
-                                            </span>
+                                            <span className="text-sm font-semibold text-blue-600 group-hover:text-blue-800 flex items-center gap-2">Responder →</span>
                                         </div>
                                     </div>
                                 );
                             })}
                         </div>
-
                         {totalPages > 1 && (
                             <div className="mt-auto pt-6 flex items-center justify-between">
-                                <button
-                                    type="button"
-                                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                                    disabled={currentPage === 1}
-                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    Anterior
-                                </button>
+                                <button type="button" onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))} disabled={currentPage === 1} className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50">Anterior</button>
                                 <span className="text-sm text-text">Página {currentPage} de {totalPages}</span>
-                                <button
-                                    type="button"
-                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                                    disabled={currentPage === totalPages}
-                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                >
-                                    Próxima
-                                </button>
+                                <button type="button" onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))} disabled={currentPage === totalPages} className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50">Próxima</button>
                             </div>
                         )}
                     </>
