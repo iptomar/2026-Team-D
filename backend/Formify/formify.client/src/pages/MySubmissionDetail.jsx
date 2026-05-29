@@ -189,7 +189,7 @@ export default function MySubmissionDetail() {
 
             // Assume-se que o teu backend aceita um PUT em /api/Submissions/{id}/status 
             // ou envia o objeto atualizado conforme a tua API exigir.
-            const response = await fetch(`http://localhost:5208/api/Submissions/${id}/status`, {
+            const response = await fetch(`http://localhost:5208/api/Submissions/status/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -235,7 +235,7 @@ export default function MySubmissionDetail() {
     return (
         <div className="space-y-6">
             <Link
-                to="/meus-formularios"
+                to={isAdmin ? "/approveRequest" : "/meus-formularios"}
                 className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80"
             >
                 ← Voltar

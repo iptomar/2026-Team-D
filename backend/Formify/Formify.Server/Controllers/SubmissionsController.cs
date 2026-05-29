@@ -34,6 +34,7 @@ namespace Formify.Server.Controllers
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
             var result = allSubmissions
+                .Where(s => s.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
                 .OrderByDescending(s => s.SubmittedAt)
                 .Select(s =>
                 {
@@ -159,7 +160,7 @@ namespace Formify.Server.Controllers
         }
 
         // PUT /api/submissions/{id}/status
-        [HttpPut("{id}/status")]
+        [HttpPut("status/{id}")]
         [Authorize(Roles="admin")]
         public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateStatusRequest request)
         {
