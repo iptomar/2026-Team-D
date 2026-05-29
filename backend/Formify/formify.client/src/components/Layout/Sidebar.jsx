@@ -20,12 +20,6 @@ export default function Sidebar() {
     const isProfessor = path.startsWith('/professor') || role === 'professor';
     const isAluno = path.startsWith('/aluno') || role === 'aluno';
 
-    const isMyForms = path.startsWith('/meus-formularios');
-    const isMyInfo = path.startsWith('/myinfo');
-
-    // Qualquer uma destas rotas ou cargos é uma vista "User" (esconde os botões de admin)
-    const isUserView = isFuncionario || isProfessor || isAluno || isMyForms || isMyInfo;
-
     const linkCls =
         'block rounded-lg px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-accent-bg hover:text-accent';
     const buttonCls =
@@ -53,7 +47,7 @@ export default function Sidebar() {
             </div>
 
             <nav className="space-y-2">
-                {isUserView ? (
+                {isFuncionario || isAluno || isProfessor ? (
                     <>
                         <Link
                             to={formsRoute}
@@ -82,6 +76,9 @@ export default function Sidebar() {
                         </Link>
                         <Link to="/CreateForm" className={linkCls}>
                             Criar Formulário
+                        </Link>
+                        <Link to="/approveRequest" className={linkCls}>
+                            Aprovar Pedidos
                         </Link>
                         <button type="button" onClick={handleLogout} className={buttonCls}>
                             Logout

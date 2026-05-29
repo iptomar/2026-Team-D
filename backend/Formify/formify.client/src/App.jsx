@@ -15,6 +15,7 @@ import SessionGuard from './components/Auth/SessionGuard';
 import RespondForm from './pages/RespondForm';
 import MySubmissions from './pages/MySubmissions';
 import MySubmissionDetail from './pages/MySubmissionDetail';
+import ApprovalView from './pages/ApprovalView';
 
 export default function App() {
     return (
@@ -34,6 +35,7 @@ export default function App() {
 
                     <Route path="/CreateForm" element={<ProtectedRoute allowedRoles={["admin"]}><CreateForm /></ProtectedRoute>} />
                     <Route path="/edit-form/:id" element={<ProtectedRoute allowedRoles={["admin"]}><CreateForm /></ProtectedRoute>} />
+                    <Route path="/approveRequest" element={<ProtectedRoute allowedRoles={["admin"]}><ApprovalView /></ProtectedRoute>} />
 
                     <Route path="/ViewForm/:id" element={<ViewForm />} />
 
@@ -52,7 +54,7 @@ export default function App() {
                         </ProtectedRoute>
                     } />
                     <Route path="/meus-formularios/:id" element={
-                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}>
+                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno", "admin"]}>
                             <MySubmissionDetail />
                         </ProtectedRoute>
                     } />
