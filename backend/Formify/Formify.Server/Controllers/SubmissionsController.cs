@@ -19,6 +19,47 @@ namespace Formify.Server.Controllers
             _jsonHandler = jsonHandler;
         }
 
+        // GET /api/submissions/admin
+        // Lista das submissões de todos os utilizadores
+        [HttpGet("admin")]
+        public async Task<IActionResult> GetAllSubmissions()
+        {
+            // Optional: You might want to check if the user is actually an Admin here
+            if (!TryGetUserId(out int _))
+            {
+                return Unauthorized(new { message = "Utilizador não autenticado ou token inválido." });
+            }
+
+            var allSubmissions = await _jsonHandler.GetAllSubmissionsAsync();
+            var allForms = await _jsonHandler.GetAllFormsAsync();
+
+            var result = allSubmissions
+                .Where(s => s.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+                .OrderByDescending(s => s.SubmittedAt)
+                .Select(s =>
+                {
+                    var form = allForms.FirstOrDefault(f => f.Id == s.FormId);
+
+                    return new
+                    {
+                        id = s.Id,
+                        userId = s.UserId, // Added this so you know WHO submitted it
+                        formId = s.FormId,
+                        formTitle = form?.Title ?? "(Formulário removido)",
+                        formDescription = form?.Description,
+                        submittedAt = s.SubmittedAt,
+                        formVersion = s.FormVersion,
+                        currentFormVersion = form?.Version,
+                        isStale = form != null && form.Version > s.FormVersion,
+                        formArchived = form != null && form.Status == FormStatus.Archived,
+                        status = s.Status ?? "Pending"
+                    };
+                })
+                .ToList();
+
+            return Ok(result);
+        }
+
         // GET /api/submissions/me
         // Lista as submissões do utilizador autenticado com informação básica
         // do formulário associado (título e descrição) para apresentação na UI.
@@ -81,8 +122,11 @@ namespace Formify.Server.Controllers
                 return NotFound(new { message = "Submissão não encontrada." });
             }
 
+            //check if user is an administrator
+            bool isAdmin = User.IsInRole("admin");
+
             // Bloqueio explícito: o utilizador só pode aceder às suas próprias submissões.
-            if (submission.UserId != userId)
+            if (submission.UserId != userId && !isAdmin)
             {
                 return StatusCode(403, new { message = "Acesso negado a esta submissão." });
             }
@@ -116,11 +160,11 @@ namespace Formify.Server.Controllers
         }
 
         // PUT /api/submissions/{id}/status
-        [HttpPut("{id}/status")]
-        [Authorize]
+        [HttpPut("status/{id}")]
+        [Authorize(Roles="admin")]
         public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateStatusRequest request)
         {
-            var validStatuses = new[] { "Pending", "Approved" };
+            var validStatuses = new[] { "Pending", "Approved", "Refused" };
             if (!validStatuses.Contains(request.Status))
                 return BadRequest(new { message = "Estado inválido." });
 

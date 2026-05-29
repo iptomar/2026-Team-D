@@ -138,7 +138,8 @@ export default function MySubmissionDetail() {
     const [data, setData] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
-
+    const isAdmin = localStorage.getItem('role') === 'admin';
+    
     useEffect(() => {
         const fetchDetail = async () => {
             try {
@@ -177,6 +178,42 @@ export default function MySubmissionDetail() {
         fetchDetail();
     }, [id]);
 
+    const handleUpdateStatus = async (newStatus) => {
+        if (!window.confirm(`Tens a certeza que pretendes alterar o estado para "${newStatus}"?`)) {
+            return;
+        }
+
+        try {
+            setIsLoading(true);
+            const token = localStorage.getItem('token');
+
+            // Assume-se que o teu backend aceita um PUT em /api/Submissions/{id}/status 
+            // ou envia o objeto atualizado conforme a tua API exigir.
+            const response = await fetch(`http://localhost:5208/api/Submissions/status/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: `Bearer ${token}` } : {})
+                },
+                body: JSON.stringify({
+                    ...data, // Envia o resto dos dados se a tua API exigir o objeto completo
+                    status: newStatus
+                }),
+            });
+
+            if (!response.ok) throw new Error('Erro ao atualizar o estado');
+
+            // Atualiza o estado local para refletir a mudança imediatamente no ecrã
+            setData(prev => ({ ...prev, status: newStatus }));
+            alert(`Submissão ${newStatus === 'Approved' ? 'aprovada' : 'recusada'} com sucesso!`);
+        } catch (e) {
+            console.error(e);
+            setError('Não foi possível atualizar o estado da submissão.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
     const fields = data?.form?.fields || data?.form?.Fields || [];
     const answers = data?.answers || {};
 
@@ -198,7 +235,7 @@ export default function MySubmissionDetail() {
     return (
         <div className="space-y-6">
             <Link
-                to="/meus-formularios"
+                to={isAdmin ? "/approveRequest" : "/meus-formularios"}
                 className="inline-flex w-fit items-center gap-2 font-semibold text-accent transition-all hover:opacity-80"
             >
                 ← Voltar
@@ -224,7 +261,7 @@ export default function MySubmissionDetail() {
                             )}
                         </div>
                         <div className="flex shrink-0 flex-col items-start gap-2 sm:items-end">
-                             <StatusBadge status={data.status} />
+                            <StatusBadge status={data.status} />
                             {data.isStale && (
                                 <span className="inline-flex w-fit items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-semibold text-amber-700">
                                     Desatualizado
@@ -335,6 +372,26 @@ export default function MySubmissionDetail() {
                             </div>
                         )}
                     </div>
+
+                    {/* SECÇÃO DE AÇÕES DO ADMINISTRADOR */}
+                    {isAdmin && data.status === 'Pending' && (
+                        <div className="flex flex-col gap-3 mt-6 border-t border-accent-border pt-6 sm:flex-row sm:justify-end">
+                            <button
+                                onClick={() => handleUpdateStatus('Refused')}
+                                disabled={isLoading}
+                                className="inline-flex justify-center items-center rounded-lg border border-red-200 bg-red-50 px-5 py-2.5 text-sm font-semibold text-red-700 transition-all hover:bg-red-100 disabled:opacity-50"
+                            >
+                                Recusar Submissão
+                            </button>
+                            <button
+                                onClick={() => handleUpdateStatus('Approved')}
+                                disabled={isLoading}
+                                className="inline-flex justify-center items-center rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 disabled:opacity-50"
+                            >
+                                Aprovar Submissão
+                            </button>
+                        </div>
+                    )}
                 </>
             ) : null}
         </div>
