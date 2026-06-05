@@ -255,6 +255,8 @@ namespace Formify.Server.Controllers
                 {
                     FormId = formId,
                     UserId = userId,
+                    // Herda o responsável atual do formulário (fica congelado nesta submissão).
+                    ResponsibleUserId = form.ResponsibleUserId,
                     Answers = answers ?? new Dictionary<string, object>(),
                     SubmittedAt = DateTime.Now,
                     FormVersion = form.Version
