@@ -58,6 +58,8 @@ namespace Formify.Server.Controllers
                     {
                         id = s.Id,
                         userId = s.UserId, // Added this so you know WHO submitted it
+                        submittedByUserId = s.UserId, // alias com nome explícito (Ref #161)
+                        responsibleUserId = s.ResponsibleUserId,
                         formId = s.FormId,
                         formTitle = form?.Title ?? "(Formulário removido)",
                         formDescription = form?.Description,
@@ -101,10 +103,11 @@ namespace Formify.Server.Controllers
                     {
                         id = s.Id,
                         formId = s.FormId,
+                        submittedByUserId = s.UserId,
+                        responsibleUserId = s.ResponsibleUserId,
                         formTitle = form?.Title ?? "(Formulário removido)",
                         formDescription = form?.Description,
                         submittedAt = s.SubmittedAt,
-                       // status = "Submetido",
                         formVersion = s.FormVersion,
                         currentFormVersion = form?.Version,
                         isStale,
@@ -155,6 +158,8 @@ namespace Formify.Server.Controllers
             {
                 id = submission.Id,
                 formId = submission.FormId,
+                submittedByUserId = submission.UserId,
+                responsibleUserId = submission.ResponsibleUserId,
                 submittedAt = submission.SubmittedAt,
                 status = submission.Status ?? "Pending",
                 answers = submission.Answers,

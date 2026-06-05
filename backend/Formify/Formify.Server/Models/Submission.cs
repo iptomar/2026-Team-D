@@ -6,7 +6,12 @@
 
         public int FormId { get; set; }
 
-        public int UserId { get; set; } // ID do utilizador que preencheu
+        public int UserId { get; set; } // ID do utilizador que preencheu (submittedByUserId)
+
+        // Responsável pelo pedido — herdado de Form.ResponsibleUserId no momento
+        // da submissão. Fica "congelado" nesta submissão mesmo que o responsável
+        // do formulário seja alterado depois.
+        public int? ResponsibleUserId { get; set; }
 
         // Dicionário para guardar as respostas: Key = ID ou Nome do Campo, Value = Resposta
         public Dictionary<string, object> Answers { get; set; } = new();
