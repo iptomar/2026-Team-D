@@ -19,22 +19,36 @@ namespace Formify.Server.Controllers
             _jsonHandler = jsonHandler;
         }
 
-        // GET /api/submissions/admin
-        // Lista das submissões de todos os utilizadores
+        // GET /api/submissions/admin[?status=pending|approved|refused|all]
+        // Lista das submissões de todos os utilizadores. Por defeito filtra
+        // por "pending" (vista normal de "Aprovar Pedidos"). Aceita também
+        // "approved", "refused" ou "all" para consulta histórica.
         [HttpGet("admin")]
-        public async Task<IActionResult> GetAllSubmissions()
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> GetAllSubmissions([FromQuery] string status = "pending")
         {
-            // Optional: You might want to check if the user is actually an Admin here
             if (!TryGetUserId(out int _))
             {
                 return Unauthorized(new { message = "Utilizador não autenticado ou token inválido." });
             }
 
+            var validFilters = new[] { "pending", "approved", "refused", "all" };
+            var statusFilter = (status ?? "pending").ToLowerInvariant();
+            if (!validFilters.Contains(statusFilter))
+            {
+                return BadRequest(new { message = "Filtro de status inválido. Valores: pending, approved, refused, all." });
+            }
+
             var allSubmissions = await _jsonHandler.GetAllSubmissionsAsync();
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
-            var result = allSubmissions
-                .Where(s => s.Status.Equals("Pending", StringComparison.OrdinalIgnoreCase))
+            IEnumerable<Submission> filtered = allSubmissions;
+            if (statusFilter != "all")
+            {
+                filtered = filtered.Where(s => s.Status.Equals(statusFilter, StringComparison.OrdinalIgnoreCase));
+            }
+
+            var result = filtered
                 .OrderByDescending(s => s.SubmittedAt)
                 .Select(s =>
                 {
