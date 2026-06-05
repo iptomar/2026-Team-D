@@ -4,6 +4,13 @@ import StatusBadge from '../components/StatusBadge';
 
 const API_URL = 'http://localhost:5208/api/Submissions/admin';
 
+const STATUS_FILTERS = [
+    { value: 'pending', label: 'Pendentes', empty: 'Não há pedidos pendentes para aprovar.' },
+    { value: 'approved', label: 'Aprovados', empty: 'Ainda não foram aprovados pedidos.' },
+    { value: 'refused', label: 'Recusados', empty: 'Não há pedidos recusados.' },
+    { value: 'all', label: 'Todos', empty: 'Ainda não foram submetidos pedidos.' },
+];
+
 const normalizeText = (value) =>
     (value || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
 
@@ -22,11 +29,12 @@ const formatDate = (iso) => {
     }
 };
 
-export default function MySubmissions() {
+export default function ApprovalView() {
     const [submissions, setSubmissions] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
 
+    const [statusFilter, setStatusFilter] = useState('pending');
     const [searchTerm, setSearchTerm] = useState('');
     const [sortDate, setSortDate] = useState('newest');
 
@@ -34,14 +42,17 @@ export default function MySubmissions() {
     const itemsPerPage = 12;
 
     useEffect(() => {
+        const controller = new AbortController();
+
         const fetchSubmissions = async () => {
             try {
                 setIsLoading(true);
                 setError('');
 
                 const token = localStorage.getItem('token');
-                const response = await fetch(API_URL, {
+                const response = await fetch(`${API_URL}?status=${statusFilter}`, {
                     headers: token ? { Authorization: `Bearer ${token}` } : {},
+                    signal: controller.signal,
                 });
 
                 if (response.status === 401) {
@@ -49,21 +60,27 @@ export default function MySubmissions() {
                     setSubmissions([]);
                     return;
                 }
-
+                if (response.status === 403) {
+                    setError('Apenas administradores podem aceder a esta página.');
+                    setSubmissions([]);
+                    return;
+                }
                 if (!response.ok) throw new Error('Erro ao obter submissões');
 
                 const data = await response.json();
                 setSubmissions(Array.isArray(data) ? data : []);
             } catch (e) {
+                if (e.name === 'AbortError') return;
                 console.error('Erro ao carregar submissões:', e);
-                setError('Não foi possível carregar as tuas submissões.');
+                setError('Não foi possível carregar os pedidos.');
             } finally {
                 setIsLoading(false);
             }
         };
 
         fetchSubmissions();
-    }, []);
+        return () => controller.abort();
+    }, [statusFilter]);
 
     const filteredAndSorted = useMemo(() => {
         const term = normalizeText(searchTerm.trim());
@@ -89,15 +106,44 @@ export default function MySubmissions() {
 
     useEffect(() => {
         setCurrentPage(1);
-    }, [searchTerm, sortDate]);
+    }, [searchTerm, sortDate, statusFilter]);
+
+    const currentEmptyText = STATUS_FILTERS.find((f) => f.value === statusFilter)?.empty
+        || 'Sem pedidos para mostrar.';
 
     return (
         <div className="min-h-[calc(100vh-140px)] space-y-8 flex flex-col">
             <div className="flex flex-col gap-2">
-                <h2 className="text-3xl font-bold text-text-h">Lista dos Pedidos</h2>
+                <h2 className="text-3xl font-bold text-text-h">Aprovar Pedidos</h2>
+                <p className="text-lg text-text">
+                    Gestão de submissões dos utilizadores — vista de administração
+                </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2 my-2">
+            {/* Filtro por estado */}
+            <div className="border-b border-accent-border">
+                <nav className="-mb-px flex flex-wrap gap-2">
+                    {STATUS_FILTERS.map((f) => {
+                        const isActive = statusFilter === f.value;
+                        return (
+                            <button
+                                key={f.value}
+                                type="button"
+                                onClick={() => setStatusFilter(f.value)}
+                                className={`border-b-2 px-4 py-2 text-sm font-semibold transition-colors ${
+                                    isActive
+                                        ? 'border-accent text-accent'
+                                        : 'border-transparent text-text hover:border-accent-border hover:text-text-h'
+                                }`}
+                            >
+                                {f.label}
+                            </button>
+                        );
+                    })}
+                </nav>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
                 <div className="flex flex-col gap-2">
                     <label className="font-medium text-text-h">Pesquisar</label>
                     <input
@@ -123,15 +169,15 @@ export default function MySubmissions() {
 
             <div className="rounded-lg flex-1 flex flex-col">
                 {isLoading ? (
-                    <div className="text-center py-12 text-text">A carregar submissões...</div>
+                    <div className="text-center py-12 text-text">A carregar pedidos...</div>
                 ) : error ? (
                     <div className="rounded-lg border-2 border-dashed border-red-300 bg-red-50 px-8 py-12 text-center">
                         <p className="text-xl font-semibold text-red-700">{error}</p>
                     </div>
                 ) : filteredAndSorted.length === 0 ? (
                     <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
-                        <p className="text-xl font-semibold text-text-h">Ainda não preencheste formulários</p>
-                        <p className="mt-2 text-text">As tuas submissões vão aparecer aqui assim que responderes ao primeiro formulário.</p>
+                        <p className="text-xl font-semibold text-text-h">Sem pedidos</p>
+                        <p className="mt-2 text-text">{currentEmptyText}</p>
                     </div>
                 ) : (
                     <>
@@ -151,7 +197,7 @@ export default function MySubmissions() {
                                             {s.isStale && (
                                                 <span
                                                     className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 border border-amber-200"
-                                                    title="O formulário foi alterado desde a tua submissão"
+                                                    title="O formulário foi alterado desde a submissão"
                                                 >
                                                     Desatualizado
                                                 </span>
