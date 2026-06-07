@@ -85,8 +85,25 @@ function AnswerValue({ field, value }) {
 
 function TableAnswer({ field, answers }) {
     const columns = field.options || field.Options || [];
-    const rowCount = field.tableRowCount || field.TableRowCount || 1;
+    const defaultRowCount = field.tableRowCount || field.TableRowCount || 1;
     const fId = field.id || field.Id;
+
+    // Determinar o número máximo de linhas respondido (caso o utilizador tenha adicionado linhas)
+    let maxAnsweredRow = -1;
+    Object.keys(answers || {}).forEach(key => {
+        if (key.startsWith(`${fId}-r`)) {
+            const parts = key.split('-r');
+            if (parts.length > 1) {
+                const rowPart = parts[1].split('-c')[0];
+                const rNum = parseInt(rowPart, 10);
+                if (!isNaN(rNum) && rNum > maxAnsweredRow) {
+                    maxAnsweredRow = rNum;
+                }
+            }
+        }
+    });
+
+    const rowCount = Math.max(defaultRowCount, maxAnsweredRow + 1);
 
     return (
         <div className="overflow-x-auto rounded-lg border border-accent-border">

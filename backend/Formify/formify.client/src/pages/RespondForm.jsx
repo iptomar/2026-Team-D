@@ -8,6 +8,7 @@ export default function RespondForm() {
     const [formData, setFormData] = useState(null);
     const [answers, setAnswers] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const [tableRowCounts, setTableRowCounts] = useState({});
 
     const currentUser = localStorage.getItem('username') || 'Utilizador';
     const currentRole = localStorage.getItem('role') || 'Role';
@@ -31,16 +32,43 @@ export default function RespondForm() {
                     return;
                 }
 
-                setFormData(data);
+                // Normalizar os campos retornados pela API
+                const initialRowCounts = {};
+                const fieldsNormalizados = (data.fields || data.Fields || []).map(f => {
+                    const type = (f.type || f.Type || 'text').toLowerCase();
+                    const widthFormatado = f.width || f.Width || 'full';
+                    const fId = f.id || f.Id;
+
+                    if (type === 'table') {
+                        const rows = f.tableRowCount || f.TableRowCount || f.tableRows || 1;
+                        initialRowCounts[fId] = rows;
+                        return {
+                            ...f,
+                            id: fId,
+                            type: 'table',
+                            width: widthFormatado,
+                            tableColumns: f.options || f.Options || [],
+                            tableRows: rows
+                        };
+                    }
+
+                    return {
+                        ...f,
+                        id: fId,
+                        type: type,
+                        width: widthFormatado,
+                        options: f.options || f.Options || []
+                    };
+                });
+
+                setFormData({ ...data, fields: fieldsNormalizados });
+                setTableRowCounts(initialRowCounts);
 
                 // Preparar objeto de respostas vazio
                 const initialAnswers = {};
-                (data.fields || data.Fields || []).forEach(field => {
-                    const type = field.type || field.Type;
-                    const fId = field.id || field.Id;
-
-                    if (type !== 'section') {
-                        initialAnswers[fId] = type === 'checkbox' ? [] : '';
+                fieldsNormalizados.forEach(field => {
+                    if (field.type !== 'section') {
+                        initialAnswers[field.id] = field.type === 'checkbox' ? [] : '';
                     }
                 });
                 setAnswers(initialAnswers);
@@ -56,6 +84,45 @@ export default function RespondForm() {
 
         if (id) fetchForm();
     }, [id, navigate]);
+
+    const handleAddRow = (fieldId) => {
+        setTableRowCounts(prev => ({
+            ...prev,
+            [fieldId]: (prev[fieldId] || 1) + 1
+        }));
+    };
+
+    const handleRemoveRow = (fieldId, rIndex, columnsCount) => {
+        const currentRows = tableRowCounts[fieldId] || 1;
+        if (currentRows <= 1) return;
+
+        setTableRowCounts(prev => ({
+            ...prev,
+            [fieldId]: currentRows - 1
+        }));
+
+        setAnswers(prev => {
+            const newAnswers = { ...prev };
+            // Shift values for subsequent rows up
+            for (let r = rIndex; r < currentRows; r++) {
+                for (let c = 0; c < columnsCount; c++) {
+                    const currentCellId = `${fieldId}-r${r}-c${c}`;
+                    const nextCellId = `${fieldId}-r${r + 1}-c${c}`;
+                    
+                    if (r === currentRows - 1) {
+                        delete newAnswers[currentCellId];
+                    } else {
+                        if (prev[nextCellId] !== undefined) {
+                            newAnswers[currentCellId] = prev[nextCellId];
+                        } else {
+                            delete newAnswers[currentCellId];
+                        }
+                    }
+                }
+            }
+            return newAnswers;
+        });
+    };
 
     // Atualiza o estado das respostas à medida que o utilizador escreve
     const handleAnswerChange = (fieldId, value, type = 'text') => {
@@ -243,39 +310,67 @@ export default function RespondForm() {
                                 )}
 
                                 {type === 'table' && (
-                                    <div className="overflow-x-auto rounded-lg border border-gray-200 mt-2">
-                                        <table className="w-full border-collapse text-sm text-left">
-                                            <thead className="bg-gray-50 border-b border-gray-200">
-                                                <tr>
-                                                    <th className="px-4 py-3 font-semibold text-gray-600 w-16 text-center">Nº</th>
-                                                    {(field.tableColumns || field.TableColumns || []).map((col, cIndex) => (
-                                                        <th key={cIndex} className="px-4 py-3 font-semibold text-gray-600">{col}</th>
-                                                    ))}
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-gray-100">
-                                                {Array.from({ length: field.tableRows || field.TableRowCount || 1 }).map((_, rIndex) => (
-                                                    <tr key={rIndex} className="hover:bg-gray-50/50">
-                                                        <td className="px-4 py-3 text-gray-400 font-medium text-xs text-center">{rIndex + 1}</td>
-                                                        {(field.tableColumns || field.TableColumns || []).map((col, cIndex) => {
-                                                            const cellId = `${fId}-r${rIndex}-c${cIndex}`;
-                                                            return (
-                                                                <td key={cIndex} className="p-2">
-                                                                    <input
-                                                                        type="text"
-                                                                        placeholder="Resposta..."
-                                                                        value={answers[cellId] || ''}
-                                                                        onChange={(e) => handleAnswerChange(cellId, e.target.value)}
-                                                                        required={req}
-                                                                        className="w-full rounded border-gray-300 px-3 py-2 text-sm focus:border-accent focus:ring-1 focus:ring-accent"
-                                                                    />
-                                                                </td>
-                                                            );
-                                                        })}
+                                    <div className="flex flex-col gap-2 mt-2">
+                                        <div className="overflow-x-auto rounded-lg border border-gray-200">
+                                            <table className="w-full border-collapse text-sm text-left">
+                                                <thead className="bg-gray-50 border-b border-gray-200">
+                                                    <tr>
+                                                        <th className="px-4 py-3 font-semibold text-gray-600 w-16 text-center">Nº</th>
+                                                        {(field.tableColumns || []).map((col, cIndex) => (
+                                                            <th key={cIndex} className="px-4 py-3 font-semibold text-gray-600">{col}</th>
+                                                        ))}
+                                                        <th className="px-4 py-3 font-semibold text-gray-600 w-20 text-center">Ações</th>
                                                     </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
+                                                </thead>
+                                                <tbody className="divide-y divide-gray-100">
+                                                    {Array.from({ length: tableRowCounts[fId] || 1 }).map((_, rIndex) => (
+                                                        <tr key={rIndex} className="hover:bg-gray-50/50">
+                                                            <td className="px-4 py-3 text-gray-400 font-medium text-xs text-center">{rIndex + 1}</td>
+                                                            {(field.tableColumns || []).map((col, cIndex) => {
+                                                                const cellId = `${fId}-r${rIndex}-c${cIndex}`;
+                                                                return (
+                                                                    <td key={cIndex} className="p-2">
+                                                                        <input
+                                                                            type="text"
+                                                                            placeholder="Resposta..."
+                                                                            value={answers[cellId] || ''}
+                                                                            onChange={(e) => handleAnswerChange(cellId, e.target.value)}
+                                                                            required={req}
+                                                                            className="w-full rounded border-gray-300 px-3 py-2 text-sm focus:border-accent focus:ring-1 focus:ring-accent"
+                                                                        />
+                                                                    </td>
+                                                                );
+                                                            })}
+                                                            <td className="p-2 text-center">
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => handleRemoveRow(fId, rIndex, (field.tableColumns || []).length)}
+                                                                    disabled={(tableRowCounts[fId] || 1) <= 1}
+                                                                    className="text-red-500 hover:text-red-700 disabled:opacity-30 disabled:cursor-not-allowed p-1 rounded hover:bg-red-50 transition-colors"
+                                                                    title="Remover Linha"
+                                                                >
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 mx-auto">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                                    </svg>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div className="flex justify-start">
+                                            <button
+                                                type="button"
+                                                onClick={() => handleAddRow(fId)}
+                                                className="inline-flex items-center gap-1.5 text-xs font-semibold text-accent hover:text-emerald-700 transition-colors bg-accent-bg/50 px-3 py-1.5 rounded border border-accent/20 hover:bg-accent-bg"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                                </svg>
+                                                Adicionar Linha
+                                            </button>
+                                        </div>
                                     </div>
                                 )}
                             </div>

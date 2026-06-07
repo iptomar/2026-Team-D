@@ -78,6 +78,7 @@ export default function Login() {
                 if (data.role === 'professor') navigate('/professor');
                 else if (data.role === 'funcionario') navigate('/funcionario');
                 else if (data.role === 'admin') navigate('/admin');
+                else if (data.role === 'aluno') navigate('/aluno');
                 else navigate('/');
             } else {
                 const data = await res.json();
