@@ -86,7 +86,8 @@
     "CreatedAt": "2026-04-30T09:00:00+01:00",
     "UpdatedAt": "2026-04-30T09:00:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 2,
@@ -191,7 +192,8 @@
     "CreatedAt": "2026-04-30T09:10:00+01:00",
     "UpdatedAt": "2026-04-30T09:10:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 3,
@@ -285,7 +287,8 @@
     "CreatedAt": "2026-04-30T09:20:00+01:00",
     "UpdatedAt": "2026-04-30T09:20:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 4,
@@ -368,7 +371,8 @@
     "CreatedAt": "2026-04-30T09:30:00+01:00",
     "UpdatedAt": "2026-04-30T09:30:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 5,
@@ -442,7 +446,8 @@
     "CreatedAt": "2026-04-30T09:40:00+01:00",
     "UpdatedAt": "2026-04-30T09:40:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 6,
@@ -517,7 +522,8 @@
     "CreatedAt": "2026-04-30T09:50:00+01:00",
     "UpdatedAt": "2026-04-30T09:50:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 7,
@@ -590,7 +596,8 @@
     "CreatedAt": "2026-04-30T10:00:00+01:00",
     "UpdatedAt": "2026-04-30T10:00:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 8,
@@ -664,7 +671,8 @@
     "CreatedAt": "2026-04-30T10:10:00+01:00",
     "UpdatedAt": "2026-04-30T10:10:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 9,
@@ -734,7 +742,8 @@
     "CreatedAt": "2026-04-30T10:20:00+01:00",
     "UpdatedAt": "2026-04-30T10:20:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 10,
@@ -805,7 +814,8 @@
     "CreatedAt": "2026-04-30T10:30:00+01:00",
     "UpdatedAt": "2026-04-30T10:30:00+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 11,
@@ -857,7 +867,8 @@
     "CreatedAt": "2026-04-30T10:40:00+01:00",
     "UpdatedAt": "2026-04-30T12:58:50.8472013+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 12,
@@ -915,7 +926,8 @@
     "CreatedAt": "2026-04-30T10:50:00+01:00",
     "UpdatedAt": "2026-04-30T22:32:16.6053302+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 13,
@@ -925,7 +937,7 @@
       "Professor"
     ],
     "Status": "Published",
-    "Version": 1,
+    "Version": 2,
     "Fields": [
       {
         "Id": "114d4208-8844-4476-8351-ef120a027d55",
@@ -1371,9 +1383,10 @@
       }
     ],
     "CreatedAt": "2026-05-21T16:56:02.2655777+01:00",
-    "UpdatedAt": "2026-05-21T17:19:09.2970041+01:00",
+    "UpdatedAt": "2026-06-06T17:57:25.4056439+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 14,
@@ -1829,17 +1842,16 @@
       }
     ],
     "CreatedAt": "2026-05-28T03:46:08.7738475+01:00",
-    "UpdatedAt": "2026-06-06T20:58:39.3344083+01:00",
+    "UpdatedAt": "2026-05-28T03:47:03.0489993+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": 1
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 15,
     "Title": "Requerimento Assuntos Diversos",
     "Description": "",
-    "Audience": [
-      "Aluno"
-    ],
+    "Audience": [ "Aluno" ],
     "Status": "Draft",
     "Version": 3,
     "Fields": [
@@ -1863,11 +1875,7 @@
         "Placeholder": "Selecione a Escola",
         "Order": 1,
         "Width": "full",
-        "Options": [
-          "ESGT",
-          "ESTA",
-          "ESTT"
-        ],
+        "Options": [ "ESGT", "ESTA", "ESTT" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2085,10 +2093,7 @@
     "Id": 16,
     "Title": "Requerimento Emiss\u00E3o de Documentos",
     "Description": "Instituto Polit\u00E9cnico de Tomar - PT.SIGQ.MOD ACA 30 60-3",
-    "Audience": [
-      "Aluno",
-      "Ex-Aluno"
-    ],
+    "Audience": [ "Aluno", "Ex-Aluno" ],
     "Status": "Published",
     "Version": 3,
     "Fields": [
@@ -2112,11 +2117,7 @@
         "Placeholder": "Selecione a Escola",
         "Order": 1,
         "Width": "full",
-        "Options": [
-          "ESGT",
-          "ESTA",
-          "ESTT"
-        ],
+        "Options": [ "ESGT", "ESTA", "ESTT" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2272,10 +2273,7 @@
         "Placeholder": "",
         "Order": 14,
         "Width": "half",
-        "Options": [
-          "Com aproveitamento",
-          "Sem aproveitamento"
-        ],
+        "Options": [ "Com aproveitamento", "Sem aproveitamento" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2287,14 +2285,7 @@
         "Placeholder": "Selecione o efeito",
         "Order": 15,
         "Width": "half",
-        "Options": [
-          "Abono de fam\u00EDlia",
-          "ADSE, SAD, SAMS, etc.",
-          "Recrutamento militar",
-          "Pens\u00F5es de sangue",
-          "IRS",
-          "Outro"
-        ],
+        "Options": [ "Abono de fam\u00EDlia", "ADSE, SAD, SAMS, etc.", "Recrutamento militar", "Pens\u00F5es de sangue", "IRS", "Outro" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2306,10 +2297,7 @@
         "Placeholder": "",
         "Order": 16,
         "Width": "full",
-        "Options": [
-          "Unidades curriculares",
-          "Unidades isoladas"
-        ],
+        "Options": [ "Unidades curriculares", "Unidades isoladas" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2321,12 +2309,7 @@
         "Placeholder": "",
         "Order": 17,
         "Width": "full",
-        "Options": [
-          "Nenhum",
-          "Certificado em L\u00EDngua Inglesa",
-          "Certificado de Realiza\u00E7\u00E3o de provas de acesso ao abrigo do regime dos M23",
-          "Conte\u00FAdos Program\u00E1ticos"
-        ],
+        "Options": [ "Nenhum", "Certificado em L\u00EDngua Inglesa", "Certificado de Realiza\u00E7\u00E3o de provas de acesso ao abrigo do regime dos M23", "Conte\u00FAdos Program\u00E1ticos" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2338,11 +2321,7 @@
         "Placeholder": "Selecione a op\u00E7\u00E3o",
         "Order": 18,
         "Width": "full",
-        "Options": [
-          "Grau de Mestre / Licenciado / Bacharel",
-          "Microcredencia\u00E7\u00E3o",
-          "CET"
-        ],
+        "Options": [ "Grau de Mestre / Licenciado / Bacharel", "Microcredencia\u00E7\u00E3o", "CET" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2354,12 +2333,7 @@
         "Placeholder": "",
         "Order": 19,
         "Width": "full",
-        "Options": [
-          "Com discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas",
-          "Sem discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas",
-          "Em Portugu\u00EAs",
-          "Em Ingl\u00EAs"
-        ],
+        "Options": [ "Com discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas", "Sem discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas", "Em Portugu\u00EAs", "Em Ingl\u00EAs" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2371,13 +2345,7 @@
         "Placeholder": "Selecione o grau",
         "Order": 20,
         "Width": "half",
-        "Options": [
-          "CTESP",
-          "Bacharelato",
-          "Licenciatura",
-          "Mestrado",
-          "P\u00F3s-Gradua\u00E7\u00E3o"
-        ],
+        "Options": [ "CTESP", "Bacharelato", "Licenciatura", "Mestrado", "P\u00F3s-Gradua\u00E7\u00E3o" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2389,10 +2357,7 @@
         "Placeholder": "",
         "Order": 21,
         "Width": "half",
-        "Options": [
-          "N\u00E3o",
-          "Sim (preencher anexo)"
-        ],
+        "Options": [ "N\u00E3o", "Sim (preencher anexo)" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2440,11 +2405,7 @@
         "Placeholder": "",
         "Order": 25,
         "Width": "full",
-        "Options": [
-          "Atividade",
-          "Data Inicio",
-          "Data Final"
-        ],
+        "Options": [ "Atividade", "Data Inicio", "Data Final" ],
         "TableFixedRows": false,
         "TableRowCount": 2
       }
@@ -2458,9 +2419,7 @@
     "Id": 17,
     "Title": "Requerimento Credita\u00E7\u00E3o",
     "Description": "Instituto Polit\u00E9cnico de Tomar - IPT.SIGQ.MOD ACA 40 10-1",
-    "Audience": [
-      "Aluno"
-    ],
+    "Audience": [ "Aluno" ],
     "Status": "Draft",
     "Version": 3,
     "Fields": [
@@ -2568,11 +2527,7 @@
         "Placeholder": "Selecione a origem da forma\u00E7\u00E3o",
         "Order": 8,
         "Width": "half",
-        "Options": [
-          "Forma\u00E7\u00E3o Acad\u00E9mica",
-          "Experi\u00EAncia Profissional",
-          "Unidades Isoladas"
-        ],
+        "Options": [ "Forma\u00E7\u00E3o Acad\u00E9mica", "Experi\u00EAncia Profissional", "Unidades Isoladas" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2584,13 +2539,7 @@
         "Placeholder": "Selecione o grau/curso",
         "Order": 9,
         "Width": "half",
-        "Options": [
-          "Curso de Mestrado",
-          "Curso de Licenciatura",
-          "Curso de T\u00E9cnico Superior Profissional",
-          "Curso de Especializa\u00E7\u00E3o Tecnol\u00F3gica",
-          "Outras Forma\u00E7\u00F5es"
-        ],
+        "Options": [ "Curso de Mestrado", "Curso de Licenciatura", "Curso de T\u00E9cnico Superior Profissional", "Curso de Especializa\u00E7\u00E3o Tecnol\u00F3gica", "Outras Forma\u00E7\u00F5es" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2650,11 +2599,7 @@
         "Placeholder": "",
         "Order": 14,
         "Width": "half",
-        "Options": [
-          "ESGT",
-          "ESTA",
-          "ESTT"
-        ],
+        "Options": [ "ESGT", "ESTA", "ESTT" ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2698,6 +2643,7 @@
     "CreatedAt": "2026-06-05T00:00:00+01:00",
     "UpdatedAt": "2026-06-05T01:26:21.0312692+01:00",
     "Category": "Requerimentos Acad\u00E9micos",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   }
 ]

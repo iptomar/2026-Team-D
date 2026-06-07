@@ -20,5 +20,7 @@ namespace Formify.Server.DTOs
         public string Category { get; set; } = "Geral";
 
         public int? ResponsibleUserId { get; set; }
+
+        public bool RequiresApproval { get; set; }
     }
 }
