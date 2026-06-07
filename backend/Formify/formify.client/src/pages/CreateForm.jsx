@@ -62,13 +62,14 @@ function normalizeField(field = {}) {
     };
 }
 
-function buildFormSnapshot(nome, descricao, audience, fields, responsibleUserId) {
+function buildFormSnapshot(nome, descricao, audience, fields, responsibleUserId, requiresApproval) {
     return {
         nome,
         descricao,
         audience: [...audience],
         fields: fields.map(normalizeField),
-        responsibleUserId // Adicionado ao snapshot para detetar se o utilizador alterou o responsável
+        responsibleUserId, // Adicionado ao snapshot para detetar se o utilizador alterou o responsável
+        requiresApproval // <-- ADICIONADO
     };
 }
 
@@ -653,6 +654,7 @@ export default function CreateForm() {
     const navigate = useNavigate();
     const selectedField = fields.find(f => f.id === selectedId) || null;
 
+
     const pushToast = (type, message) => {
         const toastId = crypto.randomUUID();
         setToasts(prev => [...prev, { id: toastId, type, message }]);
@@ -661,7 +663,10 @@ export default function CreateForm() {
         }, 5000);
     };
 
-    const currentSnapshot = buildFormSnapshot(nome.trim(), descricao, audience, fields, responsibleUserId);
+
+    const [requiresApproval, setRequiresApproval] = useState(false);
+
+    const currentSnapshot = buildFormSnapshot(nome.trim(), descricao, audience, fields, responsibleUserId, requiresApproval);
     const isDirty = Boolean(id && initialSnapshot && JSON.stringify(currentSnapshot) !== JSON.stringify(initialSnapshot));
 
     useEffect(() => {
@@ -692,6 +697,7 @@ export default function CreateForm() {
                 const loadedCategory = formDados.category || formDados.Category || CATEGORIAS_DISPONIVEIS[0];
                 const loadedFields = normalizeFieldList(formDados.fields || formDados.Fields || []);
                 const loadedResponsible = formDados.responsibleUserId || formDados.ResponsibleUserId || '';
+                const loadedRequiresApproval = formDados.requiresApproval || formDados.RequiresApproval || false; 
 
                 setNome(loadedNome);
                 setDescricao(loadedDescricao);
@@ -699,9 +705,9 @@ export default function CreateForm() {
                 setFields(loadedFields);
                 setAudience(loadedAudience);
                 setResponsibleUserId(loadedResponsible.toString());
+                setRequiresApproval(loadedRequiresApproval); 
 
-                setInitialSnapshot(buildFormSnapshot(loadedNome.trim(), loadedDescricao, loadedAudience, loadedFields, loadedResponsible.toString()));
-            } catch {
+                setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields, responsibleUserId, requiresApproval));            } catch {
                 pushToast('error', 'Não foi possível ligar ao servidor.');
             }
         };
@@ -931,6 +937,11 @@ export default function CreateForm() {
         const isFinal = e.nativeEvent.submitter.id === 'save-final';
 
         if (isFinal) {
+            if (requiresApproval && !responsibleUserId) {
+                setErroFields(['É obrigatório selecionar um "Responsável pela Aprovação" para poder publicar este formulário.']);
+                return; 
+            }
+
             if (realFields.length === 0) {
                 setErroFields(['Adiciona pelo menos um campo ao formulário antes de publicar.']);
                 return;
@@ -987,6 +998,7 @@ export default function CreateForm() {
                     Audience: audience,
                     StatusDraft: !isFinal,
                     Fields: fieldsWithOrder,
+                    RequiresApproval: requiresApproval,
                     ResponsibleUserId: parsedResponsibleId // ENVIAR O RESPONSÁVEL
                 }),
             });
@@ -1012,7 +1024,7 @@ export default function CreateForm() {
 
             await response.json();
             pushToast('success', isFinal ? 'Formulário publicado com sucesso.' : 'Rascunho guardado com sucesso.');
-            setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields, responsibleUserId));
+            setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields, requiresApproval, responsibleUserId));
             setIsLoading(false);
             window.setTimeout(() => navigate('/admin'), 1400);
         } catch {
@@ -1084,8 +1096,10 @@ export default function CreateForm() {
                         />
                     </div>
 
-                    {/* AGRUPAMENTO: Categoria e Responsável Lado a Lado (Em ecrãs grandes) */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* AGRUPAMENTO: Categoria e Aprovação (Duas Colunas) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        {/* COLUNA 1: Categoria */}
                         <div className="flex flex-col gap-2">
                             <label className="font-medium text-text-h">Categoria</label>
                             <select
@@ -1099,21 +1113,45 @@ export default function CreateForm() {
                             </select>
                         </div>
 
-                        {/* NOVO CAMPO: Dropdown do Responsável */}
-                        <div className="flex flex-col gap-2">
-                            <label className="font-medium text-text-h">Responsável pela Aprovação</label>
-                            <select
-                                value={responsibleUserId}
-                                onChange={(e) => setResponsibleUserId(e.target.value)}
-                                className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-                            >
-                                <option value="">(Sem responsável definido)</option>
-                                {/* Podes substituir estes IDs pelos IDs verdadeiros dos utilizadores mais tarde */}
-                                <option value="1">Gabinete de Relações Internacionais</option>
-                                <option value="2">Secretaria Escolar</option>
-                                <option value="3">Recursos Humanos</option>
-                                <option value="4">Direção de Curso</option>
-                            </select>
+                        {/* COLUNA 2: Bloco do Responsável (Checkbox + Dropdown) */}
+                        <div className="flex flex-col gap-4">
+
+                            {/* Checkbox */}
+                            <div className="flex flex-col justify-start mt-2">
+                                <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-text-h">
+                                    <input
+                                        type="checkbox"
+                                        checked={requiresApproval}
+                                        onChange={(e) => {
+                                            setRequiresApproval(e.target.checked);
+                                            if (!e.target.checked) setResponsibleUserId(''); // Limpa se desativar
+                                        }}
+                                        className="accent-green-600 w-4 h-4 rounded border-gray-300 focus:ring-green-500"
+                                    />
+                                    Este formulário necessita de aprovação?
+                                </label>
+                            </div>
+
+                            {/* Dropdown do Responsável (SÓ APARECE SE CHECKBOX ESTIVER ATIVA) */}
+                            {requiresApproval && (
+                                <div className="flex flex-col gap-2 animate-fade-in">
+                                    <label className="font-medium text-text-h">
+                                        Responsável pela Aprovação <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        value={responsibleUserId}
+                                        onChange={(e) => setResponsibleUserId(e.target.value)}
+                                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
+                                    >
+                                        <option value="">(Selecione um responsável...)</option>
+                                        <option value="1">Gabinete de Relações Internacionais</option>
+                                        <option value="2">Secretaria Escolar</option>
+                                        <option value="3">Recursos Humanos</option>
+                                        <option value="4">Direção de Curso</option>
+                                    </select>
+                                </div>
+                            )}
+
                         </div>
                     </div>
 

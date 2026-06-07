@@ -36,7 +36,15 @@ namespace Formify.Server.Controllers
             if (!ModelState.IsValid)
                 return ValidationProblem(ModelState);
 
+            // Se é para publicar (não é draft), exige aprovação, e não tem responsável: bloqueia
+            if (!request.StatusDraft && request.RequiresApproval && !request.ResponsibleUserId.HasValue)
+            {
+                return BadRequest(new { message = "Um formulário que requer aprovação não pode ser publicado sem ter um responsável definido." });
+            }
+
             var allForms = await _jsonHandler.GetAllFormsAsync();
+
+
 
             var form = new Form
             {
@@ -46,7 +54,8 @@ namespace Formify.Server.Controllers
                 Category = request.Category,
                 Audience = request.Audience,
                 Status = StatusFromRequest(request.StatusDraft),
-                ResponsibleUserId = request.ResponsibleUserId, // MAPEADO AQUI
+                RequiresApproval = request.RequiresApproval, 
+                ResponsibleUserId = request.ResponsibleUserId, 
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Fields = request.Fields
@@ -148,6 +157,12 @@ namespace Formify.Server.Controllers
             if (string.IsNullOrWhiteSpace(request.Title)) return BadRequest(new { message = "O nome do formulário é obrigatório." });
             if (request.Audience == null || !request.Audience.Any()) return BadRequest(new { message = "É obrigatório selecionar pelo menos um público-alvo." });
             if (request.Fields == null || !request.Fields.Any(f => f.Type != "section")) return BadRequest(new { message = "O formulário deve conter pelo menos um campo." });
+            
+            // Se é para publicar (não é draft), exige aprovação, e não tem responsável: BLOQUEIA!
+            if (!request.StatusDraft && request.RequiresApproval && !request.ResponsibleUserId.HasValue)
+            {
+                return BadRequest(new { message = "Um formulário que requer aprovação não pode ser publicado sem ter um responsável definido." });
+            }
 
             var allForms = await _jsonHandler.GetAllFormsAsync();
             var formToUpdate = allForms.FirstOrDefault(f => f.Id == id);
@@ -160,7 +175,8 @@ namespace Formify.Server.Controllers
             formToUpdate.Category = request.Category;
             formToUpdate.Audience = request.Audience;
             formToUpdate.Status = StatusFromRequest(request.StatusDraft);
-            formToUpdate.ResponsibleUserId = request.ResponsibleUserId; // MAPEADO AQUI
+            formToUpdate.RequiresApproval = request.RequiresApproval; 
+            formToUpdate.ResponsibleUserId = request.ResponsibleUserId;
             formToUpdate.UpdatedAt = DateTime.Now;
             formToUpdate.Fields = request.Fields;
             formToUpdate.Version += 1;
