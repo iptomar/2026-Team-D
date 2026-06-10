@@ -1851,7 +1851,9 @@
     "Id": 15,
     "Title": "Requerimento Assuntos Diversos",
     "Description": "",
-    "Audience": [ "Aluno" ],
+    "Audience": [
+      "Aluno"
+    ],
     "Status": "Draft",
     "Version": 3,
     "Fields": [
@@ -1875,7 +1877,11 @@
         "Placeholder": "Selecione a Escola",
         "Order": 1,
         "Width": "full",
-        "Options": [ "ESGT", "ESTA", "ESTT" ],
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2087,13 +2093,17 @@
     "CreatedAt": "2026-06-05T00:46:10.5621318+01:00",
     "UpdatedAt": "2026-06-05T00:55:18.290017+01:00",
     "Category": "Acad\u00E9micos",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 16,
     "Title": "Requerimento Emiss\u00E3o de Documentos",
     "Description": "Instituto Polit\u00E9cnico de Tomar - PT.SIGQ.MOD ACA 30 60-3",
-    "Audience": [ "Aluno", "Ex-Aluno" ],
+    "Audience": [
+      "Aluno",
+      "Ex-Aluno"
+    ],
     "Status": "Published",
     "Version": 3,
     "Fields": [
@@ -2117,7 +2127,11 @@
         "Placeholder": "Selecione a Escola",
         "Order": 1,
         "Width": "full",
-        "Options": [ "ESGT", "ESTA", "ESTT" ],
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2273,7 +2287,10 @@
         "Placeholder": "",
         "Order": 14,
         "Width": "half",
-        "Options": [ "Com aproveitamento", "Sem aproveitamento" ],
+        "Options": [
+          "Com aproveitamento",
+          "Sem aproveitamento"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2285,7 +2302,14 @@
         "Placeholder": "Selecione o efeito",
         "Order": 15,
         "Width": "half",
-        "Options": [ "Abono de fam\u00EDlia", "ADSE, SAD, SAMS, etc.", "Recrutamento militar", "Pens\u00F5es de sangue", "IRS", "Outro" ],
+        "Options": [
+          "Abono de fam\u00EDlia",
+          "ADSE, SAD, SAMS, etc.",
+          "Recrutamento militar",
+          "Pens\u00F5es de sangue",
+          "IRS",
+          "Outro"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2297,7 +2321,10 @@
         "Placeholder": "",
         "Order": 16,
         "Width": "full",
-        "Options": [ "Unidades curriculares", "Unidades isoladas" ],
+        "Options": [
+          "Unidades curriculares",
+          "Unidades isoladas"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2309,7 +2336,12 @@
         "Placeholder": "",
         "Order": 17,
         "Width": "full",
-        "Options": [ "Nenhum", "Certificado em L\u00EDngua Inglesa", "Certificado de Realiza\u00E7\u00E3o de provas de acesso ao abrigo do regime dos M23", "Conte\u00FAdos Program\u00E1ticos" ],
+        "Options": [
+          "Nenhum",
+          "Certificado em L\u00EDngua Inglesa",
+          "Certificado de Realiza\u00E7\u00E3o de provas de acesso ao abrigo do regime dos M23",
+          "Conte\u00FAdos Program\u00E1ticos"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2321,7 +2353,11 @@
         "Placeholder": "Selecione a op\u00E7\u00E3o",
         "Order": 18,
         "Width": "full",
-        "Options": [ "Grau de Mestre / Licenciado / Bacharel", "Microcredencia\u00E7\u00E3o", "CET" ],
+        "Options": [
+          "Grau de Mestre / Licenciado / Bacharel",
+          "Microcredencia\u00E7\u00E3o",
+          "CET"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2333,7 +2369,12 @@
         "Placeholder": "",
         "Order": 19,
         "Width": "full",
-        "Options": [ "Com discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas", "Sem discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas", "Em Portugu\u00EAs", "Em Ingl\u00EAs" ],
+        "Options": [
+          "Com discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas",
+          "Sem discrimina\u00E7\u00E3o das classifica\u00E7\u00F5es obtidas",
+          "Em Portugu\u00EAs",
+          "Em Ingl\u00EAs"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2345,7 +2386,13 @@
         "Placeholder": "Selecione o grau",
         "Order": 20,
         "Width": "half",
-        "Options": [ "CTESP", "Bacharelato", "Licenciatura", "Mestrado", "P\u00F3s-Gradua\u00E7\u00E3o" ],
+        "Options": [
+          "CTESP",
+          "Bacharelato",
+          "Licenciatura",
+          "Mestrado",
+          "P\u00F3s-Gradua\u00E7\u00E3o"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2357,7 +2404,10 @@
         "Placeholder": "",
         "Order": 21,
         "Width": "half",
-        "Options": [ "N\u00E3o", "Sim (preencher anexo)" ],
+        "Options": [
+          "N\u00E3o",
+          "Sim (preencher anexo)"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2405,7 +2455,11 @@
         "Placeholder": "",
         "Order": 25,
         "Width": "full",
-        "Options": [ "Atividade", "Data Inicio", "Data Final" ],
+        "Options": [
+          "Atividade",
+          "Data Inicio",
+          "Data Final"
+        ],
         "TableFixedRows": false,
         "TableRowCount": 2
       }
@@ -2413,13 +2467,16 @@
     "CreatedAt": "0001-01-01T00:00:00",
     "UpdatedAt": "2026-06-06T20:16:38.2537452+01:00",
     "Category": "Geral",
-    "ResponsibleUserId": null
+    "ResponsibleUserId": null,
+    "RequiresApproval": false
   },
   {
     "Id": 17,
     "Title": "Requerimento Credita\u00E7\u00E3o",
     "Description": "Instituto Polit\u00E9cnico de Tomar - IPT.SIGQ.MOD ACA 40 10-1",
-    "Audience": [ "Aluno" ],
+    "Audience": [
+      "Aluno"
+    ],
     "Status": "Draft",
     "Version": 3,
     "Fields": [
@@ -2527,7 +2584,11 @@
         "Placeholder": "Selecione a origem da forma\u00E7\u00E3o",
         "Order": 8,
         "Width": "half",
-        "Options": [ "Forma\u00E7\u00E3o Acad\u00E9mica", "Experi\u00EAncia Profissional", "Unidades Isoladas" ],
+        "Options": [
+          "Forma\u00E7\u00E3o Acad\u00E9mica",
+          "Experi\u00EAncia Profissional",
+          "Unidades Isoladas"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2539,7 +2600,13 @@
         "Placeholder": "Selecione o grau/curso",
         "Order": 9,
         "Width": "half",
-        "Options": [ "Curso de Mestrado", "Curso de Licenciatura", "Curso de T\u00E9cnico Superior Profissional", "Curso de Especializa\u00E7\u00E3o Tecnol\u00F3gica", "Outras Forma\u00E7\u00F5es" ],
+        "Options": [
+          "Curso de Mestrado",
+          "Curso de Licenciatura",
+          "Curso de T\u00E9cnico Superior Profissional",
+          "Curso de Especializa\u00E7\u00E3o Tecnol\u00F3gica",
+          "Outras Forma\u00E7\u00F5es"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2599,7 +2666,11 @@
         "Placeholder": "",
         "Order": 14,
         "Width": "half",
-        "Options": [ "ESGT", "ESTA", "ESTT" ],
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
         "TableFixedRows": false,
         "TableRowCount": null
       },
@@ -2645,5 +2716,1292 @@
     "Category": "Requerimentos Acad\u00E9micos",
     "ResponsibleUserId": null,
     "RequiresApproval": false
+  },
+  {
+    "Id": 18,
+    "Title": "Requerimento (minuta)",
+    "Description": "Requerimento gen\u00E9rico destinado a alunos e candidatos para apresenta\u00E7\u00E3o formal de pedidos, exposi\u00E7\u00F5es ou solicita\u00E7\u00F5es \u00E0 institui\u00E7\u00E3o.",
+    "Audience": [
+      "Aluno"
+    ],
+    "Status": "Draft",
+    "Version": 1,
+    "Fields": [
+      {
+        "Id": "6cbd2758-744c-46dc-9fad-355f9b828eff",
+        "Type": "section",
+        "Label": "Requerimento Assuntos Diversos",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "db4d2d07-a9fe-47c4-8222-84862a8cb69e",
+        "Type": "dropdown",
+        "Label": "Escola ",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f7114754-f1f7-4b66-8f17-30cbdfd44ffc",
+        "Type": "section",
+        "Label": "1. IDENTIFICA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b4512aec-02c0-4887-afe3-1598c16fd158",
+        "Type": "text",
+        "Label": "Nome Completo:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4ade162-742f-4990-bed8-4d273a403c3e",
+        "Type": "section",
+        "Label": "1.1. do aluno",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 4,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "e7ddc593-79e3-4e38-a284-d557096c0a89",
+        "Type": "number",
+        "Label": "N\u00BA de aluno:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 5,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "7a0423dc-1139-448b-9749-6d76a16f6b08",
+        "Type": "text",
+        "Label": "Curso :",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 6,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "2b8695ed-3782-426d-a407-2e01c0b950f9",
+        "Type": "date",
+        "Label": "Data",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 7,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "4d096089-d753-49ca-ac87-8fc7ee4258bd",
+        "Type": "section",
+        "Label": "1.2. do candidato",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 8,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "9b83e0a8-4857-4343-81d6-c3d2ae4ff0c3",
+        "Type": "number",
+        "Label": "BI - CC - Outro:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 9,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "bbb7aba5-de61-495a-bc06-9965c1d63a28",
+        "Type": "date",
+        "Label": "Validade:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 10,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "27ed8723-3062-4e5b-8a2f-fe6abd5e1194",
+        "Type": "text",
+        "Label": "Endere\u00E7o: ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 11,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d2a089a8-703b-4b1e-bf58-fff9b5c6f4d8",
+        "Type": "text",
+        "Label": "C\u00F3digo  Postal: ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 12,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-06-10T18:43:00.2433397+01:00",
+    "UpdatedAt": "2026-06-10T18:43:00.243345+01:00",
+    "Category": "Requerimentos",
+    "ResponsibleUserId": 2,
+    "RequiresApproval": true
+  },
+  {
+    "Id": 19,
+    "Title": "Requerimento (minuta)",
+    "Description": "Requerimento gen\u00E9rico destinado a alunos e candidatos para apresenta\u00E7\u00E3o formal de pedidos, exposi\u00E7\u00F5es ou solicita\u00E7\u00F5es \u00E0 institui\u00E7\u00E3o.",
+    "Audience": [
+      "Aluno"
+    ],
+    "Status": "Published",
+    "Version": 1,
+    "Fields": [
+      {
+        "Id": "4e00cda8-6293-4681-b33d-2a103ce67a9a",
+        "Type": "section",
+        "Label": "Requerimento Assuntos Diversos ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "4702fb53-72c5-490f-ac8b-e8d52335d13c",
+        "Type": "dropdown",
+        "Label": "Escola",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "46e3d382-b9b2-4f1c-985f-16f354b00532",
+        "Type": "section",
+        "Label": "1. IDENTIFICA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "62742ca2-b334-4d88-ac5a-08703ff0988f",
+        "Type": "text",
+        "Label": "Nome Completo:",
+        "Required": true,
+        "Placeholder": "Pedro Campos Martins ",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "40dd6e5b-5301-4eca-ab93-faf9236a457a",
+        "Type": "section",
+        "Label": "1.1. do aluno",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 4,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "79d29211-bd66-43c8-b6a8-4dd7ecb286e1",
+        "Type": "text",
+        "Label": "N\u00BA de aluno:",
+        "Required": false,
+        "Placeholder": "25785",
+        "Order": 5,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "95e6cac0-371b-4ba7-a083-801a05892502",
+        "Type": "text",
+        "Label": "Curso:",
+        "Required": false,
+        "Placeholder": "Engenharia Inform\u00E1tica",
+        "Order": 6,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d96a0b30-db3d-4f7b-b1e3-2b3089d4960e",
+        "Type": "number",
+        "Label": "Ano:",
+        "Required": false,
+        "Placeholder": "2025",
+        "Order": 7,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b1648fc8-8c92-4b31-8fd4-9e348b12a17f",
+        "Type": "section",
+        "Label": "1.2. do candidato",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 8,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "75023785-d90e-45f2-9875-dfb524e26f41",
+        "Type": "text",
+        "Label": "BI - CC - Outro: ",
+        "Required": false,
+        "Placeholder": "528741369",
+        "Order": 9,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "2b58ed9b-8346-45d4-b25f-135585ec4c44",
+        "Type": "date",
+        "Label": "Validade:",
+        "Required": false,
+        "Placeholder": "10/10/2029",
+        "Order": 10,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "07a75f35-35c1-41c7-a725-5e2fbb19068a",
+        "Type": "text",
+        "Label": "Endere\u00E7o:",
+        "Required": false,
+        "Placeholder": "Rua Principal, N6, Vila Nova",
+        "Order": 11,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "7823fd3b-8819-42ef-86ec-6a194d323c62",
+        "Type": "number",
+        "Label": "C\u00F3digo Postal: ",
+        "Required": false,
+        "Placeholder": "2583525",
+        "Order": 12,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b4745b02-708e-4da7-96a1-0fe9238c647a",
+        "Type": "number",
+        "Label": "Telefone: ",
+        "Required": false,
+        "Placeholder": "963852741",
+        "Order": 13,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "266003f5-bcc0-4a11-a7b1-63f943cac3a6",
+        "Type": "text",
+        "Label": "E-mail",
+        "Required": false,
+        "Placeholder": "PedroCm@Igmail.com",
+        "Order": 14,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "44acde07-a813-46a0-a869-6e560674614f",
+        "Type": "section",
+        "Label": "2. ASSUNTO | DESCRI\u00C7\u00C3O ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 15,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "61655389-34a1-4ae5-98fd-a86087d95345",
+        "Type": "text",
+        "Label": "2.1. Assunto: ",
+        "Required": true,
+        "Placeholder": "Exames .. ",
+        "Order": 16,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "a7d8bd74-6bbe-4723-88ae-bdbbedb69146",
+        "Type": "textarea",
+        "Label": "2.2. Descri\u00E7\u00E3o: ",
+        "Required": false,
+        "Placeholder": "...",
+        "Order": 17,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d21d5f2e-9f68-4b95-a214-ec25b65392cf",
+        "Type": "section",
+        "Label": "3. FUNDAMENTA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 18,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "cc0fae85-20bb-4ede-9e3f-f7304febf6e1",
+        "Type": "textarea",
+        "Label": "Fundamenta\u00E7\u00E3o: ",
+        "Required": true,
+        "Placeholder": "Perguntar sobre a \u00E9poca de exames ....",
+        "Order": 19,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "613d039a-d38f-4b01-aad7-7935a41e6898",
+        "Type": "section",
+        "Label": "4. O REQUERENTE",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 20,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "43d0b44a-fa73-4df7-adad-f352615c31a6",
+        "Type": "date",
+        "Label": "Data:",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 21,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "7ba70a87-6350-41cc-8d22-292306d6a5c8",
+        "Type": "text",
+        "Label": "Assinatura",
+        "Required": true,
+        "Placeholder": "Pedro Campos",
+        "Order": 22,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-06-10T18:58:13.8780252+01:00",
+    "UpdatedAt": "2026-06-10T18:58:13.878028+01:00",
+    "Category": "Requerimentos",
+    "ResponsibleUserId": 2,
+    "RequiresApproval": true
+  },
+  {
+    "Id": 20,
+    "Title": "Requerimento Emiss\u00E3o de Documentos",
+    "Description": "Formul\u00E1rio destinado \u00E0 solicita\u00E7\u00E3o de emiss\u00E3o de documentos acad\u00E9micos e administrativos por parte do aluno, tais como declara\u00E7\u00F5es, certificados, comprovativos, hist\u00F3ricos ou outros documentos oficiais emitidos pela institui\u00E7\u00E3o.",
+    "Audience": [
+      "Aluno"
+    ],
+    "Status": "Published",
+    "Version": 3,
+    "Fields": [
+      {
+        "Id": "114d4208-8844-4476-8351-ef120a027d55",
+        "Type": "section",
+        "Label": "Requerimento Emiss\u00E3o de Documentos",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "9223ebe8-7b7d-4a62-872c-d9639c88e6d7",
+        "Type": "dropdown",
+        "Label": "Escola",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "0f219f34-3942-4956-9854-059feefff6b1",
+        "Type": "section",
+        "Label": "1. IDENTIFICA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "071eaa04-d4b3-4f72-9c19-7880fe6898eb",
+        "Type": "textarea",
+        "Label": "Nome Completo",
+        "Required": true,
+        "Placeholder": "Nome",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "db60ea9c-e9e7-4eba-b1b5-34cad3163f65",
+        "Type": "text",
+        "Label": "BI - CC - Outro: ",
+        "Required": true,
+        "Placeholder": "123456789",
+        "Order": 4,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "180ef13a-8a29-4976-a2de-964fdd834989",
+        "Type": "date",
+        "Label": "Validade",
+        "Required": true,
+        "Placeholder": "10/10/2025",
+        "Order": 5,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b7cbaaaa-daa8-4077-87bf-c1c3e2ea7a12",
+        "Type": "number",
+        "Label": "N\u00BA Aluno",
+        "Required": true,
+        "Placeholder": "00000",
+        "Order": 6,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "35331f1c-e4d3-4438-bfd9-f91fa30850f8",
+        "Type": "textarea",
+        "Label": "Curso",
+        "Required": true,
+        "Placeholder": "Licenciatura em Engenharia Inform\u00E1tica",
+        "Order": 7,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "3d5cfeba-d318-4e3e-b78f-e199067fca55",
+        "Type": "section",
+        "Label": "2. CONTACTOS",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 8,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "8226ac73-d2d4-45bd-bc43-64b1906b6907",
+        "Type": "text",
+        "Label": "Morada",
+        "Required": false,
+        "Placeholder": "Rua Principal, N60, Vila Nova",
+        "Order": 9,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "a177885c-b153-4b0f-a6a2-b6be9369d277",
+        "Type": "number",
+        "Label": "C\u00F3digo Postal",
+        "Required": false,
+        "Placeholder": "2585258",
+        "Order": 10,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "09725f55-2353-4709-a97b-0e91bd63622e",
+        "Type": "text",
+        "Label": "Disciplina",
+        "Required": false,
+        "Placeholder": "Disciplina",
+        "Order": 11,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "52fd6228-befa-4d70-90b0-03de2140f149",
+        "Type": "number",
+        "Label": "Tel: ",
+        "Required": false,
+        "Placeholder": "987645312",
+        "Order": 12,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "2ede7a64-aaaf-4c55-ace0-62c5f670c29c",
+        "Type": "text",
+        "Label": "E-mail:",
+        "Required": false,
+        "Placeholder": "cmd@gmail.com",
+        "Order": 13,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f1a06534-4983-439a-a501-6003fc456904",
+        "Type": "section",
+        "Label": "3. DOCUMENTO(S) REQUERIDO(S)",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 14,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "28e960d7-0520-44b9-ab3f-0e875e58ce0d",
+        "Type": "checkbox",
+        "Label": "3.1 - Certificado de matr\u00EDcula, inscri\u00E7\u00E3o ou frequ\u00EAncia:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 15,
+        "Width": "full",
+        "Options": [
+          "Com aproveitamento",
+          "Sem aproveitamento"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "163dcd7d-a277-40d2-87c9-0beca244daf4",
+        "Type": "checkbox",
+        "Label": "Requer para efeitos de:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 16,
+        "Width": "full",
+        "Options": [
+          "Abono de fam\u00EDlia ",
+          "ADSE, SAD, SAMSM etc",
+          "Recrutamento militar",
+          "Pens\u00F5es de sangue",
+          "IRS"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "3096e113-b911-44e4-9944-63c5431a6a05",
+        "Type": "text",
+        "Label": "Se outro:",
+        "Required": false,
+        "Placeholder": "...",
+        "Order": 17,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "5ab20677-8d9d-49c0-894e-b3680c14eaff",
+        "Type": "checkbox",
+        "Label": "3.2 - Certificado de realiza\u00E7\u00E3o de: ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 18,
+        "Width": "full",
+        "Options": [
+          "unidades curriculares",
+          "unidades isoladas"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "605f5dcd-e84f-4110-a1b9-23ab8ad727fc",
+        "Type": "dropdown",
+        "Label": "Outros:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 19,
+        "Width": "full",
+        "Options": [
+          "Conte\u00FAdos Program\u00E1ticos ",
+          "Certificado em L\u00EDngua Inglesa",
+          "Certificado de Realiza\u00E7\u00E3o de provas de acesso ao abrigo do regime dos M23"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "4a8d2799-7f32-4678-8a1d-71a893c0f7c6",
+        "Type": "checkbox",
+        "Label": "3.4 - Carta de Curso:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 20,
+        "Width": "half",
+        "Options": [
+          "Mestre",
+          "Licenciado",
+          "Bacharelato",
+          "CTesSP",
+          "CET",
+          "Mestrado",
+          "P\u00F3s-Gradua\u00E7\u00E3o",
+          "Microcred\u00EAncia\u00E7\u00E3o"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "3289b027-b8de-4306-9d69-aac8cc8687cd",
+        "Type": "checkbox",
+        "Label": "3.5 - Diploma de Conclus\u00E3o",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 21,
+        "Width": "half",
+        "Options": [
+          "Com discrimina\u00E7\u00E3o das Classifica\u00E7\u00F5es obtidas",
+          "Em Portugu\u00EAs",
+          "Em ingl\u00EAs",
+          "Sem discrimina\u00E7\u00E3o das Classifica\u00E7\u00F5es obtidas"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "a3fda80d-4d5c-4e04-b210-72dfe7ba25a4",
+        "Type": "checkbox",
+        "Label": "Suplemento | Atividade eleg\u00EDveis",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 22,
+        "Width": "full",
+        "Options": [
+          "N\u00E3o",
+          "Sim (preencher anexo)"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "def56afa-1848-41d4-bcb0-3b72b058e0db",
+        "Type": "section",
+        "Label": "* Para mais informa\u00E7\u00F5es consultar a tabela de emolumentos do IPT",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 23,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "6c8bc5d5-3ace-4d4a-bcdf-5c2702790271",
+        "Type": "section",
+        "Label": "4. REQUERENTE",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 24,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b650c129-79e2-46f0-a99f-978209cd61e6",
+        "Type": "date",
+        "Label": "Data:",
+        "Required": false,
+        "Placeholder": "10/10/2026",
+        "Order": 25,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "2026-06-10T19:12:24.7760737+01:00",
+    "UpdatedAt": "2026-06-10T21:52:22.6879096+01:00",
+    "Category": "Secretaria",
+    "ResponsibleUserId": 2,
+    "RequiresApproval": true
+  },
+  {
+    "Id": 21,
+    "Title": "Requerimento de Credita\u00E7\u00E3o",
+    "Description": "Formul\u00E1rio destinado \u00E0 submiss\u00E3o de pedidos de credita\u00E7\u00E3o de forma\u00E7\u00E3o anterior, compet\u00EAncias ou experi\u00EAncia profissional/acad\u00E9mica, para efeitos de reconhecimento de cr\u00E9ditos no percurso acad\u00E9mico do estudante.",
+    "Audience": [
+      "Aluno"
+    ],
+    "Status": "Published",
+    "Version": 2,
+    "Fields": [
+      {
+        "Id": "4e00cda8-6293-4681-b33d-2a103ce67a9a",
+        "Type": "section",
+        "Label": "Requerimento Assuntos Diversos ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "4702fb53-72c5-490f-ac8b-e8d52335d13c",
+        "Type": "dropdown",
+        "Label": "Tipologia",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "Forma\u00E7\u00E3o Acad\u00EAmica ",
+          "Experi\u00EAncia Profissional"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "46e3d382-b9b2-4f1c-985f-16f354b00532",
+        "Type": "section",
+        "Label": "1. IDENTIFICA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "62742ca2-b334-4d88-ac5a-08703ff0988f",
+        "Type": "text",
+        "Label": "Nome Completo:",
+        "Required": true,
+        "Placeholder": "Pedro Campos Martins ",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "40dd6e5b-5301-4eca-ab93-faf9236a457a",
+        "Type": "section",
+        "Label": "1.1. do aluno",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 4,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "79d29211-bd66-43c8-b6a8-4dd7ecb286e1",
+        "Type": "text",
+        "Label": "N\u00BA de aluno:",
+        "Required": false,
+        "Placeholder": "25785",
+        "Order": 5,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "95e6cac0-371b-4ba7-a083-801a05892502",
+        "Type": "text",
+        "Label": "Curso:",
+        "Required": false,
+        "Placeholder": "Ex: Engenharia Inform\u00E1tica",
+        "Order": 6,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d96a0b30-db3d-4f7b-b1e3-2b3089d4960e",
+        "Type": "number",
+        "Label": "Ano:",
+        "Required": false,
+        "Placeholder": "Ex: 2025",
+        "Order": 7,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "266003f5-bcc0-4a11-a7b1-63f943cac3a6",
+        "Type": "text",
+        "Label": "E-mail",
+        "Required": false,
+        "Placeholder": "PedroCm@Igmail.com",
+        "Order": 8,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d21d5f2e-9f68-4b95-a214-ec25b65392cf",
+        "Type": "section",
+        "Label": "2. FORMA\u00C7\u00C3O ADQUIRIDA ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 9,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "b679a548-5833-4f28-8481-11e76eeaa2c1",
+        "Type": "checkbox",
+        "Label": "Forma\u00E7\u00E3o Acad\u00E9mica",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 10,
+        "Width": "full",
+        "Options": [
+          "Curso Mestrado",
+          "Curso Licenciatura",
+          "Curso de T\u00E9cnico Superior Profissional",
+          "Curso de Especializa\u00E7\u00E3o Tecnol\u00F3gica",
+          "Outras Forma\u00E7\u00F5es"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "8c4d1ad9-f105-4384-b8c9-5331eb96749b",
+        "Type": "text",
+        "Label": "Curso:",
+        "Required": false,
+        "Placeholder": "Ex: Engenharia Informatica",
+        "Order": 11,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "6034e1c9-82a4-4ce8-b707-080679e20b68",
+        "Type": "text",
+        "Label": "Institui\u00E7\u00E3o:",
+        "Required": false,
+        "Placeholder": "EX: ESTT",
+        "Order": 12,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "51c72fdf-f9b5-4bbd-bf69-3c0e461428fd",
+        "Type": "checkbox",
+        "Label": "Outros:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 13,
+        "Width": "full",
+        "Options": [
+          "Experi\u00EAncia Profissional",
+          "Unidades Isoladas"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "8a282938-9a6d-4e3b-9260-372d4f41bb20",
+        "Type": "section",
+        "Label": "3. CREDITA\u00C7\u00C3O PRETENDIDA",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 14,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "a70aec4d-1851-41c7-9124-54719c0e0a80",
+        "Type": "dropdown",
+        "Label": "Escola:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 15,
+        "Width": "half",
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d85cbaf7-06e9-47ff-ae9e-c7d54a6da60f",
+        "Type": "dropdown",
+        "Label": "Curso",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 16,
+        "Width": "half",
+        "Options": [
+          "CET",
+          "TeSP",
+          "Licenciatura",
+          "Mestrado"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "fc2ff29e-ab0b-4d34-ab31-07cd37de7482",
+        "Type": "section",
+        "Label": "Unidades Curriculares que pretende submeter: (Preenchimento, obrigat\u00F3rio, da lista anexo)",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 17,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "613d039a-d38f-4b01-aad7-7935a41e6898",
+        "Type": "section",
+        "Label": "4. O REQUERENTE",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 18,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "43d0b44a-fa73-4df7-adad-f352615c31a6",
+        "Type": "date",
+        "Label": "Data:",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 19,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "7ba70a87-6350-41cc-8d22-292306d6a5c8",
+        "Type": "text",
+        "Label": "Assinatura",
+        "Required": true,
+        "Placeholder": "Pedro Campos",
+        "Order": 20,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "73ca1e4f-971b-4d00-b2d3-ee2ec1c7193b",
+        "Type": "section",
+        "Label": "A preencher pelos servi\u00E7os:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 21,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "a590eec2-c805-4d31-bd27-cbd650c9fa60",
+        "Type": "checkbox",
+        "Label": "Documentos entregues pelo candidato/aluno",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 22,
+        "Width": "full",
+        "Options": [
+          "Fotoc\u00F3pia simples do Certificado de Habilita\u00E7\u00F5es (Cred: Forma\u00E7\u00E3o Acad\u00E9mica)",
+          "Programas das Unidades Curriculares a que obteve aproveitamento (Cred: Forma\u00E7\u00E3o Acad\u00E9mica)",
+          "Curriculum Vitae detalhado (Cred: Experi\u00EAncia Profissional)",
+          "Outros"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f5280e35-a211-4f6f-b2e5-883320e5604d",
+        "Type": "text",
+        "Label": "Outros:",
+        "Required": false,
+        "Placeholder": "Ex: Carta de Curso",
+        "Order": 23,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "195c5bec-d5ce-400d-af22-30516366af9a",
+        "Type": "date",
+        "Label": "Recebido a: ",
+        "Required": false,
+        "Placeholder": "10/10/2026",
+        "Order": 24,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "5beeb8b4-a909-4241-a828-59ce3127cf64",
+        "Type": "text",
+        "Label": "Funcionario:",
+        "Required": false,
+        "Placeholder": "Fernando",
+        "Order": 25,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "31a839a5-059c-4577-89c0-547d845b21e6",
+        "Type": "section",
+        "Label": "ANEXOS",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 26,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "1c2e5da8-83a9-41e9-b4de-490e65f6e0ca",
+        "Type": "checkbox",
+        "Label": "Credita\u00E7\u00E3o:",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 27,
+        "Width": "full",
+        "Options": [
+          "Forma\u00E7\u00E3o Acad\u00E9mica",
+          "Experi\u00EAncia Profissional"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "254d3f00-3b66-4c1f-943e-bb9d74ca28d1",
+        "Type": "section",
+        "Label": "Listagem de Unidades Curriculares",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 28,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "2c1f4479-0007-474a-9356-27ae5c32d6a3",
+        "Type": "text",
+        "Label": "Nome Completo:",
+        "Required": false,
+        "Placeholder": "Ex: Daniel Coelho",
+        "Order": 29,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "f94e177d-1477-4006-b782-da5e6abe2745",
+        "Type": "number",
+        "Label": "N\u00FAmero de aluno:",
+        "Required": false,
+        "Placeholder": "25836",
+        "Order": 30,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "0fbc8ed5-9601-49e1-b127-a5ab5211b402",
+        "Type": "radio",
+        "Label": "Unidades Curriculares em que: ",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 31,
+        "Width": "full",
+        "Options": [
+          "Obtive aproveitamento",
+          "Pretendo obter aproveitamento"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "72f1c2e3-a3f8-41a1-ae65-5b0dfb50f691",
+        "Type": "table",
+        "Label": "Unidades Curriculares",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 32,
+        "Width": "full",
+        "Options": [
+          "Lista:"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": 10
+      }
+    ],
+    "CreatedAt": "2026-06-10T21:59:32.9164077+01:00",
+    "UpdatedAt": "2026-06-10T22:30:40.2417038+01:00",
+    "Category": "Secretaria",
+    "ResponsibleUserId": 4,
+    "RequiresApproval": true
   }
 ]
