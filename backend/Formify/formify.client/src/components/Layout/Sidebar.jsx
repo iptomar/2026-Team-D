@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 /**
  * Sidebar Component
@@ -9,16 +9,12 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
  * - Restantes rotas → menu de administração
  */
 export default function Sidebar() {
-    const location = useLocation();
     const navigate = useNavigate();
 
-    const path = location.pathname.toLowerCase();
     const role = (localStorage.getItem('role') || '').toLowerCase();
 
     // Define os cargos
-    const isFuncionario = path.startsWith('/funcionario') || role === 'funcionario';
-    const isProfessor = path.startsWith('/professor') || role === 'professor';
-    const isAluno = path.startsWith('/aluno') || role === 'aluno';
+    const isAdmin = role === 'admin';
 
     const linkCls =
         'block rounded-lg px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-accent-bg hover:text-accent';
@@ -37,8 +33,8 @@ export default function Sidebar() {
 
     // Dinâmico: Decide para que ecrã principal aponta o botão "Formulários"
     let formsRoute = '/professor';
-    if (isFuncionario) formsRoute = '/funcionario';
-    if (isAluno) formsRoute = '/aluno';
+    if (role === 'funcionario') formsRoute = '/funcionario';
+    if (role === 'aluno') formsRoute = '/aluno';
 
     return (
         <aside className="w-64 border-r-2 border-black bg-white px-4 py-6">
@@ -47,29 +43,8 @@ export default function Sidebar() {
             </div>
 
             <nav className="space-y-2">
-                {isFuncionario || isAluno || isProfessor ? (
-                    <>
-                        <Link
-                            to={formsRoute}
-                            className={linkCls}
-                        >
-                            Formulários
-                        </Link>
-                        <Link to="/meus-formularios" className={linkCls}>
-                            Formulários Preenchidos
-                        </Link>
-                        <Link to="/myinfo" className={linkCls}>
-                            Informações Pessoais
-                        </Link>
-                        <button
-                            type="button"
-                            onClick={handleLogout}
-                            className={buttonCls}
-                        >
-                            Logout
-                        </button>
-                    </>
-                ) : (
+                {isAdmin ? (
+
                     <>
                         <Link to="/admin" className={linkCls}>
                             Formulários
@@ -84,6 +59,29 @@ export default function Sidebar() {
                             Logout
                         </button>
                     </>
+                ) : (
+
+                        <>
+                            <Link
+                                to={formsRoute}
+                                className={linkCls}
+                            >
+                                Formulários
+                            </Link>
+                            <Link to="/meus-formularios" className={linkCls}>
+                                Formulários Preenchidos
+                            </Link>
+                            <Link to="/myinfo" className={linkCls}>
+                                Informações Pessoais
+                            </Link>
+                            <button
+                                type="button"
+                                onClick={handleLogout}
+                                className={buttonCls}
+                            >
+                                Logout
+                            </button>
+                        </>
                 )}
             </nav>
         </aside>
