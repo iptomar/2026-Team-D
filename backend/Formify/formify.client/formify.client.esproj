@@ -15,4 +15,9 @@
     <Folder Include="src\pages\Aluno\" />
     <Folder Include="src\pages\Professor\" />
   </ItemGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

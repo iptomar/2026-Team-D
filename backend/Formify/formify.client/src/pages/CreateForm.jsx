@@ -985,7 +985,11 @@ export default function CreateForm() {
 
             // O backend (C#) agora espera receber um 'ResponsibleUserId' (inteiro ou nulo).
             // Convertemos a string do estado para inteiro, se existir.
-            const parsedResponsibleId = responsibleUserId ? parseInt(responsibleUserId, 10) : null;
+            console.log(responsibleUserId)
+            const parsedResponsibleId = responsibleUserId ? parseInt(responsibleUserId, 10) : 0;
+
+            console.log(responsibleUserId)
+            console.log(parsedResponsibleId)
 
             const response = await fetch(url, {
                 method,
@@ -1143,7 +1147,7 @@ export default function CreateForm() {
                                         onChange={(e) => setResponsibleUserId(e.target.value)}
                                         className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
                                     >
-                                        <option value="">(Selecione um responsável...)</option>
+                                        <option value="0">(Selecione um responsável...)</option>
                                         <option value="1">Gabinete de Relações Internacionais</option>
                                         <option value="2">Secretaria Escolar</option>
                                         <option value="3">Recursos Humanos</option>

@@ -24,7 +24,7 @@ namespace Formify.Server.Controllers
         // por "pending" (vista normal de "Aprovar Pedidos"). Aceita também
         // "approved", "refused" ou "all" para consulta histórica.
         [HttpGet("admin")]
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, secretaria,gri,rh,dircurso")]
         public async Task<IActionResult> GetAllSubmissions([FromQuery] string status = "pending")
         {
             if (!TryGetUserId(out int _))
@@ -34,6 +34,8 @@ namespace Formify.Server.Controllers
 
             var validFilters = new[] { "pending", "approved", "refused", "all" };
             var statusFilter = (status ?? "pending").ToLowerInvariant();
+            var userRole = User.FindFirst(ClaimTypes.Role)?.Value?.ToLowerInvariant();
+
             if (!validFilters.Contains(statusFilter))
             {
                 return BadRequest(new { message = "Filtro de status inválido. Valores: pending, approved, refused, all." });
@@ -43,6 +45,23 @@ namespace Formify.Server.Controllers
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
             IEnumerable<Submission> filtered = allSubmissions;
+
+            // Se NÃO for administrador geral, filtramos pelo ID correspondente ao departamento/role
+            if (!string.Equals(userRole, "admin", StringComparison.OrdinalIgnoreCase))
+            {
+                // Mapeamento de Roles (Strings) para IDs (Inteiros)
+                int targetRoleId = userRole switch
+                {
+                    "secretaria" => 1,
+                    "gri" => 2,
+                    "rh" => 3,
+                    "dircurso" => 4,
+                    _ => 0 // Role desconhecido ou sem permissão mapeada
+                };
+
+                filtered = filtered.Where(s => s.ResponsibleUserId == targetRoleId);
+            }
+
             if (statusFilter != "all")
             {
                 filtered = filtered.Where(s => s.Status.Equals(statusFilter, StringComparison.OrdinalIgnoreCase));
@@ -180,7 +199,7 @@ namespace Formify.Server.Controllers
 
         // PUT /api/submissions/{id}/status
         [HttpPut("status/{id}")]
-        [Authorize(Roles="admin")]
+        [Authorize(Roles = "admin, secretaria , gri , rh , dircurso")]
         public async Task<IActionResult> UpdateStatus(string id, [FromBody] UpdateStatusRequest request)
         {
             var validStatuses = new[] { "Pending", "Approved", "Refused" };
