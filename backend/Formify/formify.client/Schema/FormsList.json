@@ -4003,5 +4003,580 @@
     "Category": "Secretaria",
     "ResponsibleUserId": 4,
     "RequiresApproval": true
+  },
+  {
+    "Id": 22,
+    "Title": "Requerimento Estatuto Trabalhador Estudante | Dirigente Associativo | Outros",
+    "Description": "Instituto Polit\u00E9cnico de Tomar - IPT.SIGQ.MOD ACA 30 50-2",
+    "Audience": [
+      "Aluno"
+    ],
+    "Status": "Draft",
+    "Version": 2,
+    "Fields": [
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000001",
+        "Type": "section",
+        "Label": "Requerimento de Estatuto",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000002",
+        "Type": "dropdown",
+        "Label": "Escola",
+        "Required": true,
+        "Placeholder": "Selecione a Escola",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000003",
+        "Type": "section",
+        "Label": "1. IDENTIFICA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 2,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000004",
+        "Type": "text",
+        "Label": "Nome Completo",
+        "Required": true,
+        "Placeholder": "Nome",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000005",
+        "Type": "text",
+        "Label": "BI-CC-Outro",
+        "Required": true,
+        "Placeholder": "N\u00BA de Identifica\u00E7\u00E3o",
+        "Order": 4,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000008",
+        "Type": "date",
+        "Label": "Validade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 5,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000006",
+        "Type": "number",
+        "Label": "N\u00BA de aluno",
+        "Required": true,
+        "Placeholder": "00000",
+        "Order": 6,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000009",
+        "Type": "text",
+        "Label": "Curso",
+        "Required": true,
+        "Placeholder": "Nome do curso",
+        "Order": 7,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000007",
+        "Type": "text",
+        "Label": "E-mail",
+        "Required": true,
+        "Placeholder": "exemplo@ipt.pt",
+        "Order": 8,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000010",
+        "Type": "section",
+        "Label": "2. SITUA\u00C7\u00C3O DO REQUERENTE",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 9,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000011",
+        "Type": "dropdown",
+        "Label": "Estatuto Requerido",
+        "Required": true,
+        "Placeholder": "Selecione o estatuto",
+        "Order": 10,
+        "Width": "full",
+        "Options": [
+          "Trabalhador por conta outr\u00E9m",
+          "Trabalhador por conta pr\u00F3pria",
+          "Curso de Forma\u00E7\u00E3o Profissional (Dura\u00E7\u00E3o m\u00EDnima 6 meses)",
+          "Programa de Ocupa\u00E7\u00E3o Tempor\u00E1ria (Dura\u00E7\u00E3o m\u00EDnima 6 meses)",
+          "Dirigente Associativo Juvenil",
+          "Estudante Volunt\u00E1rio do IPT",
+          "Outros estatutos legais"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000012",
+        "Type": "file",
+        "Label": "Anexar Comprovativos Oficiais (Declara\u00E7\u00F5es, Recibos, IRS, Contratos, etc.)",
+        "Required": true,
+        "Placeholder": "Carregue os documentos necess\u00E1rios para o estatuto",
+        "Order": 11,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000013",
+        "Type": "textarea",
+        "Label": "Informa\u00E7\u00E3o Adicional / Anexos",
+        "Required": false,
+        "Placeholder": "Descreva informa\u00E7\u00E3o adicional relevante (opcional)",
+        "Order": 12,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000014",
+        "Type": "section",
+        "Label": "3. O REQUERENTE",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 13,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "d4e5f6g7-4000-0000-0000-000000000015",
+        "Type": "date",
+        "Label": "Data",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 14,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "0001-01-01T00:00:00",
+    "UpdatedAt": "2026-06-16T20:25:15.5288235+01:00",
+    "Category": "Requerimentos",
+    "ResponsibleUserId": 2,
+    "RequiresApproval": true
+  },
+  {
+    "Id": 23,
+    "Title": "Boletim de Candidatura",
+    "Description": "Instituto Polit\u00E9cnico de Tomar - Mod_ IPT-DSA_03.07_V3",
+    "Audience": [
+      "Candidato"
+    ],
+    "Status": "Draft",
+    "Version": 3,
+    "Fields": [
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000001",
+        "Type": "section",
+        "Label": "Boletim de Candidatura",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 0,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "9ad38491-29a2-445f-a9b1-23f17bb52251",
+        "Type": "dropdown",
+        "Label": "Tipo de curso",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 1,
+        "Width": "full",
+        "Options": [
+          "Tipo de curso a que se candidata",
+          "CURSO BREVE",
+          "CURSO DE P\u00D3S GRADUA\u00C7\u00C3O",
+          "CURSO DE T\u00C9CNICO SUPERIOR PROFISSIONAL | TeSP",
+          "CURSO DE MESTRADO"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000002",
+        "Type": "dropdown",
+        "Label": "Escola",
+        "Required": true,
+        "Placeholder": "Selecione a Escola",
+        "Order": 2,
+        "Width": "full",
+        "Options": [
+          "ESGT",
+          "ESTA",
+          "ESTT"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000003",
+        "Type": "section",
+        "Label": "1. IDENTIFICA\u00C7\u00C3O",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 3,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000004",
+        "Type": "text",
+        "Label": "Nome Completo",
+        "Required": true,
+        "Placeholder": "Nome",
+        "Order": 4,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000005",
+        "Type": "text",
+        "Label": "BI-CC-Outro",
+        "Required": true,
+        "Placeholder": "N\u00BA de Identifica\u00E7\u00E3o",
+        "Order": 5,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000006",
+        "Type": "date",
+        "Label": "Validade",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 6,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000007",
+        "Type": "number",
+        "Label": "NIF",
+        "Required": true,
+        "Placeholder": "000000000",
+        "Order": 7,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000008",
+        "Type": "date",
+        "Label": "Data de nascimento",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 8,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000009",
+        "Type": "section",
+        "Label": "2. CONTACTOS",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 9,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000010",
+        "Type": "textarea",
+        "Label": "Endere\u00E7o",
+        "Required": true,
+        "Placeholder": "Morada completa",
+        "Order": 10,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000011",
+        "Type": "text",
+        "Label": "C\u00F3digo Postal",
+        "Required": true,
+        "Placeholder": "0000-000",
+        "Order": 11,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000012",
+        "Type": "text",
+        "Label": "Telefone",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 12,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000013",
+        "Type": "text",
+        "Label": "E-mail",
+        "Required": true,
+        "Placeholder": "exemplo@email.com",
+        "Order": 13,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000014",
+        "Type": "section",
+        "Label": "3. HABILITA\u00C7\u00D5ES DO CANDIDATO",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 14,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000015",
+        "Type": "dropdown",
+        "Label": "Habilita\u00E7\u00E3o",
+        "Required": true,
+        "Placeholder": "Selecione a habilita\u00E7\u00E3o",
+        "Order": 15,
+        "Width": "full",
+        "Options": [
+          "Ensino secund\u00E1rio ou habilita\u00E7\u00E3o legalmente equivalente",
+          "Curso de Especializa\u00E7\u00E3o Tecnol\u00F3gica | CET",
+          "Qualifica\u00E7\u00E3o profissional (N\u00EDvel IV)",
+          "Licenciatura | Bacharelato",
+          "Outra"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "4481298f-eebe-43fc-8229-f3dc4ecb2642",
+        "Type": "text",
+        "Label": "Se escolheu outra responda aqui",
+        "Required": false,
+        "Placeholder": "Outra...",
+        "Order": 16,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000016",
+        "Type": "section",
+        "Label": "4. EXPERI\u00CANCIA PROFISSIONAL",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 17,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000017",
+        "Type": "checkbox",
+        "Label": "Possui Experi\u00EAncia Profissional?",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 18,
+        "Width": "full",
+        "Options": [
+          "Sim",
+          "N\u00E3o"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000018",
+        "Type": "text",
+        "Label": "\u00C1rea de Experi\u00EAncia",
+        "Required": false,
+        "Placeholder": "Especifique a \u00E1rea",
+        "Order": 19,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000019",
+        "Type": "number",
+        "Label": "Dura\u00E7\u00E3o (anos)",
+        "Required": false,
+        "Placeholder": "Ex: 3",
+        "Order": 20,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000020",
+        "Type": "section",
+        "Label": "5. CURSO PRETENDIDO (local) | REGIME",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 21,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "e9e278fe-c968-4157-9412-5c986b5f8471",
+        "Type": "table",
+        "Label": "Curso - Op\u00E7\u00F5es",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 22,
+        "Width": "full",
+        "Options": [
+          "Nome do curso"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": 1
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000023",
+        "Type": "dropdown",
+        "Label": "Regime pretendido",
+        "Required": true,
+        "Placeholder": "Selecione o regime",
+        "Order": 23,
+        "Width": "half",
+        "Options": [
+          "Diurno",
+          "P\u00F3s Laboral",
+          "Indiferente"
+        ],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000024",
+        "Type": "text",
+        "Label": "Local",
+        "Required": true,
+        "Placeholder": "Ex: Tomar ou Abrantes",
+        "Order": 24,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000025",
+        "Type": "section",
+        "Label": "6. O REQUERENTE",
+        "Required": false,
+        "Placeholder": "",
+        "Order": 25,
+        "Width": "full",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      },
+      {
+        "Id": "c3d4e5f6-3000-0000-0000-000000000026",
+        "Type": "date",
+        "Label": "Data",
+        "Required": true,
+        "Placeholder": "",
+        "Order": 26,
+        "Width": "half",
+        "Options": [],
+        "TableFixedRows": false,
+        "TableRowCount": null
+      }
+    ],
+    "CreatedAt": "0001-01-01T00:00:00",
+    "UpdatedAt": "2026-06-16T20:51:38.728499+01:00",
+    "Category": "Acad\u00E9micos",
+    "ResponsibleUserId": 2,
+    "RequiresApproval": true
   }
 ]
