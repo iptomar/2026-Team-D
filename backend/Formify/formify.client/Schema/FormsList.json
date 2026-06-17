@@ -1384,7 +1384,7 @@
     ],
     "CreatedAt": "2026-05-21T16:56:02.2655777+01:00",
     "UpdatedAt": "2026-06-06T17:57:25.4056439+01:00",
-    "Category": "Geral",
+    "Category": "Académicos",
     "ResponsibleUserId": null,
     "RequiresApproval": false
   },
@@ -1843,7 +1843,7 @@
     ],
     "CreatedAt": "2026-05-28T03:46:08.7738475+01:00",
     "UpdatedAt": "2026-05-28T03:47:03.0489993+01:00",
-    "Category": "Geral",
+    "Category": "Académicos",
     "ResponsibleUserId": null,
     "RequiresApproval": false
   },
@@ -2104,7 +2104,7 @@
       "Aluno",
       "Ex-Aluno"
     ],
-    "Status": "Published",
+    "Status": "Archived",
     "Version": 3,
     "Fields": [
       {
@@ -2477,7 +2477,7 @@
     "Audience": [
       "Aluno"
     ],
-    "Status": "Draft",
+    "Status": "Archived",
     "Version": 3,
     "Fields": [
       {
@@ -2724,7 +2724,7 @@
     "Audience": [
       "Aluno"
     ],
-    "Status": "Draft",
+    "Status": "Archived",
     "Version": 1,
     "Fields": [
       {
@@ -2901,7 +2901,7 @@
     "Audience": [
       "Aluno"
     ],
-    "Status": "Published",
+    "Status": "Archived",
     "Version": 1,
     "Fields": [
       {
@@ -4215,7 +4215,7 @@
   },
   {
     "Id": 23,
-    "Title": "Boletim de Candidatura",
+    "Title": "Boletim de Candidatura \u2014 CTeSP/P\u00F3s-Gradua\u00E7\u00E3o/Mestrado",
     "Description": "Instituto Polit\u00E9cnico de Tomar - Mod_ IPT-DSA_03.07_V3",
     "Audience": [
       "Candidato"
