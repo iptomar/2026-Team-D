@@ -1384,7 +1384,7 @@
     ],
     "CreatedAt": "2026-05-21T16:56:02.2655777+01:00",
     "UpdatedAt": "2026-06-06T17:57:25.4056439+01:00",
-    "Category": "Geral",
+    "Category": "Académicos",
     "ResponsibleUserId": null,
     "RequiresApproval": false
   },
@@ -1843,7 +1843,7 @@
     ],
     "CreatedAt": "2026-05-28T03:46:08.7738475+01:00",
     "UpdatedAt": "2026-05-28T03:47:03.0489993+01:00",
-    "Category": "Geral",
+    "Category": "Académicos",
     "ResponsibleUserId": null,
     "RequiresApproval": false
   },
@@ -2104,7 +2104,7 @@
       "Aluno",
       "Ex-Aluno"
     ],
-    "Status": "Published",
+    "Status": "Archived",
     "Version": 3,
     "Fields": [
       {
@@ -2477,7 +2477,7 @@
     "Audience": [
       "Aluno"
     ],
-    "Status": "Draft",
+    "Status": "Archived",
     "Version": 3,
     "Fields": [
       {
@@ -2724,7 +2724,7 @@
     "Audience": [
       "Aluno"
     ],
-    "Status": "Draft",
+    "Status": "Archived",
     "Version": 1,
     "Fields": [
       {
@@ -2901,7 +2901,7 @@
     "Audience": [
       "Aluno"
     ],
-    "Status": "Published",
+    "Status": "Archived",
     "Version": 1,
     "Fields": [
       {
@@ -4215,7 +4215,7 @@
   },
   {
     "Id": 23,
-    "Title": "Boletim de Candidatura",
+    "Title": "Boletim de Candidatura \u2014 CTeSP/P\u00F3s-Gradua\u00E7\u00E3o/Mestrado",
     "Description": "Instituto Polit\u00E9cnico de Tomar - Mod_ IPT-DSA_03.07_V3",
     "Audience": [
       "Candidato"
@@ -6254,5 +6254,1295 @@
     "Category": "Acad\u00E9micos",
     "ResponsibleUserId": 2,
     "RequiresApproval": true
-  }
+  },
+  {
+      "Id": 29,
+      "Title": "Boletim de Matr\u00edcula",
+      "Description": "Boletim de Matr\u00edcula do Instituto Polit\u00e9cnico de Tomar - Mod_ IPT-DSA_11",
+      "Audience": [
+        "Aluno"
+      ],
+      "Status": "Draft",
+      "Version": 1,
+      "Fields": [
+        {
+          "Id": "11111111-0000-0000-0000-000000000001",
+          "Type": "section",
+          "Label": "Boletim de Matr\u00edcula",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 0,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000002",
+          "Type": "checkbox",
+          "Label": "Escola",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 1,
+          "Width": "half",
+          "Options": [
+            "ESTT",
+            "ESTA",
+            "ESGT"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000003",
+          "Type": "text",
+          "Label": "Ano Letivo",
+          "Required": true,
+          "Placeholder": "2026/2027",
+          "Order": 2,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000004",
+          "Type": "section",
+          "Label": "Identifica\u00e7\u00e3o",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 3,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000005",
+          "Type": "text",
+          "Label": "Nome Completo",
+          "Required": true,
+          "Placeholder": "Nome completo do aluno",
+          "Order": 4,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000006",
+          "Type": "number",
+          "Label": "N\u00famero de Aluno",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 5,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000007",
+          "Type": "date",
+          "Label": "Data de Nascimento",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 6,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000008",
+          "Type": "text",
+          "Label": "Documento de Identifica\u00e7\u00e3o (BI/CC/Passaporte)",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 7,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000009",
+          "Type": "date",
+          "Label": "Validade do Documento",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 8,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-00000000000a",
+          "Type": "text",
+          "Label": "NIF",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 9,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-00000000000b",
+          "Type": "text",
+          "Label": "Nacionalidade",
+          "Required": true,
+          "Placeholder": "Portuguesa",
+          "Order": 10,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-00000000000c",
+          "Type": "section",
+          "Label": "Contactos",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 11,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-00000000000d",
+          "Type": "textarea",
+          "Label": "Morada",
+          "Required": true,
+          "Placeholder": "Rua, n\u00ba, andar",
+          "Order": 12,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-00000000000e",
+          "Type": "text",
+          "Label": "C\u00f3digo Postal",
+          "Required": true,
+          "Placeholder": "2300-123",
+          "Order": 13,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-00000000000f",
+          "Type": "text",
+          "Label": "Localidade",
+          "Required": true,
+          "Placeholder": "Tomar",
+          "Order": 14,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000010",
+          "Type": "number",
+          "Label": "Telefone",
+          "Required": true,
+          "Placeholder": "912345678",
+          "Order": 15,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000011",
+          "Type": "text",
+          "Label": "E-mail",
+          "Required": true,
+          "Placeholder": "aluno@ipt.pt",
+          "Order": 16,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000012",
+          "Type": "section",
+          "Label": "Curso",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 17,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000013",
+          "Type": "text",
+          "Label": "Curso Pretendido",
+          "Required": true,
+          "Placeholder": "Engenharia Inform\u00e1tica",
+          "Order": 18,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000014",
+          "Type": "section",
+          "Label": "Dados Acad\u00e9micos de Ingresso",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 19,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000015",
+          "Type": "dropdown",
+          "Label": "Forma de Ingresso",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 20,
+          "Width": "half",
+          "Options": [
+            "Concurso Nacional de Acesso",
+            "Concurso Especial",
+            "Reingresso",
+            "Mudan\u00e7a de Par Institui\u00e7\u00e3o/Curso",
+            "Outro"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000016",
+          "Type": "number",
+          "Label": "Classifica\u00e7\u00e3o de Acesso",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 21,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000017",
+          "Type": "text",
+          "Label": "Ano Letivo de Ingresso",
+          "Required": true,
+          "Placeholder": "2026/2027",
+          "Order": 22,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000018",
+          "Type": "section",
+          "Label": "Assinatura",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 23,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-000000000019",
+          "Type": "date",
+          "Label": "Data de Entrega",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 24,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "11111111-0000-0000-0000-00000000001a",
+          "Type": "text",
+          "Label": "Assinatura do Requerente",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 25,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        }
+      ],
+      "CreatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "UpdatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "Category": "Acad\u00e9micos",
+      "ResponsibleUserId": null,
+      "RequiresApproval": false
+    },
+    {
+      "Id": 30,
+      "Title": "Boletim de Matr\u00edcula (English)",
+      "Description": "English version of the IPT Enrolment Form - Mod_ IPT-DSA_12",
+      "Audience": [
+        "Aluno"
+      ],
+      "Status": "Draft",
+      "Version": 1,
+      "Fields": [
+        {
+          "Id": "12121212-0000-0000-0000-000000000001",
+          "Type": "section",
+          "Label": "Enrolment Form",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 0,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000002",
+          "Type": "checkbox",
+          "Label": "School",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 1,
+          "Width": "half",
+          "Options": [
+            "ESTT",
+            "ESTA",
+            "ESGT"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000003",
+          "Type": "text",
+          "Label": "Academic Year",
+          "Required": true,
+          "Placeholder": "2026/2027",
+          "Order": 2,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000004",
+          "Type": "section",
+          "Label": "Personal Data",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 3,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000005",
+          "Type": "text",
+          "Label": "Full Name",
+          "Required": true,
+          "Placeholder": "Student's full name",
+          "Order": 4,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000006",
+          "Type": "number",
+          "Label": "Student Number",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 5,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000007",
+          "Type": "date",
+          "Label": "Date of Birth",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 6,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000008",
+          "Type": "text",
+          "Label": "Identification Document / Passport",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 7,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000009",
+          "Type": "date",
+          "Label": "Document Expiry Date",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 8,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-00000000000a",
+          "Type": "text",
+          "Label": "Tax Identification Number",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 9,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-00000000000b",
+          "Type": "text",
+          "Label": "Nationality",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 10,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-00000000000c",
+          "Type": "section",
+          "Label": "Contacts",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 11,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-00000000000d",
+          "Type": "textarea",
+          "Label": "Address",
+          "Required": true,
+          "Placeholder": "Street, number, floor",
+          "Order": 12,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-00000000000e",
+          "Type": "text",
+          "Label": "Postal Code",
+          "Required": true,
+          "Placeholder": "2300-123",
+          "Order": 13,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-00000000000f",
+          "Type": "text",
+          "Label": "City",
+          "Required": true,
+          "Placeholder": "Tomar",
+          "Order": 14,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000010",
+          "Type": "number",
+          "Label": "Phone",
+          "Required": true,
+          "Placeholder": "+351 912345678",
+          "Order": 15,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000011",
+          "Type": "text",
+          "Label": "E-mail",
+          "Required": true,
+          "Placeholder": "student@ipt.pt",
+          "Order": 16,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000012",
+          "Type": "section",
+          "Label": "Programme",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 17,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000013",
+          "Type": "text",
+          "Label": "Programme / Course",
+          "Required": true,
+          "Placeholder": "Computer Engineering",
+          "Order": 18,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000014",
+          "Type": "section",
+          "Label": "Academic Admission Data",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 19,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000015",
+          "Type": "dropdown",
+          "Label": "Type of Admission",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 20,
+          "Width": "half",
+          "Options": [
+            "National Access",
+            "Special Access",
+            "Re-enrolment",
+            "Change of Institution/Programme",
+            "Other"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000016",
+          "Type": "number",
+          "Label": "Admission Score",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 21,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000017",
+          "Type": "text",
+          "Label": "Year of Admission",
+          "Required": true,
+          "Placeholder": "2026/2027",
+          "Order": 22,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000018",
+          "Type": "section",
+          "Label": "Signature",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 23,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-000000000019",
+          "Type": "date",
+          "Label": "Submission Date",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 24,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "12121212-0000-0000-0000-00000000001a",
+          "Type": "text",
+          "Label": "Applicant's Signature",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 25,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        }
+      ],
+      "CreatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "UpdatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "Category": "Acad\u00e9micos",
+      "ResponsibleUserId": null,
+      "RequiresApproval": false
+    },
+    {
+      "Id": 31,
+      "Title": "Requerimento Inscri\u00e7\u00e3o em Provas de Ingresso \u2014 Concursos Especiais",
+      "Description": "Inscri\u00e7\u00e3o em provas de ingresso associadas a concursos especiais de acesso ao ensino superior - Mod_ IPT-DSA_13",
+      "Audience": [
+        "Aluno"
+      ],
+      "Status": "Draft",
+      "Version": 1,
+      "Fields": [
+        {
+          "Id": "13131313-0000-0000-0000-000000000001",
+          "Type": "section",
+          "Label": "Inscri\u00e7\u00e3o em Provas de Ingresso \u2014 Concursos Especiais",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 0,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000002",
+          "Type": "text",
+          "Label": "Ano Letivo",
+          "Required": true,
+          "Placeholder": "2026/2027",
+          "Order": 1,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000003",
+          "Type": "checkbox",
+          "Label": "Escola",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 2,
+          "Width": "half",
+          "Options": [
+            "ESTT",
+            "ESTA",
+            "ESGT"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000004",
+          "Type": "section",
+          "Label": "Identifica\u00e7\u00e3o do Candidato",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 3,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000005",
+          "Type": "text",
+          "Label": "Nome Completo",
+          "Required": true,
+          "Placeholder": "Nome completo do candidato",
+          "Order": 4,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000006",
+          "Type": "text",
+          "Label": "Documento de Identifica\u00e7\u00e3o (BI/CC)",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 5,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000007",
+          "Type": "date",
+          "Label": "Validade do Documento",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 6,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000008",
+          "Type": "text",
+          "Label": "NIF",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 7,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000009",
+          "Type": "date",
+          "Label": "Data de Nascimento",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 8,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-00000000000a",
+          "Type": "section",
+          "Label": "Contactos",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 9,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-00000000000b",
+          "Type": "textarea",
+          "Label": "Morada",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 10,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-00000000000c",
+          "Type": "text",
+          "Label": "C\u00f3digo Postal",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 11,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-00000000000d",
+          "Type": "text",
+          "Label": "Localidade",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 12,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-00000000000e",
+          "Type": "number",
+          "Label": "Telefone",
+          "Required": true,
+          "Placeholder": "912345678",
+          "Order": 13,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-00000000000f",
+          "Type": "text",
+          "Label": "E-mail",
+          "Required": true,
+          "Placeholder": "candidato@email.pt",
+          "Order": 14,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000010",
+          "Type": "section",
+          "Label": "Curso e Provas",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 15,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000011",
+          "Type": "text",
+          "Label": "Curso Pretendido",
+          "Required": true,
+          "Placeholder": "Engenharia Inform\u00e1tica",
+          "Order": 16,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000012",
+          "Type": "dropdown",
+          "Label": "Modalidade do Concurso Especial",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 17,
+          "Width": "full",
+          "Options": [
+            "Maiores de 23 anos",
+            "Titulares de outros cursos superiores",
+            "Titulares de cursos m\u00e9dios/superiores",
+            "Titulares de DET (CTeSP)"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000013",
+          "Type": "textarea",
+          "Label": "Prova(s) de Ingresso",
+          "Required": true,
+          "Placeholder": "Indique a(s) prova(s) a que se inscreve",
+          "Order": 18,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000014",
+          "Type": "section",
+          "Label": "Documentos Entregues",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 19,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000015",
+          "Type": "checkbox",
+          "Label": "Documentos",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 20,
+          "Width": "full",
+          "Options": [
+            "Fotoc\u00f3pia simples do BI/CC",
+            "Certificado de habilita\u00e7\u00f5es",
+            "Curriculum Vitae",
+            "Comprovativo de pagamento de taxa"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000016",
+          "Type": "section",
+          "Label": "Assinatura",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 21,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000017",
+          "Type": "date",
+          "Label": "Data",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 22,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "13131313-0000-0000-0000-000000000018",
+          "Type": "text",
+          "Label": "Assinatura do Candidato",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 23,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        }
+      ],
+      "CreatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "UpdatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "Category": "Acad\u00e9micos",
+      "ResponsibleUserId": null,
+      "RequiresApproval": false
+    },
+    {
+      "Id": 32,
+      "Title": "Requerimento Inscri\u00e7\u00e3o em Provas de Ingresso \u2014 Estudantes Internacionais",
+      "Description": "Inscri\u00e7\u00e3o em provas de ingresso para candidatos a estudantes internacionais - Mod_ IPT-DSA_14",
+      "Audience": [
+        "Aluno"
+      ],
+      "Status": "Draft",
+      "Version": 1,
+      "Fields": [
+        {
+          "Id": "14141414-0000-0000-0000-000000000001",
+          "Type": "section",
+          "Label": "Inscri\u00e7\u00e3o em Provas de Ingresso \u2014 Estudantes Internacionais",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 0,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000002",
+          "Type": "text",
+          "Label": "Ano Letivo",
+          "Required": true,
+          "Placeholder": "2026/2027",
+          "Order": 1,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000003",
+          "Type": "checkbox",
+          "Label": "Escola",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 2,
+          "Width": "half",
+          "Options": [
+            "ESTT",
+            "ESTA",
+            "ESGT"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000004",
+          "Type": "section",
+          "Label": "Identifica\u00e7\u00e3o",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 3,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000005",
+          "Type": "text",
+          "Label": "Nome Completo",
+          "Required": true,
+          "Placeholder": "Full name",
+          "Order": 4,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000006",
+          "Type": "text",
+          "Label": "Passaporte / Documento de Identifica\u00e7\u00e3o",
+          "Required": true,
+          "Placeholder": "Passport number or other ID",
+          "Order": 5,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000007",
+          "Type": "date",
+          "Label": "Validade do Documento",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 6,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000008",
+          "Type": "text",
+          "Label": "Nacionalidade",
+          "Required": true,
+          "Placeholder": "Country of origin",
+          "Order": 7,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000009",
+          "Type": "date",
+          "Label": "Data de Nascimento",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 8,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-00000000000a",
+          "Type": "radio",
+          "Label": "Candidato a Estudante Internacional",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 9,
+          "Width": "full",
+          "Options": [
+            "Sim",
+            "N\u00e3o"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-00000000000b",
+          "Type": "section",
+          "Label": "Contactos",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 10,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-00000000000c",
+          "Type": "textarea",
+          "Label": "Morada (no pa\u00eds de origem ou em Portugal)",
+          "Required": true,
+          "Placeholder": "",
+          "Order": 11,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-00000000000d",
+          "Type": "text",
+          "Label": "Telefone",
+          "Required": true,
+          "Placeholder": "+351 912345678",
+          "Order": 12,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-00000000000e",
+          "Type": "text",
+          "Label": "E-mail",
+          "Required": true,
+          "Placeholder": "student@email.com",
+          "Order": 13,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-00000000000f",
+          "Type": "section",
+          "Label": "Curso e Provas",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 14,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000010",
+          "Type": "text",
+          "Label": "Curso Pretendido",
+          "Required": true,
+          "Placeholder": "Programme applied for",
+          "Order": 15,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000011",
+          "Type": "textarea",
+          "Label": "Prova(s) de Ingresso",
+          "Required": true,
+          "Placeholder": "Lista de provas de ingresso",
+          "Order": 16,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000012",
+          "Type": "section",
+          "Label": "Documentos Entregues",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 17,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000013",
+          "Type": "checkbox",
+          "Label": "Documentos",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 18,
+          "Width": "full",
+          "Options": [
+            "Fotoc\u00f3pia do passaporte / documento de identifica\u00e7\u00e3o",
+            "Certificado de habilita\u00e7\u00f5es traduzido e autenticado",
+            "Comprovativo de profici\u00eancia em portugu\u00eas ou ingl\u00eas",
+            "Comprovativo de pagamento de taxa"
+          ],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000014",
+          "Type": "section",
+          "Label": "Assinatura",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 19,
+          "Width": "full",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000015",
+          "Type": "date",
+          "Label": "Data",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 20,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        },
+        {
+          "Id": "14141414-0000-0000-0000-000000000016",
+          "Type": "text",
+          "Label": "Assinatura do Candidato",
+          "Required": false,
+          "Placeholder": "",
+          "Order": 21,
+          "Width": "half",
+          "Options": [],
+          "TableFixedRows": false,
+          "TableRowCount": null
+        }
+      ],
+      "CreatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "UpdatedAt": "2026-06-18T10:00:00.0000000+01:00",
+      "Category": "Acad\u00e9micos",
+      "ResponsibleUserId": null,
+      "RequiresApproval": false
+    }
 ]
