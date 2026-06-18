@@ -3,6 +3,7 @@ using Formify.Server.Models;
 using Formify.Server.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace Formify.Server.Controllers
@@ -18,8 +19,6 @@ namespace Formify.Server.Controllers
             _jsonHandler = jsonHandler;
         }
 
-        // Mapeia o flag legacy `StatusDraft` do DTO (bool) para o novo enum.
-        // Mantemos o DTO inalterado por compatibilidade com o frontend.
         private static FormStatus StatusFromRequest(bool isDraft) =>
             isDraft ? FormStatus.Draft : FormStatus.Published;
 
@@ -27,49 +26,48 @@ namespace Formify.Server.Controllers
         public async Task<IActionResult> Create([FromBody] CreateFormRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Title))
-            {
                 ModelState.AddModelError(nameof(request.Title), "O nome do formulário é obrigatório.");
-            }
 
             if (request.Audience == null || !request.Audience.Any())
-            {
                 ModelState.AddModelError(nameof(request.Audience), "É obrigatório selecionar pelo menos um público-alvo.");
-            }
 
             if (request.Fields == null || !request.Fields.Any(f => f.Type != "section"))
-            {
                 ModelState.AddModelError(nameof(request.Fields), "O formulário deve conter pelo menos um campo.");
-            }
 
             if (!ModelState.IsValid)
-            {
                 return ValidationProblem(ModelState);
-            }
 
+            Console.WriteLine(request);
+
+            // LÓGICA CORRIGIDA: Se for para publicar E exigir aprovação, TEM de ter responsável.
+            /*+
+             * Refaxer futuramente a validação
+             */
             var allForms = await _jsonHandler.GetAllFormsAsync();
 
-            var form = new Form
-            {
-                Id = allForms.Any() ? allForms.Max(f => f.Id) + 1 : 1,
-                Title = request.Title.Trim(),
-                Description = request.Description?.Trim(),
-                Category = request.Category,
-                Audience = request.Audience,
-                Status = StatusFromRequest(request.StatusDraft),
-                CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
-                Fields = request.Fields
-            };
 
-            allForms.Add(form);
-            await _jsonHandler.SaveFormsAsync(allForms);
+                var form = new Form
+                {
+                    Id = allForms.Any() ? allForms.Max(f => f.Id) + 1 : 1,
+                    Title = request.Title.Trim(),
+                    Description = request.Description?.Trim(),
+                    Category = request.Category,
+                    Audience = request.Audience,
+                    Status = StatusFromRequest(request.StatusDraft),
+                    RequiresApproval = request.RequiresApproval,
+                    ResponsibleUserId = request.ResponsibleUserId,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now,
+                    Fields = request.Fields
+                };
 
-            return CreatedAtAction(nameof(GetById), new { id = form.Id }, form);
-        }
+                allForms.Add(form);
+                await _jsonHandler.SaveFormsAsync(allForms);
 
-        // GET /api/forms[?status=draft|published|archived]
-        // Sem `status`, devolve tudo o que não está arquivado.
-        // Mantém-se compat com `?onlyArchived=true` e `?includeArchived=true`.
+                return CreatedAtAction(nameof(GetById), new { id = form.Id }, form);
+            }
+        
+
         [HttpGet]
         public async Task<IActionResult> GetAllForms(
             [FromQuery] string? status = null,
@@ -77,10 +75,8 @@ namespace Formify.Server.Controllers
             [FromQuery] bool onlyArchived = false)
         {
             var allForms = await _jsonHandler.GetAllFormsAsync();
-            if (allForms == null)
-            {
-                return NotFound(new { message = "No forms were found" });
-            }
+            Console.WriteLine(allForms);
+            if (allForms == null) return NotFound(new { message = "No forms were found" });
 
             IEnumerable<Form> result = allForms;
 
@@ -107,10 +103,7 @@ namespace Formify.Server.Controllers
         public async Task<IActionResult> GetPublishedForms()
         {
             var allForms = await _jsonHandler.GetAllFormsAsync();
-            if (allForms == null)
-            {
-                return Ok(new List<Form>());
-            }
+            if (allForms == null) return Ok(new List<Form>());
 
             var publishedForms = allForms.Where(f => f.Status == FormStatus.Published).ToList();
             return Ok(publishedForms);
@@ -123,7 +116,9 @@ namespace Formify.Server.Controllers
             var published = allForms.Count(f => f.Status == FormStatus.Published);
             var drafted = allForms.Count(f => f.Status == FormStatus.Draft);
             var archived = allForms.Count(f => f.Status == FormStatus.Archived);
-            var total = published + drafted; // "ativos"
+            var total = published + drafted;
+
+            Console.WriteLine(allForms);
 
             return Ok(new
             {
@@ -140,10 +135,7 @@ namespace Formify.Server.Controllers
             var allForms = await _jsonHandler.GetAllFormsAsync();
             var form = allForms.FirstOrDefault(f => f.Id == id);
 
-            if (form == null)
-            {
-                return NotFound(new { message = $"Form with ID {id} not found." });
-            }
+            if (form == null) return NotFound(new { message = $"Form with ID {id} not found." });
 
             return Ok(form);
         }
@@ -154,10 +146,7 @@ namespace Formify.Server.Controllers
             var allForms = await _jsonHandler.GetAllFormsAsync();
             var formToRemove = allForms.FirstOrDefault(f => f.Id == id);
 
-            if (formToRemove == null)
-            {
-                return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
-            }
+            if (formToRemove == null) return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
 
             allForms.Remove(formToRemove);
             await _jsonHandler.SaveFormsAsync(allForms);
@@ -165,54 +154,32 @@ namespace Formify.Server.Controllers
             return Ok(new { message = "Formulário eliminado com sucesso." });
         }
 
-        // PUT /api/forms/{id}
-        // Permite editar drafts e publicados. Edição de publicados incrementa
-        // Version, marcando submissões anteriores como desatualizadas.
-        // Não permite editar arquivados (devem ser reativados primeiro).
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateForm(int id, [FromBody] CreateFormRequest request)
         {
-            if (!ModelState.IsValid)
-            {
-                return ValidationProblem(ModelState);
-            }
+            if (!ModelState.IsValid) return ValidationProblem(ModelState);
+            if (string.IsNullOrWhiteSpace(request.Title)) return BadRequest(new { message = "O nome do formulário é obrigatório." });
+            if (request.Audience == null || !request.Audience.Any()) return BadRequest(new { message = "É obrigatório selecionar pelo menos um público-alvo." });
+            if (request.Fields == null || !request.Fields.Any(f => f.Type != "section")) return BadRequest(new { message = "O formulário deve conter pelo menos um campo." });
 
-            if (string.IsNullOrWhiteSpace(request.Title))
-            {
-                return BadRequest(new { message = "O nome do formulário é obrigatório." });
-            }
 
-            if (request.Audience == null || !request.Audience.Any())
-            {
-                return BadRequest(new { message = "É obrigatório selecionar pelo menos um público-alvo." });
-            }
-
-            if (request.Fields == null || !request.Fields.Any(f => f.Type != "section"))
-            {
-                return BadRequest(new { message = "O formulário deve conter pelo menos um campo." });
-            }
+            /*+
+             * Refaxer futuramente a validação
+             */
 
             var allForms = await _jsonHandler.GetAllFormsAsync();
             var formToUpdate = allForms.FirstOrDefault(f => f.Id == id);
 
-            if (formToUpdate == null)
-            {
-                return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
-            }
-
-            if (formToUpdate.Status == FormStatus.Archived)
-            {
-                return StatusCode(403, new
-                {
-                    message = "Não é possível editar um formulário arquivado. Reativa-o primeiro."
-                });
-            }
+            if (formToUpdate == null) return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
+            if (formToUpdate.Status == FormStatus.Archived) return StatusCode(403, new { message = "Não é possível editar um formulário arquivado. Reativa-o primeiro." });
 
             formToUpdate.Title = request.Title.Trim();
             formToUpdate.Description = request.Description?.Trim();
             formToUpdate.Category = request.Category;
             formToUpdate.Audience = request.Audience;
             formToUpdate.Status = StatusFromRequest(request.StatusDraft);
+            formToUpdate.RequiresApproval = request.RequiresApproval; 
+            formToUpdate.ResponsibleUserId = request.ResponsibleUserId;
             formToUpdate.UpdatedAt = DateTime.Now;
             formToUpdate.Fields = request.Fields;
             formToUpdate.Version += 1;
@@ -222,18 +189,13 @@ namespace Formify.Server.Controllers
             return Ok(new { message = "Formulário atualizado com sucesso.", form = formToUpdate });
         }
 
-        // POST /api/forms/{id}/duplicate
-        // Cria uma cópia independente do formulário em modo rascunho.
         [HttpPost("{id}/duplicate")]
         public async Task<IActionResult> DuplicateForm(int id)
         {
             var allForms = await _jsonHandler.GetAllFormsAsync();
             var original = allForms.FirstOrDefault(f => f.Id == id);
 
-            if (original == null)
-            {
-                return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
-            }
+            if (original == null) return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
 
             var copy = new Form
             {
@@ -243,6 +205,7 @@ namespace Formify.Server.Controllers
                 Audience = [.. original.Audience],
                 Status = FormStatus.Draft,
                 Version = 1,
+                ResponsibleUserId = original.ResponsibleUserId, // A CÓPIA TAMBÉM HERDA O RESPONSÁVEL
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
                 Fields = original.Fields.Select(f => new Field
@@ -266,39 +229,24 @@ namespace Formify.Server.Controllers
             return CreatedAtAction(nameof(GetById), new { id = copy.Id }, copy);
         }
 
-        // PATCH /api/forms/{id}/archive — passa o formulário para o estado Archived.
         [HttpPatch("{id}/archive")]
-        public async Task<IActionResult> ArchiveForm(int id)
-        {
-            return await ChangeStatus(id, FormStatus.Archived, "Formulário arquivado.");
-        }
+        public async Task<IActionResult> ArchiveForm(int id) => await ChangeStatus(id, FormStatus.Archived, "Formulário arquivado.");
 
-        // PATCH /api/forms/{id}/unarchive — recupera um arquivado para Draft
-        // (estado mais seguro: o admin reabre, valida e republica).
         [HttpPatch("{id}/unarchive")]
-        public async Task<IActionResult> UnarchiveForm(int id)
-        {
-            return await ChangeStatus(id, FormStatus.Draft, "Formulário recuperado para rascunho.");
-        }
+        public async Task<IActionResult> UnarchiveForm(int id) => await ChangeStatus(id, FormStatus.Draft, "Formulário recuperado para rascunho.");
 
         private async Task<IActionResult> ChangeStatus(int id, FormStatus status, string message)
         {
             var allForms = await _jsonHandler.GetAllFormsAsync();
             var form = allForms.FirstOrDefault(f => f.Id == id);
-
-            if (form == null)
-            {
-                return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
-            }
+            if (form == null) return NotFound(new { message = $"Formulário com ID {id} não encontrado." });
 
             form.Status = status;
             form.UpdatedAt = DateTime.Now;
             await _jsonHandler.SaveFormsAsync(allForms);
-
             return Ok(new { message, form });
         }
 
-        // POST /api/forms/{formId}/submissions
         [HttpPost("{formId}/submissions")]
         [Authorize]
         public async Task<IActionResult> SubmitForm(int formId, [FromBody] Dictionary<string, object> answers)
@@ -308,10 +256,7 @@ namespace Formify.Server.Controllers
                 var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var userRoleClaim = User.FindFirst(ClaimTypes.Role)?.Value;
 
-                if (string.IsNullOrEmpty(userIdClaim) || string.IsNullOrEmpty(userRoleClaim))
-                {
-                    return Unauthorized(new { message = "Utilizador não autenticado ou token inválido." });
-                }
+                if (string.IsNullOrEmpty(userIdClaim) || string.IsNullOrEmpty(userRoleClaim)) return Unauthorized(new { message = "Utilizador não autenticado ou token inválido." });
 
                 int userId = int.Parse(userIdClaim);
                 string userRole = userRoleClaim.ToLower();
@@ -319,34 +264,18 @@ namespace Formify.Server.Controllers
                 var allForms = await _jsonHandler.GetAllFormsAsync();
                 var form = allForms.FirstOrDefault(f => f.Id == formId);
 
-                if (form == null)
-                {
-                    return NotFound(new { message = $"Formulário com ID {formId} não encontrado." });
-                }
+                if (form == null) return NotFound(new { message = $"Formulário com ID {formId} não encontrado." });
+                if (form.Status != FormStatus.Published) return BadRequest(new { message = form.Status == FormStatus.Archived ? "Este formulário foi arquivado e já não aceita novas submissões." : "Não é possível submeter respostas para um formulário em modo rascunho." });
 
-                if (form.Status != FormStatus.Published)
-                {
-                    return BadRequest(new
-                    {
-                        message = form.Status == FormStatus.Archived
-                            ? "Este formulário foi arquivado e já não aceita novas submissões."
-                            : "Não é possível submeter respostas para um formulário em modo rascunho."
-                    });
-                }
-
-                var allowedAudiences = form.Audience != null
-                    ? form.Audience.Where(a => a != null).Select(a => a.ToLower()).ToList()
-                    : new List<string>();
-
-                if (!allowedAudiences.Contains(userRole) && !allowedAudiences.Contains("todos"))
-                {
-                    return StatusCode(403, new { message = "Acesso negado. O teu cargo não tem permissão para preencher este formulário." });
-                }
+                var allowedAudiences = form.Audience != null ? form.Audience.Where(a => a != null).Select(a => a.ToLower()).ToList() : new List<string>();
+                if (!allowedAudiences.Contains(userRole) && !allowedAudiences.Contains("todos")) return StatusCode(403, new { message = "Acesso negado. O teu cargo não tem permissão para preencher este formulário." });
 
                 var submission = new Submission
                 {
                     FormId = formId,
                     UserId = userId,
+                    // Herda o responsável atual do formulário (fica congelado nesta submissão).
+                    ResponsibleUserId = form.ResponsibleUserId,
                     Answers = answers ?? new Dictionary<string, object>(),
                     SubmittedAt = DateTime.Now,
                     FormVersion = form.Version
@@ -355,6 +284,7 @@ namespace Formify.Server.Controllers
                 var allSubmissions = await _jsonHandler.GetAllSubmissionsAsync();
                 allSubmissions.Add(submission);
                 await _jsonHandler.SaveSubmissionsAsync(allSubmissions);
+
 
                 return Ok(new { message = "Formulário submetido com sucesso!", submissionId = submission.Id });
             }

@@ -62,12 +62,14 @@ function normalizeField(field = {}) {
     };
 }
 
-function buildFormSnapshot(nome, descricao, audience, fields) {
+function buildFormSnapshot(nome, descricao, audience, fields, responsibleUserId, requiresApproval) {
     return {
         nome,
         descricao,
         audience: [...audience],
         fields: fields.map(normalizeField),
+        responsibleUserId, // Adicionado ao snapshot para detetar se o utilizador alterou o responsável
+        requiresApproval // <-- ADICIONADO
     };
 }
 
@@ -617,14 +619,16 @@ function SelectedDot() {
 // ─── Componente principal ─────────────────────────────────────────────────────
 export default function CreateForm() {
     // Se for edição, isto terá o ID. Se for criação, será undefined.
-    const { id } = useParams(); 
+    const { id } = useParams();
 
     // Dados principais do formulário
     const [nome, setNome] = useState('');
     const [descricao, setDescricao] = useState('');
     const [audience, setAudience] = useState([]);
-
     const [category, setCategory] = useState(CATEGORIAS_DISPONIVEIS[0]);
+
+    // NOVO ESTADO: Armazena o ID (ou string identificadora) do responsável pelo formulário
+    const [responsibleUserId, setResponsibleUserId] = useState('');
 
     // Campos criados no editor visual
     const [fields, setFields] = useState([]);
@@ -650,6 +654,7 @@ export default function CreateForm() {
     const navigate = useNavigate();
     const selectedField = fields.find(f => f.id === selectedId) || null;
 
+
     const pushToast = (type, message) => {
         const toastId = crypto.randomUUID();
         setToasts(prev => [...prev, { id: toastId, type, message }]);
@@ -658,7 +663,10 @@ export default function CreateForm() {
         }, 5000);
     };
 
-    const currentSnapshot = buildFormSnapshot(nome.trim(), descricao, audience, fields);
+
+    const [requiresApproval, setRequiresApproval] = useState(false);
+
+    const currentSnapshot = buildFormSnapshot(nome.trim(), descricao, audience, fields, responsibleUserId, requiresApproval);
     const isDirty = Boolean(id && initialSnapshot && JSON.stringify(currentSnapshot) !== JSON.stringify(initialSnapshot));
 
     useEffect(() => {
@@ -686,14 +694,20 @@ export default function CreateForm() {
                 const loadedNome = formDados.title || formDados.Title || '';
                 const loadedDescricao = formDados.description || formDados.Description || '';
                 const loadedAudience = formDados.audience || formDados.Audience || [];
+                const loadedCategory = formDados.category || formDados.Category || CATEGORIAS_DISPONIVEIS[0];
                 const loadedFields = normalizeFieldList(formDados.fields || formDados.Fields || []);
+                const loadedResponsible = formDados.responsibleUserId || formDados.ResponsibleUserId || '';
+                const loadedRequiresApproval = formDados.requiresApproval || formDados.RequiresApproval || false; 
 
                 setNome(loadedNome);
                 setDescricao(loadedDescricao);
+                setCategory(loadedCategory);
                 setFields(loadedFields);
                 setAudience(loadedAudience);
-                setInitialSnapshot(buildFormSnapshot(loadedNome.trim(), loadedDescricao, loadedAudience, loadedFields));
-            } catch {
+                setResponsibleUserId(loadedResponsible.toString());
+                setRequiresApproval(loadedRequiresApproval); 
+
+                setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields, responsibleUserId, requiresApproval));            } catch {
                 pushToast('error', 'Não foi possível ligar ao servidor.');
             }
         };
@@ -723,7 +737,6 @@ export default function CreateForm() {
     };
 
     // ── Alternar público-alvo ──
-    // Permite selecionar/desselecionar Professores e Funcionários.
     const toggleAudience = (value) => {
         setAudience(prev => {
             const exists = prev.includes(value);
@@ -734,8 +747,6 @@ export default function CreateForm() {
     };
 
     // ── Criar campo ──
-    // Cria a estrutura base de um campo novo, sem o adicionar ainda ao formulário.
-    // Isto permite reutilizar a mesma lógica tanto no clique como no drag and drop.
     const criarCampo = (type) => {
         const ti = getTypeInfo(type);
 
@@ -754,7 +765,6 @@ export default function CreateForm() {
     };
 
     // ── Adicionar campo ao formulário ──
-    // Usado quando o utilizador clica num elemento da paleta.
     const adicionarCampo = (type) => {
         const novo = criarCampo(type);
 
@@ -778,7 +788,6 @@ export default function CreateForm() {
     };
 
     // ── Drag and drop da paleta para o canvas ──
-    // Guarda o tipo de campo que está a ser arrastado a partir da paleta.
     const handlePaletteDragStart = (e, type) => {
         dragTypeRef.current = type;
         dragIndex.current = null;
@@ -787,8 +796,6 @@ export default function CreateForm() {
         e.dataTransfer.setData('field-type', type);
     };
 
-    // ── Início do drag de um campo já existente ──
-    // Guarda o índice do campo que está a ser reordenado.
     const handleCardDragStart = (e, index) => {
         dragIndex.current = index;
         dragTypeRef.current = null;
@@ -798,21 +805,17 @@ export default function CreateForm() {
         e.dataTransfer.setData('field-index', index.toString());
     };
 
-    // ── Campo sobre o qual o utilizador está a passar com o rato ──
     const handleCardDragOver = (e, index) => {
         e.preventDefault();
         setDragOverIndex(index);
     };
 
-    // ── Largar em cima de um campo existente ──
-    // Permite inserir um novo campo nessa posição ou mover um campo já existente.
     const handleCardDrop = (e, dropIndex) => {
         e.preventDefault();
         e.stopPropagation();
 
         const draggedType = dragTypeRef.current || e.dataTransfer.getData('field-type');
 
-        // Caso 1: elemento vindo da paleta
         if (draggedType) {
             const novo = criarCampo(draggedType);
 
@@ -825,8 +828,6 @@ export default function CreateForm() {
             setSelectedId(novo.id);
             setErroFields('');
         }
-
-        // Caso 2: reordenar campo já existente
         else if (dragIndex.current !== null && dragIndex.current !== dropIndex) {
             setFields(prev => {
                 const updated = [...prev];
@@ -841,15 +842,12 @@ export default function CreateForm() {
         setDragOverIndex(null);
     };
 
-    // ── Fim do drag ──
     const handleCardDragEnd = () => {
         dragIndex.current = null;
         dragTypeRef.current = null;
         setDragOverIndex(null);
     };
 
-    // ── Largar no espaço vazio do canvas ──
-    // Se o utilizador largar fora de um campo específico, adiciona ao fim.
     const handleCanvasDrop = (e) => {
         e.preventDefault();
 
@@ -864,39 +862,30 @@ export default function CreateForm() {
         setDragOverIndex(null);
     };
 
-    // Função para verificar se ainda existem valores default no formulário
     const validarFormularioCompleto = (fieldsToValidate) => {
         const erros = [];
 
         fieldsToValidate.forEach((field, index) => {
-            // Obter os dados padrão para este tipo de campo
             const typeInfo = FIELD_TYPES.find(f => f.type === field.type);
             const defaultLabel = typeInfo ? typeInfo.label : '';
 
-            // Forma amigável de referir o campo no erro
             const nomeAmigavel = field.label && field.label !== defaultLabel
                 ? `"${field.label}"`
                 : `Nº ${index + 1} (${defaultLabel})`;
 
-            // 1. Validar Label (APLICA-SE A TODOS, INCLUINDO SECÇÕES)
             if (!field.label || field.label.trim() === '' || field.label === defaultLabel) {
                 erros.push(`O elemento ${nomeAmigavel} ainda tem o título por preencher ou tem o nome default.`);
             }
 
-            // As secções ('section') param a validação por aqui.
-            // Não têm placeholders, opções nem colunas de tabela.
             if (field.type === 'section') return;
 
-            // 2. Validar Placeholder (para os campos que suportam placeholder de texto)
             if (['text', 'textarea', 'number'].includes(field.type)) {
                 if (!field.placeholder || field.placeholder.trim() === '') {
                     erros.push(`O campo ${nomeAmigavel} não tem um texto de ajuda (placeholder) definido.`);
                 }
             }
 
-            // 3. Validar Opções (Dropdown, Checkbox, Radio)
             if (['dropdown', 'checkbox', 'radio'].includes(field.type)) {
-                // Regex para detetar \"Opção 1\", \"Opção 2\", \"Opção 99\", etc.
                 const hasDefaultOptions = field.options.some(opt =>
                     !opt || opt.trim() === '' || /^Opção \d+$/.test(opt.trim())
                 );
@@ -906,9 +895,7 @@ export default function CreateForm() {
                 }
             }
 
-            // 4. Validar Colunas da Tabela
             if (field.type === 'table') {
-                // Regex para detetar \"Coluna A\", \"Coluna B\", \"Coluna Z\", etc.
                 const hasDefaultCols = field.tableColumns.some(col =>
                     !col || col.trim() === '' || /^Coluna [A-Z]$/.test(col.trim())
                 );
@@ -922,10 +909,6 @@ export default function CreateForm() {
         return erros;
     };
 
-
-    // ── Submissão do formulário ──
-    // Valida os dados no frontend antes de enviar para o backend.
-    // ─── Submissão do formulário ──
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -937,12 +920,10 @@ export default function CreateForm() {
         const fieldsWithOrder = fields.map((field, index) => ({
             ...field,
             order: index,
-            // Se for tabela, envia 'tableColumns' dentro de 'options' para o C#
             options: field.type === 'table' ? field.tableColumns : field.options,
             tableRowCount: field.type === 'table' ? field.tableRows : undefined
         }));
 
-        // 1. Validações SEMPRE obrigatórias (Rascunho ou Publicado)
         if (nome.trim() === '') {
             setErroNome('O nome do formulário é obrigatório.');
             return;
@@ -953,18 +934,19 @@ export default function CreateForm() {
             return;
         }
 
-        // IDENTIFICAR QUAL BOTÃO FOI CLICADO
         const isFinal = e.nativeEvent.submitter.id === 'save-final';
 
-        // 2. ⭐ VALIDAÇÕES APENAS PARA QUANDO FOR PUBLICADO ⭐
         if (isFinal) {
-            // Regra A: Tem de ter pelo menos um campo real (não conta se for só uma secção)
+            if (requiresApproval && !responsibleUserId) {
+                setErroFields(['É obrigatório selecionar um "Responsável pela Aprovação" para poder publicar este formulário.']);
+                return; 
+            }
+
             if (realFields.length === 0) {
                 setErroFields(['Adiciona pelo menos um campo ao formulário antes de publicar.']);
                 return;
             }
 
-            // Regra B: Os campos não podem ter os valores default
             const errosDePreenchimento = validarFormularioCompleto(fields);
 
             if (errosDePreenchimento.length > 0) {
@@ -972,14 +954,10 @@ export default function CreateForm() {
                 return;
             }
 
-            // Se passou todas as validações, mostra o modal de confirmação
             setShowConfirmPublish(true);
             return;
         }
 
-        // Guardar como rascunho:
-        //  - Em modo edição: pede confirmação para sobrepor a versão anterior.
-        //  - Em modo criação: submete diretamente.
         if (id) {
             setShowConfirmSaveEdit(true);
             return;
@@ -995,7 +973,6 @@ export default function CreateForm() {
         tableRowCount: field.type === 'table' ? field.tableRows : undefined,
     }));
 
-    // ── Submissão do formulário ──
     const submeterFormulario = async (fieldsWithOrder, isFinal) => {
         setIsLoading(true);
 
@@ -1005,6 +982,14 @@ export default function CreateForm() {
                 : 'http://localhost:5208/api/Forms';
 
             const method = id ? 'PUT' : 'POST';
+
+            // O backend (C#) agora espera receber um 'ResponsibleUserId' (inteiro ou nulo).
+            // Convertemos a string do estado para inteiro, se existir.
+            console.log(responsibleUserId)
+            const parsedResponsibleId = responsibleUserId ? parseInt(responsibleUserId, 10) : 0;
+
+            console.log(responsibleUserId)
+            console.log(parsedResponsibleId)
 
             const response = await fetch(url, {
                 method,
@@ -1017,6 +1002,8 @@ export default function CreateForm() {
                     Audience: audience,
                     StatusDraft: !isFinal,
                     Fields: fieldsWithOrder,
+                    RequiresApproval: requiresApproval,
+                    ResponsibleUserId: parsedResponsibleId // ENVIAR O RESPONSÁVEL
                 }),
             });
 
@@ -1041,7 +1028,7 @@ export default function CreateForm() {
 
             await response.json();
             pushToast('success', isFinal ? 'Formulário publicado com sucesso.' : 'Rascunho guardado com sucesso.');
-            setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields));
+            setInitialSnapshot(buildFormSnapshot(nome.trim(), descricao, audience, fields, requiresApproval, responsibleUserId));
             setIsLoading(false);
             window.setTimeout(() => navigate('/admin'), 1400);
         } catch {
@@ -1050,18 +1037,15 @@ export default function CreateForm() {
         }
     };
 
-    // ── Handler para confirmar publicação ──
     const handleConfirmPublish = async () => {
         await submeterFormulario(buildFieldsWithOrder(), true);
         setShowConfirmPublish(false);
     };
 
-    // ── Handler para cancelar publicação ──
     const handleCancelPublish = () => {
         setShowConfirmPublish(false);
     };
 
-    // ── Handler para guardar edição ──
     const handleConfirmSaveEdit = async () => {
         await submeterFormulario(buildFieldsWithOrder(), false);
         setShowConfirmSaveEdit(false);
@@ -1073,7 +1057,6 @@ export default function CreateForm() {
 
     return (
         <div className="space-y-6">
-            {/* Cabeçalho da página */}
             <div className="flex flex-col gap-4">
                 <button
                     type="button"
@@ -1086,9 +1069,7 @@ export default function CreateForm() {
             </div>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-                {/* Informações básicas do formulário */}
                 <div className="flex flex-col gap-4 rounded-lg border border-accent-border bg-accent-bg p-6">
-                    {/* Nome */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="nome" className="font-medium text-text-h">
                             Nome do Formulário <span className="text-red-500">*</span>
@@ -1107,7 +1088,6 @@ export default function CreateForm() {
                         {erroNome && <span className="text-red-500 text-sm">{erroNome}</span>}
                     </div>
 
-                    {/* Descrição */}
                     <div className="flex flex-col gap-2">
                         <label htmlFor="descricao" className="font-medium text-text-h">Descrição</label>
                         <textarea
@@ -1120,21 +1100,66 @@ export default function CreateForm() {
                         />
                     </div>
 
-                    <div className="flex flex-col gap-2 mb-4">
-                        <label className="font-medium text-text-h">Categoria</label>
-                        <select
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
-                        >
-                            {CATEGORIAS_DISPONIVEIS.map(cat => (
-                                <option key={cat} value={cat}>{cat}</option>
-                            ))}
-                        </select>
+                    {/* AGRUPAMENTO: Categoria e Aprovação (Duas Colunas) */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                        {/* COLUNA 1: Categoria */}
+                        <div className="flex flex-col gap-2">
+                            <label className="font-medium text-text-h">Categoria</label>
+                            <select
+                                value={category}
+                                onChange={(e) => setCategory(e.target.value)}
+                                className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
+                            >
+                                {CATEGORIAS_DISPONIVEIS.map(cat => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* COLUNA 2: Bloco do Responsável (Checkbox + Dropdown) */}
+                        <div className="flex flex-col gap-4">
+
+                            {/* Checkbox */}
+                            <div className="flex flex-col justify-start mt-2">
+                                <label className="flex cursor-pointer items-center gap-2 text-sm font-medium text-text-h">
+                                    <input
+                                        type="checkbox"
+                                        checked={requiresApproval}
+                                        onChange={(e) => {
+                                            setRequiresApproval(e.target.checked);
+                                            if (!e.target.checked) setResponsibleUserId(''); // Limpa se desativar
+                                        }}
+                                        className="accent-green-600 w-4 h-4 rounded border-gray-300 focus:ring-green-500"
+                                    />
+                                    Este formulário necessita de aprovação?
+                                </label>
+                            </div>
+
+                            {/* Dropdown do Responsável (SÓ APARECE SE CHECKBOX ESTIVER ATIVA) */}
+                            {requiresApproval && (
+                                <div className="flex flex-col gap-2 animate-fade-in">
+                                    <label className="font-medium text-text-h">
+                                        Responsável pela Aprovação <span className="text-red-500">*</span>
+                                    </label>
+                                    <select
+                                        value={responsibleUserId}
+                                        onChange={(e) => setResponsibleUserId(e.target.value)}
+                                        className="rounded-md border border-accent-border bg-white p-2 focus:border-blue-500 focus:outline-none"
+                                    >
+                                        <option value="0">(Selecione um responsável...)</option>
+                                        <option value="1">Gabinete de Relações Internacionais</option>
+                                        <option value="2">Secretaria Escolar</option>
+                                        <option value="3">Recursos Humanos</option>
+                                        <option value="4">Direção de Curso</option>
+                                    </select>
+                                </div>
+                            )}
+
+                        </div>
                     </div>
 
-                    {/* Público-alvo */}
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2 mt-2">
                         <label className="font-medium text-text-h">
                             Público-alvo <span className="text-red-500">*</span>
                         </label>
@@ -1167,17 +1192,14 @@ export default function CreateForm() {
                     </div>
                 </div>
 
-                {/* Editor visual de campos */}
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center justify-between">
                         <h3 className="text-lg font-semibold text-text-h">Campos do Formulário</h3>
                         <span className="text-sm text-gray-400">
                             {fields.filter(f => f.type !== 'section').length} campo{fields.filter(f => f.type !== 'section').length !== 1 ? 's' : ''}
-
                         </span>
                     </div>
 
-                    {/* Erro de validação dos campos */}
                     {erroFields && erroFields.length > 0 && (
                         <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
                             <p className="font-bold mb-2">Não é possível publicar. O formulário não está completo:</p>
@@ -1192,7 +1214,6 @@ export default function CreateForm() {
                     )}
 
                     <div className="flex rounded-lg border border-gray-200 bg-white overflow-hidden" style={{ minHeight: '520px' }}>
-                        {/* Paleta de elementos */}
                         <div className="flex flex-col gap-1.5 border-r border-gray-100 bg-gray-50 p-4 w-48 flex-shrink-0">
                             <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
                                 Elementos
@@ -1218,7 +1239,6 @@ export default function CreateForm() {
                             </p>
                         </div>
 
-                        {/* Canvas do formulário */}
                         <div
                             className="relative flex-1 p-4 overflow-y-auto"
                             onDrop={handleCanvasDrop}
@@ -1259,7 +1279,6 @@ export default function CreateForm() {
                             )}
                         </div>
 
-                        {/* Painel lateral de edição do campo selecionado */}
                         {selectedField && (
                             <EditPanel
                                 field={selectedField}
@@ -1274,7 +1293,6 @@ export default function CreateForm() {
                     </p>
                 </div>
 
-                {/* Botões de submissão */}
                 <div className="flex justify-end gap-3">
                     <button
                         disabled={isLoading}
@@ -1307,7 +1325,6 @@ export default function CreateForm() {
                 ))}
             </div>
 
-            {/* Modal de confirmação de publicação */}
             <ConfirmPublishModal
                 isOpen={showConfirmPublish}
                 onConfirm={handleConfirmPublish}
@@ -1315,7 +1332,6 @@ export default function CreateForm() {
                 isLoading={isLoading}
             />
 
-            {/* Modal de confirmação de gravação de edição (rascunho existente) */}
             <ConfirmSaveEditModal
                 isOpen={showConfirmSaveEdit}
                 onConfirm={handleConfirmSaveEdit}

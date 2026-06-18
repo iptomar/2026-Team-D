@@ -15,6 +15,7 @@ import SessionGuard from './components/Auth/SessionGuard';
 import RespondForm from './pages/RespondForm';
 import MySubmissions from './pages/MySubmissions';
 import MySubmissionDetail from './pages/MySubmissionDetail';
+import ApprovalView from './pages/ApprovalView';
 
 export default function App() {
     return (
@@ -29,16 +30,17 @@ export default function App() {
                     <Route path="/admin" element={<ProtectedRoute allowedRoles={["admin"]}><AdminDashboard /></ProtectedRoute>} />
 
                     <Route path="/professor" element={<ProtectedRoute allowedRoles={["professor"]}><ProfessorDashboard /></ProtectedRoute>} />
-                    <Route path="/funcionario" element={<ProtectedRoute allowedRoles={["funcionario"]}><FuncionarioDashboard /></ProtectedRoute>} />
+                    <Route path="/funcionario" element={<ProtectedRoute allowedRoles={["funcionario","gri","rh","dircurso","secretaria"]}><FuncionarioDashboard /></ProtectedRoute>} />
                     <Route path="/aluno" element={<ProtectedRoute allowedRoles={["aluno"]}><AlunoDashboard /></ProtectedRoute>} />
 
                     <Route path="/CreateForm" element={<ProtectedRoute allowedRoles={["admin"]}><CreateForm /></ProtectedRoute>} />
                     <Route path="/edit-form/:id" element={<ProtectedRoute allowedRoles={["admin"]}><CreateForm /></ProtectedRoute>} />
+                    <Route path="/approveRequest" element={<ProtectedRoute allowedRoles={["admin", "gri", "rh", "dircurso", "secretaria"]}><ApprovalView /></ProtectedRoute>} />
 
                     <Route path="/ViewForm/:id" element={<ViewForm />} />
 
 
-                    <Route path="/myinfo" element={<ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}><MyInfo /></ProtectedRoute>} />
+                    <Route path="/myinfo" element={<ProtectedRoute allowedRoles={["professor", "funcionario", "gri", "rh", "dircurso", "secretaria", "aluno"]}><MyInfo /></ProtectedRoute>} />
 
                     <Route path="/respond/:id" element={
                         <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}>
@@ -47,12 +49,12 @@ export default function App() {
                     } />
 
                     <Route path="/meus-formularios" element={
-                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}>
+                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno", "gri", "rh", "dircurso", "secretaria"]}>
                             <MySubmissions />
                         </ProtectedRoute>
                     } />
                     <Route path="/meus-formularios/:id" element={
-                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno"]}>
+                        <ProtectedRoute allowedRoles={["professor", "funcionario", "aluno", "admin", "gri", "rh", "dircurso", "secretaria"]}>
                             <MySubmissionDetail />
                         </ProtectedRoute>
                     } />

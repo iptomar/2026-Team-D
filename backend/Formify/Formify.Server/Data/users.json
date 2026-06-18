@@ -54,5 +54,29 @@
     "PasswordHash": "KVPKp2SaI5AqQJuuS0atzRmJgYs/o65tEaoVXuz3eh8=",
     "Salt": "7BoQUn\u002BLF5c3ppICfnlOdA==",
     "Role": "aluno"
+  },
+  {
+    "Id": 8,
+    "Name": "Pedro",
+    "Username": "Pedro",
+    "PasswordHash": "rAIfGI\u002BqfQO4W/Or9Fq2qfw5Yj6nortIBi/pR9ZV3Cw=",
+    "Salt": "6Et07fD2v2qv0cu9TtOn0Q==",
+    "Role": "professor"
+  },
+  {
+    "Id": 9,
+    "Name": "PedroCurso",
+    "Username": "PedroCurso",
+    "PasswordHash": "ejduNj7bPToy4P/5m9TlPkgEwi0er6cQedHseUVapSw=",
+    "Salt": "IdS0bZ/SYWchWgvkJe1e6A==",
+    "Role": "dircurso"
+  },
+  {
+    "Id": 10,
+    "Name": "pedroaluno",
+    "Username": "pedroaluno",
+    "PasswordHash": "zVU94lRprjgSG28HCEVw3PnTl6SyuL2pb8L6z6/Ng9A=",
+    "Salt": "j0vDRz04ZzGtmRwmrvxRJg==",
+    "Role": "aluno"
   }
 ]

@@ -1,0 +1,256 @@
+import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import StatusBadge from '../components/StatusBadge';
+
+const API_URL = 'http://localhost:5208/api/Submissions/admin';
+
+const STATUS_FILTERS = [
+    { value: 'pending', label: 'Pendentes', empty: 'Não há pedidos pendentes para aprovar.' },
+    { value: 'approved', label: 'Aprovados', empty: 'Ainda não foram aprovados pedidos.' },
+    { value: 'refused', label: 'Recusados', empty: 'Não há pedidos recusados.' },
+    { value: 'all', label: 'Todos', empty: 'Ainda não foram submetidos pedidos.' },
+];
+
+const normalizeText = (value) =>
+    (value || '').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+
+const formatDate = (iso) => {
+    if (!iso) return '—';
+    try {
+        return new Date(iso).toLocaleString('pt-PT', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+    } catch {
+        return iso;
+    }
+};
+
+export default function ApprovalView() {
+    const [submissions, setSubmissions] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState('');
+
+    const [statusFilter, setStatusFilter] = useState('pending');
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortDate, setSortDate] = useState('newest');
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
+
+    useEffect(() => {
+        const controller = new AbortController();
+
+        const fetchSubmissions = async () => {
+            try {
+                setIsLoading(true);
+                setError('');
+
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}?status=${statusFilter}`, {
+                    headers: token ? { Authorization: `Bearer ${token}` } : {},
+                    signal: controller.signal,
+                });
+
+                if (response.status === 401) {
+                    setError('Sessão expirada. Inicia sessão novamente.');
+                    setSubmissions([]);
+                    return;
+                }
+                if (response.status === 403) {
+                    setError('Apenas administradores podem aceder a esta página.');
+                    setSubmissions([]);
+                    return;
+                }
+                if (!response.ok) throw new Error('Erro ao obter submissões');
+
+                const data = await response.json();
+                setSubmissions(Array.isArray(data) ? data : []);
+            } catch (e) {
+                if (e.name === 'AbortError') return;
+                console.error('Erro ao carregar submissões:', e);
+                setError('Não foi possível carregar os pedidos.');
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchSubmissions();
+        return () => controller.abort();
+    }, [statusFilter]);
+
+    const filteredAndSorted = useMemo(() => {
+        const term = normalizeText(searchTerm.trim());
+
+        const filtered = submissions.filter((s) => {
+            if (!term) return true;
+            const title = normalizeText(s.formTitle);
+            const description = normalizeText(s.formDescription);
+            const tokens = term.split(/\s+/).filter(Boolean);
+            const words = `${title} ${description}`.split(/[^a-z0-9]+/).filter(Boolean);
+            return tokens.every((tok) => words.some((w) => w.startsWith(tok)));
+        });
+
+        return [...filtered].sort((a, b) => {
+            const dateA = new Date(a.submittedAt || 0).getTime();
+            const dateB = new Date(b.submittedAt || 0).getTime();
+            return sortDate === 'oldest' ? dateA - dateB : dateB - dateA;
+        });
+    }, [submissions, searchTerm, sortDate]);
+
+    const totalPages = Math.max(1, Math.ceil(filteredAndSorted.length / itemsPerPage));
+    const paginated = filteredAndSorted.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [searchTerm, sortDate, statusFilter]);
+
+    const currentEmptyText = STATUS_FILTERS.find((f) => f.value === statusFilter)?.empty
+        || 'Sem pedidos para mostrar.';
+
+    return (
+        <div className="min-h-[calc(100vh-140px)] space-y-8 flex flex-col">
+            <div className="flex flex-col gap-2">
+                <h2 className="text-3xl font-bold text-text-h">Aprovar Pedidos</h2>
+                <p className="text-lg text-text">
+                    Gestão de submissões dos utilizadores — vista de administração
+                </p>
+            </div>
+
+            {/* Filtro por estado */}
+            <div className="border-b border-accent-border">
+                <nav className="-mb-px flex flex-wrap gap-2">
+                    {STATUS_FILTERS.map((f) => {
+                        const isActive = statusFilter === f.value;
+                        return (
+                            <button
+                                key={f.value}
+                                type="button"
+                                onClick={() => setStatusFilter(f.value)}
+                                className={`border-b-2 px-4 py-2 text-sm font-semibold transition-colors ${
+                                    isActive
+                                        ? 'border-accent text-accent'
+                                        : 'border-transparent text-text hover:border-accent-border hover:text-text-h'
+                                }`}
+                            >
+                                {f.label}
+                            </button>
+                        );
+                    })}
+                </nav>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+                <div className="flex flex-col gap-2">
+                    <label className="font-medium text-text-h">Pesquisar</label>
+                    <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        placeholder="Nome do formulário..."
+                        className="rounded-md border border-accent-border bg-white p-2 focus:border-accent focus:outline-none"
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <label className="font-medium text-text-h">Ordenar por</label>
+                    <select
+                        value={sortDate}
+                        onChange={(e) => setSortDate(e.target.value)}
+                        className="rounded-md border border-accent-border bg-white p-2 focus:border-accent focus:outline-none"
+                    >
+                        <option value="newest">Mais recentes</option>
+                        <option value="oldest">Mais antigos</option>
+                    </select>
+                </div>
+            </div>
+
+            <div className="rounded-lg flex-1 flex flex-col">
+                {isLoading ? (
+                    <div className="text-center py-12 text-text">A carregar pedidos...</div>
+                ) : error ? (
+                    <div className="rounded-lg border-2 border-dashed border-red-300 bg-red-50 px-8 py-12 text-center">
+                        <p className="text-xl font-semibold text-red-700">{error}</p>
+                    </div>
+                ) : filteredAndSorted.length === 0 ? (
+                    <div className="rounded-lg border-2 border-dashed border-accent-border bg-accent-bg px-8 py-12 text-center">
+                        <p className="text-xl font-semibold text-text-h">Sem pedidos</p>
+                        <p className="mt-2 text-text">{currentEmptyText}</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                            {paginated.map((s) => (
+                                <Link
+                                    key={s.id}
+                                    to={`/meus-formularios/${s.id}`}
+                                    className="group flex flex-col h-full rounded-lg border border-accent-border p-6 shadow-sm hover:shadow-md hover:border-accent transition-all bg-white"
+                                >
+                                    <div className="flex items-start justify-between gap-3 mb-3">
+                                        <h3 className="font-bold text-lg text-text-h group-hover:text-accent transition-colors">
+                                            {s.formTitle}
+                                        </h3>
+                                        <div className="flex shrink-0 flex-col items-end gap-1">
+                                            <StatusBadge status={s.status} />
+                                            {s.isStale && (
+                                                <span
+                                                    className="rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-amber-700 border border-amber-200"
+                                                    title="O formulário foi alterado desde a submissão"
+                                                >
+                                                    Desatualizado
+                                                </span>
+                                            )}
+                                            {s.formArchived && (
+                                                <span
+                                                    className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-700 border border-gray-200"
+                                                    title="O formulário já não está disponível"
+                                                >
+                                                    Arquivado
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {s.formDescription && (
+                                        <p className="text-sm text-text line-clamp-3 flex-grow">{s.formDescription}</p>
+                                    )}
+
+                                    <div className="mt-4 pt-4 border-t border-gray-100 mt-auto flex items-center justify-between">
+                                        <span className="text-xs text-text">{formatDate(s.submittedAt)}</span>
+                                        <span className="text-sm font-semibold text-accent group-hover:text-emerald-700">
+                                            Ver detalhes →
+                                        </span>
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+
+                        {totalPages > 1 && (
+                            <div className="mt-auto pt-6 flex items-center justify-between">
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                                    disabled={currentPage === 1}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Anterior
+                                </button>
+                                <span className="text-sm text-text">Página {currentPage} de {totalPages}</span>
+                                <button
+                                    type="button"
+                                    onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                                    disabled={currentPage === totalPages}
+                                    className="rounded-md border border-accent-border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+                                >
+                                    Próxima
+                                </button>
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+        </div>
+    );
+}

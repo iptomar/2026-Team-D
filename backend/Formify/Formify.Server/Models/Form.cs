@@ -33,7 +33,10 @@ namespace Formify.Server.Models
 
         public DateTime UpdatedAt { get; set; }
 
-        // Adicionar a propriedade com um valor por defeito caso existam formulários antigos
         public string Category { get; set; } = "Geral";
+
+        public int? ResponsibleUserId { get; set; } = 0;
+
+        public bool RequiresApproval { get; set; }
     }
 }

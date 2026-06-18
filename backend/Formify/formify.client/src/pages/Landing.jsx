@@ -66,7 +66,7 @@ export default function Landing() {
                         <div className="flex flex-col items-center gap-4 pt-2 sm:flex-row sm:justify-center lg:justify-start">
                             {localStorage.getItem('token') ? (
                                 <Link
-                                    to={localStorage.getItem('role') === 'admin' ? '/admin' : localStorage.getItem('role') === 'professor' ? '/professor' : localStorage.getItem('role') === 'funcionario' ? '/funcionario' : '/'}
+                                    to={localStorage.getItem('role') === 'admin' ? '/admin' : localStorage.getItem('role') === 'professor' ? '/professor' : localStorage.getItem('role') === 'funcionario' ? '/funcionario' : localStorage.getItem('role') === 'aluno' ? '/aluno' : '/'}
                                     className="w-full rounded-lg bg-accent px-8 py-3 text-center text-base font-semibold text-white shadow-custom transition-transform hover:-translate-y-0.5 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 sm:w-auto"
                                 >
                                     Ver formulários
@@ -201,7 +201,7 @@ export default function Landing() {
                     <div className="flex flex-col gap-3 sm:flex-row">
                         {localStorage.getItem('token') ? (
                             <Link
-                                to={localStorage.getItem('role') === 'admin' ? '/admin' : localStorage.getItem('role') === 'professor' ? '/professor' : localStorage.getItem('role') === 'funcionario' ? '/funcionario' : '/'}
+                                to={localStorage.getItem('role') === 'admin' ? '/admin' : localStorage.getItem('role') === 'professor' ? '/professor' : localStorage.getItem('role') === 'funcionario' ? '/funcionario' : localStorage.getItem('role') === 'aluno' ? '/aluno' : '/'}
                                 className="rounded-lg bg-white px-8 py-3 text-base font-semibold text-accent shadow-sm transition-transform hover:-translate-y-0.5"
                             >
                                 Ver formulários

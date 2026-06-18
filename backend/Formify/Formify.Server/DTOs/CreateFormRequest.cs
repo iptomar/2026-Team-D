@@ -18,5 +18,9 @@ namespace Formify.Server.DTOs
         public List<Field> Fields { get; set; } = new List<Field>();
 
         public string Category { get; set; } = "Geral";
+
+        public int? ResponsibleUserId { get; set; } = 0;
+
+        public bool RequiresApproval { get; set; }
     }
 }
