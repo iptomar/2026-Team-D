@@ -15,6 +15,7 @@ export default function Sidebar() {
 
     // Define os cargos
     const isAdmin = role === 'admin';
+    const approvesBool = (['admin','dircurso', 'secretaria', 'rh', 'gri'].includes(role))
 
     const linkCls =
         'block rounded-lg px-4 py-2 text-sm font-medium text-text transition-colors hover:bg-accent-bg hover:text-accent';
@@ -33,7 +34,7 @@ export default function Sidebar() {
 
     // Dinâmico: Decide para que ecrã principal aponta o botão "Formulários"
     let formsRoute = '/professor';
-    if (role === 'funcionario') formsRoute = '/funcionario';
+    if (['funcionario', 'dircurso','secretaria','rh','gri'].includes(role)) formsRoute = '/funcionario';
     if (role === 'aluno') formsRoute = '/aluno';
 
     return (
@@ -43,6 +44,11 @@ export default function Sidebar() {
             </div>
 
             <nav className="space-y-2">
+                {approvesBool&&
+                <Link to="/approveRequest" className={linkCls}>
+                    Aprovar Pedidos
+                    </Link>
+                }
                 {isAdmin ? (
 
                     <>
@@ -51,9 +57,6 @@ export default function Sidebar() {
                         </Link>
                         <Link to="/CreateForm" className={linkCls}>
                             Criar Formulário
-                        </Link>
-                        <Link to="/approveRequest" className={linkCls}>
-                            Aprovar Pedidos
                         </Link>
                         <button type="button" onClick={handleLogout} className={buttonCls}>
                             Logout

@@ -76,7 +76,9 @@ export default function Login() {
                 window.dispatchEvent(new CustomEvent('app:toast', { detail: { message: 'Login efetuado com sucesso', type: 'success' } }));
                 // redirecionar conforme role
                 if (data.role === 'professor') navigate('/professor');
-                else if (data.role === 'funcionario') navigate('/funcionario');
+                else if (['funcionario', 'rh', 'gri', 'secretaria','dircurso'].includes(data.role)) {
+                    navigate('/funcionario');
+                }
                 else if (data.role === 'admin') navigate('/admin');
                 else if (data.role === 'aluno') navigate('/aluno');
                 else navigate('/');

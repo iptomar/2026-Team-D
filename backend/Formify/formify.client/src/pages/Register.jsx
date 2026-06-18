@@ -96,7 +96,7 @@ export default function Register() {
                     // redirecionar conforme role
                     if (data.role === 'professor') navigate('/professor');
                     else if (data.role === 'funcionario') navigate('/funcionario');
-                    else if (data.role === 'aluno') navigate('/aluno'); // <-- NOVO
+                    else if (data.role === 'aluno') navigate('/aluno');
                     else if (data.role === 'admin') navigate('/admin');
                     else navigate('/');
                 } else {
@@ -134,11 +134,17 @@ export default function Register() {
                     <FloatingField id="register-password" label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} autoComplete="new-password" />
                     <FloatingField id="register-confirm" label="Confirmar Password" type="password" value={confirm} onChange={e => setConfirm(e.target.value)} autoComplete="new-password" />
 
+                    {/* Em condições normais, seria um admin a atribuir algumas destas roles, mas para efeitos de Proof-of-concept
+                        Vai-se deixar desta forma por agora*/ }
                     <label className="block text-sm">Função</label>
                     <select className="w-full rounded border px-3 py-2" value={role} onChange={e => setRole(e.target.value)}>
                         <option value="professor">Professor</option>
                         <option value="funcionario">Funcionário</option>
-                        <option value="aluno">Aluno</option> {/* <-- NOVO */}
+                        <option value="aluno">Aluno</option>
+                        <option value="secretaria">Secretaria Escolar</option>
+                        <option value="gri">Gabinete de Relações Internacionais</option>
+                        <option value="dircurso">Diretor(a) de Curso</option>
+                        <option value="rh">Recursos Humanos</option>
                     </select>
 
                     {error && <div className="text-red-600">{error}</div>}

@@ -44,6 +44,8 @@ namespace Formify.Server.Services
 
         public async Task<List<Form>> GetAllFormsAsync()
         {
+            Console.WriteLine(_filePathList);
+            Console.WriteLine(File.Exists(_filePathList));
             if (!File.Exists(_filePathList))
             {
                 return new List<Form>();
@@ -84,9 +86,10 @@ namespace Formify.Server.Services
 
                 return forms;
             }
-            catch
+            catch(Exception ex)
             {
                 // If the file is empty or corrupted, return an empty list
+                Console.WriteLine("JSON ERROR: " + ex.Message);
                 return new List<Form>();
             }
         }
@@ -109,8 +112,9 @@ namespace Formify.Server.Services
                 var json = await File.ReadAllTextAsync(_filePathSubmissions);
                 return JsonSerializer.Deserialize<List<Submission>>(json, JsonOpts) ?? new List<Submission>();
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine("JSON ERROR: " + ex.Message);
                 return new List<Submission>();
             }
         }

@@ -11,7 +11,7 @@
         // Responsável pelo pedido — herdado de Form.ResponsibleUserId no momento
         // da submissão. Fica "congelado" nesta submissão mesmo que o responsável
         // do formulário seja alterado depois.
-        public int? ResponsibleUserId { get; set; }
+        public int? ResponsibleUserId { get; set; } = 0;
 
         // Dicionário para guardar as respostas: Key = ID ou Nome do Campo, Value = Resposta
         public Dictionary<string, object> Answers { get; set; } = new();
